@@ -8,9 +8,4 @@ body:
       description: |
         [Description] 버그에 관한 설명을 적어주세요
       placeholder: |
-        conflict난거 그냥 merge해버림
-  - type: textarea
-    attributes:
-      label: Additional
-      description: |
-        [추가사항] 별도로 알려줘야 할 사항이나 추가사항을 작성해주세요
+        급식 조회가 이상해요!
