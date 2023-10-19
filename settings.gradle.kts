@@ -1,4 +1,5 @@
 pluginManagement {
+    includeBuild("build-logic")
     repositories {
         google()
         mavenCentral()
@@ -15,4 +16,3 @@ dependencyResolutionManagement {
 
 rootProject.name = "OnmiAndroid"
 include(":app")
- 
