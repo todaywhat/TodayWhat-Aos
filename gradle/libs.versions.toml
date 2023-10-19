@@ -13,6 +13,7 @@ material = "1.8.0"
 
 #Compose
 activityCompose = "1.7.0"
+androidxComposeCompiler = "1.4.3"
 composeBom = "2023.03.00"
 
 # Test
@@ -26,9 +27,6 @@ core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidX
 lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "androidXLifeCycle" }
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 
-# <--------------------[ Google ]-------------------->
-material = { group = "com.google.android.material", name = "material", version.ref = "material" }
-
 # <--------------------[ Compose ]-------------------->
 activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
 compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
@@ -41,9 +39,15 @@ ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 material3 = { group = "androidx.compose.material3", name = "material3" }
 
 # <--------------------[ Test ]-------------------->
+espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso" }
+
+# <--- [ Define Dependeicies used in build-logic ] --->
+android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
+kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidXJunit" }
-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }

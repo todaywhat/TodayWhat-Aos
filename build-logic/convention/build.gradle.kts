@@ -8,6 +8,7 @@ java {
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17
 }
+
 tasks.withType<KotlinCompile>().configureEach {
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_17.toString()
@@ -15,11 +16,15 @@ tasks.withType<KotlinCompile>().configureEach {
 }
 
 dependencies {
-    
+    compileOnly(libs.android.gradlePlugin)
+    compileOnly(libs.kotlin.gradlePlugin)
 }
 
 gradlePlugin {
     plugins {
-
+        register("AndroidApplication") {
+            id = "onmi.android.application"
+            implementationClass = "com.onmi.convention.AndroidApplicationConventionPlugin"
+        }
     }
 }
