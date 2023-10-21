@@ -26,5 +26,10 @@ gradlePlugin {
             id = "onmi.android.application"
             implementationClass = "com.onmi.convention.AndroidApplicationConventionPlugin"
         }
+
+        register("AndroidLibrary") {
+            id = "onmi.android.library"
+            implementationClass = "com.onmi.convention.AndroidLibraryConventionPlugin"
+        }
     }
 }

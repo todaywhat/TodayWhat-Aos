@@ -16,3 +16,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "OnmiAndroid"
 include(":app")
+include(":navigation")

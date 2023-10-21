@@ -2,9 +2,11 @@ package com.onmi.convention
 
 import com.android.build.gradle.LibraryExtension
 import com.onmi.convention.project.configureKotlinAndroid
+import com.onmi.convention.project.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
+import org.gradle.kotlin.dsl.dependencies
 
 class AndroidLibraryConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
@@ -24,6 +26,11 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
                         proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
                     }
                 }
+            }
+
+            dependencies {
+                add("implementation", libs.findLibrary("junit").get())
+                add("implementation", libs.findLibrary("androidx-test-ext-junit").get())
             }
         }
     }
