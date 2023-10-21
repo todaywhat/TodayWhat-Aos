@@ -17,3 +17,10 @@ dependencyResolutionManagement {
 rootProject.name = "OnmiAndroid"
 include(":app")
 include(":navigation")
+include(":enterinformation")
+include(":main")
+include(":notice")
+include(":setup")
+include(":allergies")
+include(":timetable")
+include(":tutorials")
