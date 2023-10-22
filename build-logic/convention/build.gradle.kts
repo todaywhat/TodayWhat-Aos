@@ -23,18 +23,18 @@ dependencies {
 gradlePlugin {
     plugins {
         register("AndroidApplication") {
-            id = "onmi.android.application"
-            implementationClass = "com.onmi.convention.AndroidApplicationConventionPlugin"
+            id = "khs.onmi.application"
+            implementationClass = "khs.onmi.convention.AndroidApplicationConventionPlugin"
         }
 
         register("AndroidLibrary") {
-            id = "onmi.android.library"
-            implementationClass = "com.onmi.convention.AndroidLibraryConventionPlugin"
+            id = "khs.onmi.library"
+            implementationClass = "khs.onmi.convention.AndroidLibraryConventionPlugin"
         }
 
         register("AndoirdCompose") {
-            id = "onmi.android.compose"
-            implementationClass = "com.onmi.convention.AndroidComposeConventionPlugin"
+            id = "khs.onmi.compose"
+            implementationClass = "khs.onmi.convention.AndroidComposeConventionPlugin"
         }
     }
 }

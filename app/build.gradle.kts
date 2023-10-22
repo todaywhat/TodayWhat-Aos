@@ -1,9 +1,9 @@
 plugins {
-    id("onmi.android.application")
+    id("khs.onmi.application")
 }
 
 android {
-    namespace = "com.onmi.aos"
+    namespace = "khs.onmi.aos"
 
     packaging {
         resources {

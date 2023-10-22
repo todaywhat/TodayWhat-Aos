@@ -1,9 +1,9 @@
 plugins {
-    id("onmi.android.library")
+    id("khs.onmi.library")
 }
 
 android {
-    namespace = "com.onmi.meal.domain"
+    namespace = "khs.onmi.meal.domain"
 }
 
 dependencies {

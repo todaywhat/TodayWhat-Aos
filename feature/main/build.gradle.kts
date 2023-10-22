@@ -1,10 +1,10 @@
 plugins {
-    id("onmi.android.library")
-    id("onmi.android.compose")
+    id("khs.onmi.library")
+    id("khs.onmi.compose")
 }
 
 android {
-    namespace = "com.onmi.main"
+    namespace = "khs.onmi.main"
 }
 
 dependencies {
