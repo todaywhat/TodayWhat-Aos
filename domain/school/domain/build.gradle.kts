@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.onmi.domain"
+    namespace = "com.onmi.school.domain"
 }
 
 dependencies {
