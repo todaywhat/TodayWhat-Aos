@@ -11,7 +11,7 @@ fun main() {
     if (locations.contains(location)) {
         when(location) {
             "feature" -> { createFeatureModule() }
-            "domain" -> { createDomainModule() }
+            "domain" -> { createDomainModules() }
             "core" -> { createCoreModule() }
         }
     } else {
@@ -111,7 +111,8 @@ fun createFeatureModule() {
     val moduleInternalDirectories = "java/khs/onmi/$moduleName"
 
     if (moduleDirectory.exists()) {
-        println("[ $moduleName ] is already exist.")
+        println("[ $moduleName ] module is already exist.")
+        return
     } else {
         moduleDirectory.mkdir()
         updateSettingGradle(projectPath, ":feature:$moduleName")
@@ -121,8 +122,37 @@ fun createFeatureModule() {
     println("finish create feature module [ $moduleName ]")
 }
 
-fun createDomainModule() {
+fun createDomainModules() {
+    println("write domain name.")
+    val projectPath = System.getProperty("user.dir")!!
+    val domainName = readln()
+    val domainDirectory = File("$projectPath/domain/", domainName)
 
+    if (domainDirectory.exists()) {
+        println("[ $domainName ] domain is already exist.")
+        return
+    } else {
+        domainDirectory.mkdir()
+    }
+
+    val domainModulePath = "$projectPath/domain/$domainName/domain"
+    val dataModulePath = "$projectPath/domain/$domainName/data"
+    val domainModuleDirectory = File("$projectPath/domain/$domainName", "domain")
+    val dataModuleDirectory = File("$projectPath/domain/$domainName", "data")
+    val domainModuleInternalDirectories = "java/khs/onmi/$domainName/domain"
+    val dataModuleInternalDirectories = "java/khs/onmi/$domainName/data"
+
+    domainModuleDirectory.mkdir()
+    updateSettingGradle(projectPath, ":domain:$domainName:domain")
+    createModuleDirectories(domainModulePath, domainModuleInternalDirectories)
+    createModuleFiles(domainModulePath, "domain", domainModuleInternalDirectories)
+
+    dataModuleDirectory.mkdir()
+    updateSettingGradle(projectPath, ":domain:$domainName:data")
+    createModuleDirectories(dataModulePath, dataModuleInternalDirectories)
+    createModuleFiles(dataModulePath, "data", dataModuleInternalDirectories)
+
+    println("finish create domain modules [ $domainName ]")
 }
 
 fun createCoreModule() {
@@ -134,7 +164,8 @@ fun createCoreModule() {
     val moduleInternalDirectories = "java/khs/onmi/core/$moduleName"
 
     if (moduleDirectory.exists()) {
-        println("[ $moduleName ] is already exist.")
+        println("[ $moduleName ] module is already exist.")
+        return
     } else {
         moduleDirectory.mkdir()
         updateSettingGradle(projectPath, ":core:$moduleName")
