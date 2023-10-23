@@ -145,12 +145,12 @@ fun createDomainModules() {
     domainModuleDirectory.mkdir()
     updateSettingGradle(projectPath, ":domain:$domainName:domain")
     createModuleDirectories(domainModulePath, domainModuleInternalDirectories)
-    createModuleFiles(domainModulePath, "domain", domainModuleInternalDirectories)
+    createModuleFiles(domainModulePath, "$domainName.domain", domainModuleInternalDirectories)
 
     dataModuleDirectory.mkdir()
     updateSettingGradle(projectPath, ":domain:$domainName:data")
     createModuleDirectories(dataModulePath, dataModuleInternalDirectories)
-    createModuleFiles(dataModulePath, "data", dataModuleInternalDirectories)
+    createModuleFiles(dataModulePath, "$domainName.data", dataModuleInternalDirectories)
 
     println("finish create domain modules [ $domainName ]")
 }
