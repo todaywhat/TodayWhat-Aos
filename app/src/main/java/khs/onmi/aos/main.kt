@@ -4,40 +4,19 @@ import java.io.File
 import java.io.FileWriter
 
 fun main() {
-    val path = System.getProperty("user.dir")!!
-    println(path)
-    println("모듈명을 입력해 주세요.")
+    val projectPath = System.getProperty("user.dir")!!
+    println("write module name.")
     val moduleName = readln()
-    val modulePath = "$path/$moduleName"
-    val moduleDir = File(path, moduleName)
-    val dirs = listOf("java","khs","onmi", moduleName)
-    val dirNames = listOf("main","test","androidTest")
+    val modulePath = "$projectPath/$moduleName"
+    val moduleDirectory = File(projectPath, moduleName)
 
-    writeSettingGradle(path, moduleName)
-
-    if (moduleDir.exists()) {
-        println("이미 존재하는 이름의 모듈입니다.")
+    if (moduleDirectory.exists()) {
+        println("[ $moduleName ] is already exist.")
     } else {
-        moduleDir.mkdir()
-        makeDir(path = modulePath, dirName = "libs")
-        makeDir(path = modulePath, dirName = "src")
-        dirNames.forEach { name ->
-            makeDir("$modulePath/src", name)
-            var dirPath = "$modulePath/src/$name"
-
-            dirs.forEach {
-                makeDir(dirPath, it)
-                dirPath = "$dirPath/$it"
-            }
-        }
-        makeFile(path = modulePath, fileName = "build.gradle.kts", content = Content.buildGradleKts(moduleName))
-        makeFile(path = modulePath, fileName = ".gitignore")
-        makeFile(path = modulePath, fileName = "consumer-rules.pro")
-        makeFile(path = modulePath, fileName = "proguard-rules.pro", content = Content.proguardRules)
-        makeFile(path = "$path/$moduleName/src/main", fileName = "AndroidManifest.xml", content = Content.manifest)
-        makeFile(path = "$path/$moduleName/src/main/java/khs/onmi/$moduleName", fileName = ".gitinit")
-        makeFile(path = "$path/$moduleName/src/androidTest/java/khs/onmi/$moduleName", fileName = "ExampleInstrumentedTest.kt")
-        makeFile(path = "$path/$moduleName/src/test/java/khs/onmi/$moduleName", fileName = "ExampleUnitTest.kt")
+        moduleDirectory.mkdir()
+        updateSettingGradle(projectPath, moduleName)
+        createModuleDirectories(modulePath, moduleName)
+        createModuleFiles(modulePath, moduleName)
     }
 }
 
@@ -49,23 +28,23 @@ fun makeFile(
     val file = File(path, fileName)
 
     if (file.exists()) {
-        println("이미 존재하는 이름의 파일입니다.")
+        println("file [ $fileName ] is already exist.")
     } else {
         runCatching {
             val fileWriter = FileWriter(file)
             fileWriter.write(content)
             fileWriter.close()
         }.onFailure {
-            println("파일 생성에 실패했습니다.\n error: $it")
+            println("fail to create file [ $fileName ]\n caused: $it")
         }
     }
 }
 
-fun makeDir(
+fun makeDirectory(
     path: String,
-    dirName: String
+    directoryName: String,
 ) {
-    val file = File(path, dirName)
+    val file = File(path, directoryName)
 
     if (file.exists()) {
         println("이미 존재하는 이름의 디렉토리입니다.")
@@ -73,18 +52,52 @@ fun makeDir(
         runCatching {
             file.mkdir()
         }.onFailure {
-            println("디렉토리 생성에 실패했습니다.\n error: $it")
+            println("fail to create directory [ $directoryName ]\n caused: $it")
         }
     }
 }
 
-fun writeSettingGradle(
+fun updateSettingGradle(
     path: String,
-    moduleName: String
+    moduleName: String,
 ) {
     val settingGradle = File("$path/settings.gradle.kts")
     val settingGradleContent = settingGradle.readText()
     val fileWriter = FileWriter(settingGradle)
     fileWriter.write("$settingGradleContent\ninclude(\":$moduleName\")")
     fileWriter.close()
+}
+
+fun createModuleDirectories(
+    modulePath: String,
+    moduleName: String,
+) {
+    val dirs = listOf("java", "khs", "onmi", moduleName)
+    val dirNames = listOf("main", "test", "androidTest")
+
+    makeDirectory(path = modulePath, directoryName = "libs")
+    makeDirectory(path = modulePath, directoryName = "src")
+    dirNames.forEach { name ->
+        makeDirectory("$modulePath/src", name)
+        var dirPath = "$modulePath/src/$name"
+
+        dirs.forEach {
+            makeDirectory(dirPath, it)
+            dirPath = "$dirPath/$it"
+        }
+    }
+}
+
+fun createModuleFiles(
+    modulePath: String,
+    moduleName: String,
+) {
+    makeFile(path = modulePath, fileName = "build.gradle.kts", content = Content.buildGradleKts(moduleName))
+    makeFile(path = modulePath, fileName = ".gitignore")
+    makeFile(path = modulePath, fileName = "consumer-rules.pro")
+    makeFile(path = modulePath, fileName = "proguard-rules.pro", content = Content.proguardRules)
+    makeFile(path = "$modulePath/src/main", fileName = "AndroidManifest.xml", content = Content.manifest)
+    makeFile(path = "$modulePath/src/main/java/khs/onmi/$moduleName", fileName = ".gitinit")
+    makeFile(path = "$modulePath/src/androidTest/java/khs/onmi/$moduleName", fileName = "ExampleInstrumentedTest.kt")
+    makeFile(path = "$modulePath/src/test/java/khs/onmi/$moduleName", fileName = "ExampleUnitTest.kt")
 }
