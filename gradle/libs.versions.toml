@@ -18,6 +18,7 @@ composeCompiler = "1.4.3"
 junit = "4.13.2"
 androidXJunit = "1.1.5"
 espresso = "3.5.1"
+material = "1.10.0"
 
 [libraries]
 # <--------------------[ AndroidX ]-------------------->
@@ -43,6 +44,7 @@ espresso-core = { group = "androidx.test.espresso", name = "espresso-core", vers
 # <--- [ Define Dependeicies used in build-logic ] --->
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
 kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
 
 [plugins]
