@@ -39,7 +39,7 @@ object Content {
                 "}\n" +
                 "\n" +
                 "android {\n" +
-                "    namespace = \"com.onmi.$moduleName\"\n" +
+                "    namespace = \"khs.onmi.$moduleName\"\n" +
                 "    compileSdk = 33\n" +
                 "\n" +
                 "    defaultConfig {\n" +

@@ -4,19 +4,19 @@ import java.io.File
 import java.io.FileWriter
 
 fun main() {
-    val projectPath = System.getProperty("user.dir")!!
-    println("write module name.")
-    val moduleName = readln()
-    val modulePath = "$projectPath/$moduleName"
-    val moduleDirectory = File(projectPath, moduleName)
-
-    if (moduleDirectory.exists()) {
-        println("[ $moduleName ] is already exist.")
+    val locations = listOf("feature", "domain", "core")
+    println("choose module generate location.")
+    println("1.feature\n2.domain\n3.core")
+    val location = readln()
+    if (locations.contains(location)) {
+        when(location) {
+            "feature" -> { createFeatureModule() }
+            "domain" -> { createDomainModule() }
+            "core" -> { createCoreModule() }
+        }
     } else {
-        moduleDirectory.mkdir()
-        updateSettingGradle(projectPath, moduleName)
-        createModuleDirectories(modulePath, moduleName)
-        createModuleFiles(modulePath, moduleName)
+        println("[ $location ] is not exist.")
+        return
     }
 }
 
@@ -59,20 +59,19 @@ fun makeDirectory(
 
 fun updateSettingGradle(
     path: String,
-    moduleName: String,
+    modulePath: String,
 ) {
     val settingGradle = File("$path/settings.gradle.kts")
     val settingGradleContent = settingGradle.readText()
     val fileWriter = FileWriter(settingGradle)
-    fileWriter.write("$settingGradleContent\ninclude(\":$moduleName\")")
+    fileWriter.write("$settingGradleContent\ninclude(\"$modulePath\")")
     fileWriter.close()
 }
 
 fun createModuleDirectories(
     modulePath: String,
-    moduleName: String,
+    moduleInternalDirectories: String,
 ) {
-    val dirs = listOf("java", "khs", "onmi", moduleName)
     val dirNames = listOf("main", "test", "androidTest")
 
     makeDirectory(path = modulePath, directoryName = "libs")
@@ -81,7 +80,7 @@ fun createModuleDirectories(
         makeDirectory("$modulePath/src", name)
         var dirPath = "$modulePath/src/$name"
 
-        dirs.forEach {
+        moduleInternalDirectories.split("/").forEach {
             makeDirectory(dirPath, it)
             dirPath = "$dirPath/$it"
         }
@@ -100,4 +99,31 @@ fun createModuleFiles(
     makeFile(path = "$modulePath/src/main/java/khs/onmi/$moduleName", fileName = ".gitinit")
     makeFile(path = "$modulePath/src/androidTest/java/khs/onmi/$moduleName", fileName = "ExampleInstrumentedTest.kt")
     makeFile(path = "$modulePath/src/test/java/khs/onmi/$moduleName", fileName = "ExampleUnitTest.kt")
+}
+
+fun createFeatureModule() {
+    println("write feature module name.")
+    val projectPath = System.getProperty("user.dir")!!
+    val moduleName = readln()
+    val modulePath = "$projectPath/Feature/$moduleName"
+    val moduleDirectory = File("$projectPath/Feature/", moduleName)
+    val moduleInternalDirectories = "java/khs/onmi/$moduleName"
+
+    if (moduleDirectory.exists()) {
+        println("[ $moduleName ] is already exist.")
+    } else {
+        moduleDirectory.mkdir()
+        updateSettingGradle(projectPath, ":feature:$moduleName")
+        createModuleDirectories(modulePath, moduleInternalDirectories)
+        createModuleFiles(modulePath, moduleName)
+    }
+    println("finish create feature module [ $moduleName ]")
+}
+
+fun createDomainModule() {
+
+}
+
+fun createCoreModule() {
+
 }
