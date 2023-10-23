@@ -47,7 +47,7 @@ fun makeDirectory(
     val file = File(path, directoryName)
 
     if (file.exists()) {
-        println("이미 존재하는 이름의 디렉토리입니다.")
+        println("directory [ $directoryName ] is already exist.")
     } else {
         runCatching {
             file.mkdir()
@@ -90,23 +90,24 @@ fun createModuleDirectories(
 fun createModuleFiles(
     modulePath: String,
     moduleName: String,
+    moduleInternalDirectoriesPath: String,
 ) {
     makeFile(path = modulePath, fileName = "build.gradle.kts", content = Content.buildGradleKts(moduleName))
     makeFile(path = modulePath, fileName = ".gitignore")
     makeFile(path = modulePath, fileName = "consumer-rules.pro")
     makeFile(path = modulePath, fileName = "proguard-rules.pro", content = Content.proguardRules)
     makeFile(path = "$modulePath/src/main", fileName = "AndroidManifest.xml", content = Content.manifest)
-    makeFile(path = "$modulePath/src/main/java/khs/onmi/$moduleName", fileName = ".gitinit")
-    makeFile(path = "$modulePath/src/androidTest/java/khs/onmi/$moduleName", fileName = "ExampleInstrumentedTest.kt")
-    makeFile(path = "$modulePath/src/test/java/khs/onmi/$moduleName", fileName = "ExampleUnitTest.kt")
+    makeFile(path = "$modulePath/src/main/$moduleInternalDirectoriesPath", fileName = ".gitinit")
+    makeFile(path = "$modulePath/src/androidTest/$moduleInternalDirectoriesPath", fileName = "ExampleInstrumentedTest.kt")
+    makeFile(path = "$modulePath/src/test/$moduleInternalDirectoriesPath", fileName = "ExampleUnitTest.kt")
 }
 
 fun createFeatureModule() {
     println("write feature module name.")
     val projectPath = System.getProperty("user.dir")!!
     val moduleName = readln()
-    val modulePath = "$projectPath/Feature/$moduleName"
-    val moduleDirectory = File("$projectPath/Feature/", moduleName)
+    val modulePath = "$projectPath/feature/$moduleName"
+    val moduleDirectory = File("$projectPath/feature/", moduleName)
     val moduleInternalDirectories = "java/khs/onmi/$moduleName"
 
     if (moduleDirectory.exists()) {
@@ -115,7 +116,7 @@ fun createFeatureModule() {
         moduleDirectory.mkdir()
         updateSettingGradle(projectPath, ":feature:$moduleName")
         createModuleDirectories(modulePath, moduleInternalDirectories)
-        createModuleFiles(modulePath, moduleName)
+        createModuleFiles(modulePath, moduleName, moduleInternalDirectories)
     }
     println("finish create feature module [ $moduleName ]")
 }
@@ -125,5 +126,20 @@ fun createDomainModule() {
 }
 
 fun createCoreModule() {
+    println("write core module name.")
+    val projectPath = System.getProperty("user.dir")!!
+    val moduleName = readln()
+    val modulePath = "$projectPath/core/$moduleName"
+    val moduleDirectory = File("$projectPath/core/", moduleName)
+    val moduleInternalDirectories = "java/khs/onmi/core/$moduleName"
 
+    if (moduleDirectory.exists()) {
+        println("[ $moduleName ] is already exist.")
+    } else {
+        moduleDirectory.mkdir()
+        updateSettingGradle(projectPath, ":core:$moduleName")
+        createModuleDirectories(modulePath, moduleInternalDirectories)
+        createModuleFiles(modulePath, moduleName, moduleInternalDirectories)
+    }
+    println("finish create core module [ $moduleName ]")
 }
