@@ -1,4 +1,4 @@
-package khs.onmi.aos
+package khs.onmi.aos.script
 
 import java.io.File
 import java.io.FileWriter
@@ -20,7 +20,8 @@ fun main() {
     }
 }
 
-fun makeFile(
+// create file function
+fun createFile(
     path: String,
     fileName: String,
     content: String = "",
@@ -40,7 +41,8 @@ fun makeFile(
     }
 }
 
-fun makeDirectory(
+//create directory function
+fun createDirectory(
     path: String,
     directoryName: String,
 ) {
@@ -57,6 +59,7 @@ fun makeDirectory(
     }
 }
 
+//update settings.gradle function
 fun updateSettingGradle(
     path: String,
     modulePath: String,
@@ -68,38 +71,53 @@ fun updateSettingGradle(
     fileWriter.close()
 }
 
+//create all internal module directories function
 fun createModuleDirectories(
     modulePath: String,
     moduleInternalDirectories: String,
 ) {
     val dirNames = listOf("main", "test", "androidTest")
 
-    makeDirectory(path = modulePath, directoryName = "libs")
-    makeDirectory(path = modulePath, directoryName = "src")
+    createDirectory(path = modulePath, directoryName = "libs")
+    createDirectory(path = modulePath, directoryName = "src")
     dirNames.forEach { name ->
-        makeDirectory("$modulePath/src", name)
+        createDirectory("$modulePath/src", name)
         var dirPath = "$modulePath/src/$name"
 
         moduleInternalDirectories.split("/").forEach {
-            makeDirectory(dirPath, it)
+            createDirectory(dirPath, it)
             dirPath = "$dirPath/$it"
         }
     }
 }
 
+//create all internal module files function
 fun createModuleFiles(
     modulePath: String,
     moduleName: String,
     moduleInternalDirectoriesPath: String,
 ) {
-    makeFile(path = modulePath, fileName = "build.gradle.kts", content = Content.buildGradleKts(moduleName))
-    makeFile(path = modulePath, fileName = ".gitignore")
-    makeFile(path = modulePath, fileName = "consumer-rules.pro")
-    makeFile(path = modulePath, fileName = "proguard-rules.pro", content = Content.proguardRules)
-    makeFile(path = "$modulePath/src/main", fileName = "AndroidManifest.xml", content = Content.manifest)
-    makeFile(path = "$modulePath/src/main/$moduleInternalDirectoriesPath", fileName = ".gitinit")
-    makeFile(path = "$modulePath/src/androidTest/$moduleInternalDirectoriesPath", fileName = "ExampleInstrumentedTest.kt")
-    makeFile(path = "$modulePath/src/test/$moduleInternalDirectoriesPath", fileName = "ExampleUnitTest.kt")
+    createFile(path = modulePath, fileName = "build.gradle.kts", content = Content.buildGradleKts(moduleName))
+    createFile(path = modulePath, fileName = ".gitignore")
+    createFile(path = modulePath, fileName = "consumer-rules.pro")
+    createFile(path = modulePath, fileName = "proguard-rules.pro", content = Content.proguardRules)
+    createFile(path = "$modulePath/src/main", fileName = "AndroidManifest.xml", content = Content.manifest)
+    createFile(path = "$modulePath/src/main/$moduleInternalDirectoriesPath", fileName = ".gitinit")
+    createFile(path = "$modulePath/src/androidTest/$moduleInternalDirectoriesPath", fileName = "ExampleInstrumentedTest.kt")
+    createFile(path = "$modulePath/src/test/$moduleInternalDirectoriesPath", fileName = "ExampleUnitTest.kt")
+}
+
+//rebuild gradle function
+fun rebuildGradle() {
+    runCatching {
+        val parse = "./gradlew build".split("\\s".toRegex())
+        val process = ProcessBuilder(*parse.toTypedArray())
+            .redirectErrorStream(true)
+            .start()
+        println(process.inputStream.bufferedReader().readText())
+    }.onFailure {
+        println("rebuild error")
+    }
 }
 
 fun createFeatureModule() {
@@ -120,6 +138,7 @@ fun createFeatureModule() {
         createModuleFiles(modulePath, moduleName, moduleInternalDirectories)
     }
     println("finish create feature module [ $moduleName ]")
+    rebuildGradle()
 }
 
 fun createDomainModules() {
@@ -153,6 +172,7 @@ fun createDomainModules() {
     createModuleFiles(dataModulePath, "$domainName.data", dataModuleInternalDirectories)
 
     println("finish create domain modules [ $domainName ]")
+    rebuildGradle()
 }
 
 fun createCoreModule() {
@@ -173,4 +193,5 @@ fun createCoreModule() {
         createModuleFiles(modulePath, moduleName, moduleInternalDirectories)
     }
     println("finish create core module [ $moduleName ]")
+    rebuildGradle()
 }

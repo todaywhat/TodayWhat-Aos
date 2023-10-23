@@ -1,4 +1,4 @@
-package khs.onmi.aos
+package khs.onmi.aos.script
 
 object Content {
     //proguard-rule.pro
