@@ -1,7 +1,6 @@
 package khs.onmi.core.designsystem.theme.color
 
 import androidx.compose.ui.graphics.Color
-import khs.onmi.core.designsystem.theme.ColorTheme
 
 object DarkThemeColor : ColorTheme() {
     override val TextPrimary = Color(0xFFD8D8DF)
