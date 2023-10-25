@@ -1,4 +1,4 @@
-package khs.onmi.core.designsystem.theme
+package khs.onmi.core.designsystem.theme.color
 
 import androidx.compose.ui.graphics.Color
 
