@@ -12,12 +12,12 @@ import khs.onmi.core.designsystem.theme.ONMITheme
 
 @Composable
 fun ONMIRadioButton(
-    selected: Boolean,
+    isSelected: Boolean,
     onClick: () -> Unit,
 ) {
     ONMITheme { color, _ ->
         RadioButton(
-            selected = selected,
+            selected = isSelected,
             onClick = onClick,
             colors = RadioButtonDefaults.colors(
                 selectedColor = color.TextPrimary,
@@ -30,11 +30,11 @@ fun ONMIRadioButton(
 @Preview
 @Composable
 fun ONMIRadioButtonPre() {
-    var selected by remember {
+    var isSelected by remember {
         mutableStateOf(false)
     }
 
-    ONMIRadioButton(selected = selected) {
-        selected = !selected
+    ONMIRadioButton(isSelected = isSelected) {
+        isSelected = !isSelected
     }
 }
