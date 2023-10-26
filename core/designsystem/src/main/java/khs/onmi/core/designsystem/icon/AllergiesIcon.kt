@@ -16,7 +16,10 @@ import khs.onmi.core.designsystem.R
 import khs.onmi.core.designsystem.theme.ONMITheme
 
 @Composable
-private fun BasicAllergiesIcon(id: Int) {
+private fun BasicAllergiesIcon(
+    id: Int,
+    isItemSelected: Boolean,
+) {
     ONMITheme { color, _ ->
         Box(
             modifier = Modifier
@@ -28,122 +31,166 @@ private fun BasicAllergiesIcon(id: Int) {
                 painter = painterResource(id = id),
                 contentDescription = "Allergies Icon",
                 modifier = Modifier.align(Alignment.Center),
-                tint = color.UnselectedPrimary
+                tint = if (isItemSelected) color.Black else color.UnselectedPrimary
             )
         }
     }
 }
 
-@Preview
 @Composable
-fun AllergiesEggIcon() {
-    BasicAllergiesIcon(id = R.drawable.ic_allergies_egg)
+fun AllergiesEggIcon(isItemSelected: Boolean) {
+    BasicAllergiesIcon(
+        id = R.drawable.ic_allergies_egg,
+        isItemSelected = isItemSelected
+    )
+}
+
+@Composable
+fun AllergiesMilkIcon(isItemSelected: Boolean) {
+    BasicAllergiesIcon(
+        id = R.drawable.ic_allergies_milk,
+        isItemSelected = isItemSelected
+    )
+}
+
+@Composable
+fun AllergiesBuckwheatIcon(isItemSelected: Boolean) {
+    BasicAllergiesIcon(
+        id = R.drawable.ic_allergies_buckwheat,
+        isItemSelected = isItemSelected
+    )
+}
+
+@Composable
+fun AllergiesPeanutIcon(isItemSelected: Boolean) {
+    BasicAllergiesIcon(
+        id = R.drawable.ic_allergies_peanut,
+        isItemSelected = isItemSelected
+    )
+}
+
+@Composable
+fun AllergiesPeaIcon(isItemSelected: Boolean) {
+    BasicAllergiesIcon(
+        id = R.drawable.ic_allergies_pea,
+        isItemSelected = isItemSelected
+    )
+}
+
+@Composable
+fun AllergiesWheatIcon(isItemSelected: Boolean) {
+    BasicAllergiesIcon(
+        id = R.drawable.ic_allergies_wheat,
+        isItemSelected = isItemSelected
+    )
+}
+
+@Composable
+fun AllergiesMackerelIcon(isItemSelected: Boolean) {
+    BasicAllergiesIcon(
+        id = R.drawable.ic_allergies_mackerel,
+        isItemSelected = isItemSelected
+    )
+}
+
+@Composable
+fun AllergiesCrabIcon(isItemSelected: Boolean) {
+    BasicAllergiesIcon(
+        id = R.drawable.ic_allergies_crab,
+        isItemSelected = isItemSelected
+    )
+}
+
+@Composable
+fun AllergiesShrimpIcon(isItemSelected: Boolean) {
+    BasicAllergiesIcon(
+        id = R.drawable.ic_allergies_shrimp,
+        isItemSelected = isItemSelected
+    )
+}
+
+@Composable
+fun AllergiesPorkIcon(isItemSelected: Boolean) {
+    BasicAllergiesIcon(
+        id = R.drawable.ic_allergies_pork,
+        isItemSelected = isItemSelected
+    )
+}
+
+@Composable
+fun AllergiesPeachIcon(isItemSelected: Boolean) {
+    BasicAllergiesIcon(
+        id = R.drawable.ic_allergies_peach,
+        isItemSelected = isItemSelected
+    )
+}
+
+@Composable
+fun AllergiesTomatoIcon(isItemSelected: Boolean) {
+    BasicAllergiesIcon(
+        id = R.drawable.ic_allergies_tomato,
+        isItemSelected = isItemSelected
+    )
+}
+
+@Composable
+fun AllergiesSulphuricAcidIcon(isItemSelected: Boolean) {
+    BasicAllergiesIcon(
+        id = R.drawable.ic_allergies_sulphuric_acid,
+        isItemSelected = isItemSelected
+    )
+}
+
+@Composable
+fun AllergiesWalnutIcon(isItemSelected: Boolean) {
+    BasicAllergiesIcon(
+        id = R.drawable.ic_allergies_walnut,
+        isItemSelected = isItemSelected
+    )
+}
+
+@Composable
+fun AllergiesChickenIcon(isItemSelected: Boolean) {
+    BasicAllergiesIcon(
+        id = R.drawable.ic_allergies_chicken,
+        isItemSelected = isItemSelected
+    )
+}
+
+@Composable
+fun AllergiesBeefIcon(isItemSelected: Boolean) {
+    BasicAllergiesIcon(
+        id = R.drawable.ic_allergies_beef,
+        isItemSelected = isItemSelected
+    )
+}
+
+@Composable
+fun AllergiesSquidIcon(isItemSelected: Boolean) {
+    BasicAllergiesIcon(
+        id = R.drawable.ic_allergies_squid,
+        isItemSelected = isItemSelected
+    )
+}
+
+@Composable
+fun AllergiesShellfishIcon(isItemSelected: Boolean) {
+    BasicAllergiesIcon(
+        id = R.drawable.ic_allergies_shellfish,
+        isItemSelected = isItemSelected
+    )
+}
+
+@Composable
+fun AllergiesPineNutIcon(isItemSelected: Boolean) {
+    BasicAllergiesIcon(
+        id = R.drawable.ic_allergies_pine_nut,
+        isItemSelected = isItemSelected
+    )
 }
 
 @Preview
 @Composable
-fun AllergiesMilkIcon() {
-    BasicAllergiesIcon(id = R.drawable.ic_allergies_milk)
-}
-
-@Preview
-@Composable
-fun AllergiesBuckwheatIcon() {
-    BasicAllergiesIcon(id = R.drawable.ic_allergies_buckwheat)
-}
-
-@Preview
-@Composable
-fun AllergiesPeanutIcon() {
-    BasicAllergiesIcon(id = R.drawable.ic_allergies_peanut)
-}
-
-@Preview
-@Composable
-fun AllergiesPeaIcon() {
-    BasicAllergiesIcon(id = R.drawable.ic_allergies_pea)
-}
-
-@Preview
-@Composable
-fun AllergiesWheatIcon() {
-    BasicAllergiesIcon(id = R.drawable.ic_allergies_wheat)
-}
-
-@Preview
-@Composable
-fun AllergiesMackerelIcon() {
-    BasicAllergiesIcon(id = R.drawable.ic_allergies_mackerel)
-}
-
-@Preview
-@Composable
-fun AllergiesCrabIcon() {
-    BasicAllergiesIcon(id = R.drawable.ic_allergies_crab)
-}
-
-@Preview
-@Composable
-fun AllergiesShrimpIcon() {
-    BasicAllergiesIcon(id = R.drawable.ic_allergies_shrimp)
-}
-
-@Preview
-@Composable
-fun AllergiesPorkIcon() {
-    BasicAllergiesIcon(id = R.drawable.ic_allergies_pork)
-}
-
-@Preview
-@Composable
-fun AllergiesPeachIcon() {
-    BasicAllergiesIcon(id = R.drawable.ic_allergies_peach)
-}
-
-@Preview
-@Composable
-fun AllergiesTomatoIcon() {
-    BasicAllergiesIcon(id = R.drawable.ic_allergies_tomato)
-}
-
-@Preview
-@Composable
-fun AllergiesSulphuricAcidIcon() {
-    BasicAllergiesIcon(id = R.drawable.ic_allergies_sulphuric_acid)
-}
-
-@Preview
-@Composable
-fun AllergiesWalnutIcon() {
-    BasicAllergiesIcon(id = R.drawable.ic_allergies_walnut)
-}
-
-@Preview
-@Composable
-fun AllergiesChickenIcon() {
-    BasicAllergiesIcon(id = R.drawable.ic_allergies_chicken)
-}
-
-@Preview
-@Composable
-fun AllergiesBeefIcon() {
-    BasicAllergiesIcon(id = R.drawable.ic_allergies_beef)
-}
-
-@Preview
-@Composable
-fun AllergiesSquidIcon() {
-    BasicAllergiesIcon(id = R.drawable.ic_allergies_squid)
-}
-
-@Preview
-@Composable
-fun AllergiesShellfishIcon() {
-    BasicAllergiesIcon(id = R.drawable.ic_allergies_shellfish)
-}
-
-@Preview
-@Composable
-fun AllergiesPineNutIcon() {
-    BasicAllergiesIcon(id = R.drawable.ic_allergies_pine_nut)
+fun AllergyIconPre() {
+    BasicAllergiesIcon(id = R.drawable.ic_allergies_egg, isItemSelected = true)
 }
