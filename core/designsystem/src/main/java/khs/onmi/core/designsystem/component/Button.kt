@@ -16,7 +16,7 @@ import khs.onmi.core.designsystem.theme.ONMITheme
 @Composable
 fun ONMIButton(
     text: String,
-    isEnable: Boolean,
+    isEnabled: Boolean,
     onClick: () -> Unit,
 ) {
     ONMITheme { color, typography ->
@@ -33,7 +33,7 @@ fun ONMIButton(
             ),
             shape = RoundedCornerShape(8.dp),
             onClick = onClick,
-            enabled = isEnable
+            enabled = isEnabled
         ) {
             Text(
                 text = text,
@@ -46,7 +46,7 @@ fun ONMIButton(
 @Preview
 @Composable
 fun ONMIButtonPre() {
-    ONMIButton(text = "Text", isEnable = false) {
+    ONMIButton(text = "Text", isEnabled = false) {
 
     }
 }
