@@ -67,7 +67,7 @@ fun SettingIcon(
 }
 
 @Composable
-fun AllergiesIcon(
+fun LargeAllergiesIcon(
     modifier: Modifier = Modifier,
 ) {
     BasicIcon(
@@ -107,7 +107,7 @@ fun LargeIconsPre() {
             NotificationsIcon()
             NotificationsFillIcon()
             SettingIcon()
-            AllergiesIcon()
+            LargeAllergiesIcon()
             GithubIcon()
             EmailIcon()
         }
