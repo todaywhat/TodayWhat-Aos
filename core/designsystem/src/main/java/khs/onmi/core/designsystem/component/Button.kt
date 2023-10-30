@@ -17,14 +17,12 @@ import khs.onmi.core.designsystem.theme.ONMITheme
 fun ONMIButton(
     text: String,
     isEnabled: Boolean,
+    modifier: Modifier = Modifier,
     onClick: () -> Unit,
 ) {
     ONMITheme { color, typography ->
         Button(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(52.dp)
-                .padding(horizontal = 16.dp),
+            modifier = modifier,
             colors = ButtonDefaults.buttonColors(
                 contentColor = color.White,
                 disabledContentColor = color.UnselectedPrimary,
@@ -46,7 +44,14 @@ fun ONMIButton(
 @Preview
 @Composable
 fun ONMIButtonPre() {
-    ONMIButton(text = "Text", isEnabled = false) {
+    ONMIButton(
+        text = "Text",
+        isEnabled = false,
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(52.dp)
+            .padding(horizontal = 16.dp)
+    ) {
 
     }
 }
