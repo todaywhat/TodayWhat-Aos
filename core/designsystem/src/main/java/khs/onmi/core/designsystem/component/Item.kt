@@ -2,7 +2,6 @@ package khs.onmi.core.designsystem.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -37,7 +36,10 @@ fun MealsItem(
                 modifier = Modifier.align(Alignment.CenterStart)
             )
             if (isAllergyFood) {
-                LargeAllergiesIcon(modifier = Modifier.align(Alignment.CenterEnd))
+                LargeAllergiesIcon(
+                    tint = color.UnselectedPrimary,
+                    modifier = Modifier.align(Alignment.CenterEnd)
+                )
             }
         }
     }
