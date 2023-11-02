@@ -2,12 +2,16 @@ package khs.onmi.core.designsystem.component
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -31,6 +35,7 @@ import khs.onmi.core.designsystem.theme.ONMITheme
 fun AllergiesCard(
     modifier: Modifier = Modifier,
     isSelected: Boolean,
+    itemNumber: Int,
     allergyName: String,
     allergyIcon: @Composable () -> Unit,
     onItemClick: () -> Unit,
@@ -43,20 +48,37 @@ fun AllergiesCard(
             colors = CardDefaults.cardColors(containerColor = color.CardBackgroundSecondary),
             onClick = onItemClick
         ) {
-            Column(
-                modifier = Modifier.fillMaxHeight(),
-                verticalArrangement = Arrangement.Center
-            ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.padding(start = 20.dp)
+            Box(modifier = Modifier.fillMaxSize()) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .align(Alignment.CenterStart),
+                    verticalArrangement = Arrangement.Center
                 ) {
-                    allergyIcon()
-                    Spacer(modifier = Modifier.width(8.dp))
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.padding(start = 20.dp)
+                    ) {
+                        allergyIcon()
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = allergyName,
+                            style = typography.Body3,
+                            color = if (isSelected) color.TextPrimary else color.UnselectedPrimary
+                        )
+                    }
+                }
+                Box(
+                    modifier = Modifier
+                        .size(24.dp)
+                        .align(Alignment.TopEnd)
+                        .offset(x = (-8).dp, y = 8.dp)
+                ) {
                     Text(
-                        text = allergyName,
+                        text = itemNumber.toString(),
                         style = typography.Body3,
-                        color = if (isSelected) color.TextPrimary else color.UnselectedPrimary
+                        color = if (isSelected) color.TextPrimary else color.UnselectedPrimary,
+                        modifier = Modifier.align(Alignment.Center)
                     )
                 }
             }
@@ -76,6 +98,7 @@ fun AllergiesCardPre() {
             .width(167.dp)
             .height(96.dp),
         isSelected = isSelected,
+        itemNumber = 1,
         allergyName = "달걀",
         allergyIcon = {
             AllergiesEggIcon(isItemSelected = isSelected)
