@@ -1,11 +1,15 @@
 package khs.onmi.core.designsystem.component
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -45,12 +49,60 @@ fun MealsItem(
     }
 }
 
+@Composable
+fun TimeTableItem(
+    time: String,
+    subject: String,
+    modifier: Modifier = Modifier,
+) {
+    ONMITheme { color, typography ->
+        Row(
+            modifier = modifier
+                .clip(RoundedCornerShape(8.dp))
+                .background(color.CardBackground)
+                .padding(horizontal = 12.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            Text(
+                text = "${time}교시",
+                style = typography.Caption1,
+                color = color.TextPrimary
+            )
+            Divider(
+                modifier = Modifier
+                    .width(1.dp)
+                    .height(18.dp)
+                    .background(color.UnselectedPrimary)
+            )
+            Text(
+                text = subject,
+                style = typography.Headline4,
+                color = color.TextPrimary
+            )
+        }
+    }
+}
+
 @Preview
 @Composable
 fun MealsItemPre() {
     MealsItem(
         meal = "급식 메뉴",
         isAllergyFood = true,
+        modifier = Modifier
+            .height(52.dp)
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
+    )
+}
+
+@Preview
+@Composable
+fun TimeTableItemPre() {
+    TimeTableItem(
+        time = "1",
+        subject = "한국사",
         modifier = Modifier
             .height(52.dp)
             .fillMaxWidth()
