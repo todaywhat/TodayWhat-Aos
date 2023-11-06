@@ -16,9 +16,9 @@ import androidx.compose.ui.input.pointer.pointerInput
 
 enum class ButtonState { Pressed, Idle }
 
-fun Modifier.addBounceEffect() = composed {
+fun Modifier.addBounceEffect(bouncingDegree: Float = 0.85f) = composed {
     var buttonState by remember { mutableStateOf(ButtonState.Idle) }
-    val scale by animateFloatAsState(if (buttonState == ButtonState.Pressed) 0.70f else 1f, label = "")
+    val scale by animateFloatAsState(if (buttonState == ButtonState.Pressed) bouncingDegree else 1f, label = "")
 
     this.graphicsLayer {
         scaleX = scale
