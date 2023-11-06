@@ -28,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import khs.onmi.core.designsystem.icon.AllergiesEggIcon
+import khs.onmi.core.designsystem.modifier.addBounceEffect
 import khs.onmi.core.designsystem.theme.ONMITheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -42,7 +43,7 @@ fun AllergiesCard(
 ) {
     ONMITheme { color, typography ->
         Card(
-            modifier = modifier,
+            modifier = modifier.addBounceEffect(),
             shape = RoundedCornerShape(16.dp),
             border = BorderStroke(2.dp, color.Black).takeIf { isSelected },
             colors = CardDefaults.cardColors(containerColor = color.CardBackgroundSecondary),
@@ -99,7 +100,7 @@ fun AllergiesCardPre() {
             .height(96.dp),
         isSelected = isSelected,
         itemNumber = 1,
-        allergyName = "달걀",
+        allergyName = "난류",
         allergyIcon = {
             AllergiesEggIcon(isItemSelected = isSelected)
         },
