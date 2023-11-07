@@ -11,7 +11,7 @@ import khs.onmi.core.designsystem.R
 import khs.onmi.core.designsystem.theme.ONMITheme
 
 @Composable
-fun InfoMealIcon(
+fun InfoCardMealIcon(
     tint: Color,
     modifier: Modifier = Modifier,
 ) {
@@ -24,7 +24,7 @@ fun InfoMealIcon(
 }
 
 @Composable
-fun InfoTimeTableIcon(
+fun InfoCardTimeTableIcon(
     tint: Color,
     modifier: Modifier = Modifier,
 ) {
@@ -41,8 +41,8 @@ fun InfoTimeTableIcon(
 fun InfoCardIconsPre() {
     ONMITheme { color, _ ->
         Column {
-            InfoMealIcon(tint = color.UnselectedSecondary)
-            InfoTimeTableIcon(tint = color.UnselectedSecondary)
+            InfoCardMealIcon(tint = color.UnselectedSecondary)
+            InfoCardTimeTableIcon(tint = color.UnselectedSecondary)
         }
     }
 }
