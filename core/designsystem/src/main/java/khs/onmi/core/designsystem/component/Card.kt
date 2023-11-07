@@ -8,14 +8,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -29,6 +29,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import khs.onmi.core.designsystem.icon.AllergiesEggIcon
+import khs.onmi.core.designsystem.icon.InfoCardMealIcon
+import khs.onmi.core.designsystem.icon.InfoCardTimeTableIcon
 import khs.onmi.core.designsystem.modifier.addBounceEffect
 import khs.onmi.core.designsystem.modifier.onmiClickable
 import khs.onmi.core.designsystem.theme.ONMITheme
@@ -91,6 +93,56 @@ fun AllergiesCard(
     }
 }
 
+@Composable
+fun InfoCard(
+    modifier: Modifier = Modifier,
+    isMeal: Boolean,
+    school: String,
+    grade: Int,
+    `class`: Int,
+) {
+    ONMITheme { color, typography ->
+        Box(
+            modifier = modifier
+                .clip(RoundedCornerShape(16.dp))
+                .background(color.CardBackground)
+        ) {
+            if (isMeal) {
+                InfoCardMealIcon(
+                    tint = color.UnselectedSecondary,
+                    modifier = Modifier
+                        .align(Alignment.CenterEnd)
+                        .offset(x = (-11).dp, y = 22.dp)
+                )
+            } else {
+                InfoCardTimeTableIcon(
+                    tint = color.UnselectedSecondary,
+                    modifier = Modifier
+                        .align(Alignment.CenterEnd)
+                        .offset(x = (-9).dp, y = 25.dp)
+                )
+            }
+            Column(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(start = 16.dp, end = 16.dp, top = 24.dp, bottom = 22.dp)
+            ) {
+                Text(
+                    text = school,
+                    style = typography.Headline4,
+                    color = color.Black
+                )
+                Spacer(modifier = Modifier.size(8.dp))
+                Text(
+                    text = "${grade}학년 ${`class`}반",
+                    style = typography.Body2,
+                    color = color.UnselectedPrimary
+                )
+            }
+        }
+    }
+}
+
 @Preview
 @Composable
 fun AllergiesCardPre() {
@@ -112,4 +164,27 @@ fun AllergiesCardPre() {
             isSelected = !isSelected
         }
     )
+}
+
+@Preview
+@Composable
+fun InfoCardPre() {
+    var isMeal by remember {
+        mutableStateOf(true)
+    }
+
+    Column {
+        InfoCard(
+            modifier = Modifier
+                .fillMaxWidth(),
+            isMeal = isMeal,
+            school = "광주소프트웨어마이스터고등학교",
+            grade = 2,
+            `class` = 1
+        )
+
+        Button(onClick = { isMeal = !isMeal }) {
+            Text(text = "ddsfjsid")
+        }
+    }
 }
