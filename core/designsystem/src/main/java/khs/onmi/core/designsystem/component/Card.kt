@@ -1,5 +1,11 @@
 package khs.onmi.core.designsystem.component
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideIn
+import androidx.compose.animation.slideOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -27,6 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import khs.onmi.core.designsystem.icon.AllergiesEggIcon
 import khs.onmi.core.designsystem.icon.InfoCardMealIcon
@@ -107,19 +114,38 @@ fun InfoCard(
                 .clip(RoundedCornerShape(16.dp))
                 .background(color.CardBackground)
         ) {
-            if (isMeal) {
+            AnimatedVisibility(
+                modifier = Modifier.align(Alignment.CenterEnd),
+                visible = isMeal,
+                enter = slideIn(tween(400, easing = LinearOutSlowInEasing)) { fullSize ->
+                    IntOffset(0, -400)
+                },
+                exit = slideOut(tween(400, easing = FastOutSlowInEasing)) {
+                    IntOffset(0, -400)
+                },
+            ) {
                 InfoCardMealIcon(
                     tint = color.UnselectedSecondary,
                     modifier = Modifier
                         .align(Alignment.CenterEnd)
                         .offset(x = (-11).dp, y = 22.dp)
                 )
-            } else {
+            }
+            AnimatedVisibility(
+                modifier = Modifier.align(Alignment.CenterEnd),
+                visible = !isMeal,
+                enter = slideIn(tween(400, easing = LinearOutSlowInEasing)) { fullSize ->
+                    IntOffset(0, 400)
+                },
+                exit = slideOut(tween(400, easing = FastOutSlowInEasing)) {
+                    IntOffset(0, 400)
+                },
+            ) {
                 InfoCardTimeTableIcon(
                     tint = color.UnselectedSecondary,
                     modifier = Modifier
                         .align(Alignment.CenterEnd)
-                        .offset(x = (-9).dp, y = 25.dp)
+                        .offset(x = (-11).dp, y = 22.dp)
                 )
             }
             Column(
@@ -176,6 +202,7 @@ fun InfoCardPre() {
     Column {
         InfoCard(
             modifier = Modifier
+                .height(95.dp)
                 .fillMaxWidth(),
             isMeal = isMeal,
             school = "광주소프트웨어마이스터고등학교",
@@ -184,7 +211,7 @@ fun InfoCardPre() {
         )
 
         Button(onClick = { isMeal = !isMeal }) {
-            Text(text = "ddsfjsid")
+            Text(text = "애니메이션 동작")
         }
     }
 }
