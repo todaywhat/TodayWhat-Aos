@@ -1,6 +1,8 @@
 package khs.onmi.core.designsystem.component
 
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -16,12 +18,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusManager
+import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
@@ -38,6 +41,7 @@ fun ONMITextField(
     keyboardType: KeyboardType = KeyboardType.Text,
     imeAction: ImeAction = ImeAction.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
+    focusRequester: FocusRequester = FocusRequester(),
     onValueChange: (String) -> Unit,
     onTrailingIconClick: () -> Unit,
 ) {
@@ -54,6 +58,7 @@ fun ONMITextField(
                     if (isFocused) color.Black else Color.Transparent,
                     RoundedCornerShape(8.dp)
                 )
+                .focusRequester(focusRequester)
                 .onFocusChanged {
                     isFocused = it.isFocused
                 },
@@ -92,20 +97,47 @@ fun ONMITextField(
     }
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Preview
 @Composable
 fun ONMITextFieldPre() {
-    val kc = LocalSoftwareKeyboardController.current
+    val focusManager = LocalFocusManager.current
     var text by remember {
         mutableStateOf("")
     }
+    var text2 by remember {
+        mutableStateOf("")
+    }
+    var text3 by remember {
+        mutableStateOf("")
+    }
 
-    ONMITextField(
-        modifier = Modifier.fillMaxWidth(),
-        value = text,
-        placeHolderText = "ONMITextField",
-        onValueChange = { text = it },
-        onTrailingIconClick = { text = "" }
-    )
+    Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+        ONMITextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = text,
+            placeHolderText = "ONMITextField",
+            imeAction = ImeAction.Next,
+            keyboardActions = KeyboardActions(onNext = { focusManager.moveFocus(FocusDirection.Down) }),
+            onValueChange = { text = it },
+            onTrailingIconClick = { text = "" }
+        )
+        ONMITextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = text2,
+            placeHolderText = "ONMITextField",
+            imeAction = ImeAction.Next,
+            keyboardActions = KeyboardActions(onNext = { focusManager.moveFocus(FocusDirection.Down) }),
+            onValueChange = { text2 = it },
+            onTrailingIconClick = { text2 = "" }
+        )
+        ONMITextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = text3,
+            placeHolderText = "ONMITextField",
+            imeAction = ImeAction.Done,
+            keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
+            onValueChange = { text3 = it },
+            onTrailingIconClick = { text3 = "" }
+        )
+    }
 }
