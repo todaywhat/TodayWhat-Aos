@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -75,7 +74,7 @@ fun AllergiesCard(
                     modifier = Modifier.padding(start = 20.dp)
                 ) {
                     allergyIcon()
-                    Spacer(modifier = Modifier.width(8.dp))
+                    RowSpacerWithDp(dp = 8.dp)
                     Text(
                         text = allergyName,
                         style = typography.Body3,
@@ -158,7 +157,7 @@ fun InfoCard(
                     style = typography.Headline4,
                     color = color.Black
                 )
-                Spacer(modifier = Modifier.size(8.dp))
+                ColumnSpacerWithDp(dp = 8.dp)
                 Text(
                     text = "${grade}학년 ${`class`}반",
                     style = typography.Body2,
