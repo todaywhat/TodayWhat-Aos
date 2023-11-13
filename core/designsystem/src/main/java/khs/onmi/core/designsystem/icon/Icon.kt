@@ -167,6 +167,19 @@ fun XMarkCircleFillIcon(
     )
 }
 
+@Composable
+fun ArrowBackIcon(
+    tint: Color,
+    modifier: Modifier = Modifier,
+) {
+    Icon(
+        painter = painterResource(id = R.drawable.ic_arrow_back),
+        contentDescription = "Arrow Back Icon",
+        tint = tint,
+        modifier = modifier
+    )
+}
+
 @Preview
 @Composable
 fun IconsPre() {
@@ -184,6 +197,7 @@ fun IconsPre() {
             DownIcon(tint = color.TextPrimary)
             RightArrowIcon(tint = color.TextPrimary)
             XMarkCircleFillIcon(tint = color.TextPrimary)
+            ArrowBackIcon(tint = color.TextPrimary)
         }
     }
 }
