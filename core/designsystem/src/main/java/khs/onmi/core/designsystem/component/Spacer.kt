@@ -20,7 +20,7 @@ fun ColumnSpacerWithPercent(percent: Float) {
 
 @Composable
 fun RowSpacerWithDp(dp: Dp) {
-    Spacer(modifier = Modifier.height(dp))
+    Spacer(modifier = Modifier.width(dp))
 }
 
 @Composable
