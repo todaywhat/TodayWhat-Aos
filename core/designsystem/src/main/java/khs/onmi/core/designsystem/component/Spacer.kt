@@ -9,21 +9,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 
 @Composable
-fun HeightSpacerWithDp(dp: Dp) {
+fun ColumnSpacerWithDp(dp: Dp) {
     Spacer(modifier = Modifier.height(dp))
 }
 
 @Composable
-fun HeightSpacerWithPercent(percent: Float) {
+fun ColumnSpacerWithPercent(percent: Float) {
     Spacer(modifier = Modifier.fillMaxHeight(percent))
 }
 
 @Composable
-fun WidthSpacerWithDp(dp: Dp) {
+fun RowSpacerWithDp(dp: Dp) {
     Spacer(modifier = Modifier.height(dp))
 }
 
 @Composable
-fun WidthSpacerWithPercent(percent: Float) {
+fun RowSpacerWithPercent(percent: Float) {
     Spacer(modifier = Modifier.fillMaxWidth(percent))
 }
