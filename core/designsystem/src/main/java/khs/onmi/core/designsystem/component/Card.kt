@@ -74,7 +74,7 @@ fun AllergiesCard(
                     modifier = Modifier.padding(start = 20.dp)
                 ) {
                     allergyIcon()
-                    RowSpacerWithDp(dp = 8.dp)
+                    RowSpacer(dp = 8.dp)
                     Text(
                         text = allergyName,
                         style = typography.Body3,
@@ -157,7 +157,7 @@ fun InfoCard(
                     style = typography.Headline4,
                     color = color.Black
                 )
-                ColumnSpacerWithDp(dp = 8.dp)
+                ColumnSpacer(dp = 8.dp)
                 Text(
                     text = "${grade}학년 ${`class`}반",
                     style = typography.Body2,
