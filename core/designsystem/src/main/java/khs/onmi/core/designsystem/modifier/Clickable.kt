@@ -8,17 +8,23 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.unit.Dp
+import khs.onmi.core.designsystem.utils.runIf
 
 @OptIn(ExperimentalFoundationApi::class)
 fun Modifier.onmiClickable(
     rippleEnabled: Boolean = true,
     bounded: Boolean = true,
     radius: Dp = Dp.Unspecified,
-    onClick: () -> Unit
-) = composed {
-    combinedClickable(
-        onClick = onClick,
-        interactionSource = remember { MutableInteractionSource() },
-        indication = if (rippleEnabled) rememberRipple(bounded = bounded, radius = radius) else null
-    )
+    onClick: (() -> Unit)? = null,
+) = runIf(onClick != null) {
+    composed {
+        combinedClickable(
+            onClick = onClick!!,
+            interactionSource = remember { MutableInteractionSource() },
+            indication = if (rippleEnabled) rememberRipple(
+                bounded = bounded,
+                radius = radius
+            ) else null
+        )
+    }
 }
