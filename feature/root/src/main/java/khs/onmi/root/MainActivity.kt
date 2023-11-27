@@ -4,8 +4,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import khs.onmi.enterinformation.navigation.enterInformationNavGraph
 import khs.onmi.navigation.ONMINavRoutes
 
 class MainActivity : ComponentActivity() {
@@ -18,11 +18,7 @@ class MainActivity : ComponentActivity() {
                 navController = navController,
                 startDestination = ONMINavRoutes.ENTERINFOMATION
             ) {
-                composable(
-                    route = ONMINavRoutes.ENTERINFOMATION
-                ) {
-
-                }
+                enterInformationNavGraph(navController = navController)
             }
         }
     }
