@@ -13,6 +13,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":feature:root"))
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
