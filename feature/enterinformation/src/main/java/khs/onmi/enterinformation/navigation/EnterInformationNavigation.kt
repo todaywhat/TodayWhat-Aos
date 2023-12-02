@@ -17,7 +17,9 @@ fun NavGraphBuilder.enterInformationNavGraph(
         composable(
             route = ONMINavRoutes.EnterInformation.MAIN
         ) {
-            MainScreen(navController = navController)
+            MainScreen(
+                navController = navController
+            )
         }
     }
 }
