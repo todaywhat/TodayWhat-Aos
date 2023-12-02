@@ -19,8 +19,8 @@ import khs.onmi.core.designsystem.utils.WrappedIconButton
 @Composable
 fun TopNavigationBar(
     title: String = "",
-    leading: @Composable RowScope.() -> Unit,
-    trailing: @Composable RowScope.() -> Unit,
+    leading: @Composable RowScope.() -> Unit = {},
+    trailing: @Composable RowScope.() -> Unit = {},
 ) {
     ONMITheme { color, typography ->
         Box(
