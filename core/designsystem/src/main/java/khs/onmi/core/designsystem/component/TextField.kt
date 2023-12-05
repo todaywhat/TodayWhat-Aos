@@ -41,7 +41,9 @@ fun ONMITextField(
     keyboardType: KeyboardType = KeyboardType.Text,
     imeAction: ImeAction = ImeAction.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
+    readOnly: Boolean = false,
     focusRequester: FocusRequester = FocusRequester(),
+    onClick: () -> Unit = {},
     onValueChange: (String) -> Unit,
     onTrailingIconClick: () -> Unit,
 ) {
@@ -61,12 +63,16 @@ fun ONMITextField(
                 .focusRequester(focusRequester)
                 .onFocusChanged {
                     isFocused = it.isFocused
+                    if (it.isFocused) {
+                        onClick()
+                    }
                 },
             value = value,
             onValueChange = onValueChange,
             textStyle = typography.Body1,
             colors = TextFieldDefaults.outlinedTextFieldColors(
-                textColor = color.TextPrimary,
+                focusedTextColor = color.TextPrimary,
+                unfocusedTextColor = color.TextPrimary,
                 cursorColor = color.TextPrimary,
                 containerColor = color.CardBackground,
                 focusedBorderColor = Color.Transparent,
@@ -93,6 +99,7 @@ fun ONMITextField(
             keyboardActions = keyboardActions,
             maxLines = 1,
             shape = RoundedCornerShape(8.dp),
+            readOnly = readOnly,
         )
     }
 }

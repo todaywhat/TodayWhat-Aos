@@ -11,7 +11,7 @@ androidXAppcompat = "1.6.1"
 #Compose
 composeUi = "1.3.3"
 activityCompose = "1.7.0"
-composeMaterial3 = "1.1.0-alpha01"
+composeMaterial3 = "1.1.2"
 composeCompiler = "1.4.3"
 composeNav = "2.5.3"
 

@@ -1,9 +1,12 @@
 package khs.onmi.core.ui
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import khs.onmi.core.designsystem.component.ColumnSpacer
 import khs.onmi.core.designsystem.component.ONMITextField
@@ -16,7 +19,12 @@ fun LabelTextFiled(
     value: String,
     onValueChange: (String) -> Unit,
     placeHolderText: String,
+    readOnly: Boolean = false,
+    focusRequester: FocusRequester = FocusRequester(),
+    onClick: () -> Unit = {},
     onTrailingIconClick: () -> Unit,
+    imeAction: ImeAction = ImeAction.Default,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
 ) {
     ONMITheme { color, typography ->
         Column {
@@ -31,7 +39,12 @@ fun LabelTextFiled(
                 value = value,
                 placeHolderText = placeHolderText,
                 onValueChange = onValueChange,
-                onTrailingIconClick = onTrailingIconClick
+                readOnly = readOnly,
+                onTrailingIconClick = onTrailingIconClick,
+                focusRequester = focusRequester,
+                onClick = onClick,
+                imeAction = imeAction,
+                keyboardActions = keyboardActions
             )
         }
     }
