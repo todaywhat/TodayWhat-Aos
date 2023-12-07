@@ -18,10 +18,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import khs.onmi.core.designsystem.component.ColumnSpacer
 import khs.onmi.core.designsystem.component.ONMIButton
 import khs.onmi.core.designsystem.component.TopNavigationBar
 import khs.onmi.core.designsystem.icon.ArrowBackIcon
@@ -30,6 +32,7 @@ import khs.onmi.core.designsystem.utils.WrappedIconButton
 import khs.onmi.core.ui.LabelTextFiled
 import khs.onmi.enterinformation.component.DepartmentSelectorBottomSheet
 import khs.onmi.enterinformation.component.GreetingComponent
+import khs.onmi.enterinformation.component.SchoolSelector
 import kotlinx.coroutines.launch
 
 sealed class CurrentStage {
@@ -53,6 +56,14 @@ object Dummy {
         "임베디드SW과",
         "e-비즈니스과",
     )
+    val schools = listOf(
+        Pair("광주소프트웨어마이스터고", "광주광역시 광산구"),
+        Pair("광주소프트웨어마이스터고", "광주광역시 광산구"),
+        Pair("광주소프트웨어마이스터고", "광주광역시 광산구"),
+        Pair("광주소프트웨어마이스터고", "광주광역시 광산구"),
+        Pair("광주소프트웨어마이스터고", "광주광역시 광산구"),
+        Pair("광주소프트웨어마이스터고", "광주광역시 광산구"),
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -61,10 +72,15 @@ fun MainScreen(
     navController: NavController,
 ) {
     val focusManager = LocalFocusManager.current
+    val focusRequester = FocusRequester()
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
 
     val (bottomSheetVisible, setBottomSheetVisible) = remember {
+        mutableStateOf(false)
+    }
+
+    val (schoolSelectorVisible, setSchoolSelectorVisible) = remember {
         mutableStateOf(false)
     }
 
@@ -90,11 +106,11 @@ fun MainScreen(
 
     setCurrentStage(
         when {
-            department.isBlank() && `class`.isBlank() && grade.isBlank() && school.isBlank() -> CurrentStage.ENTERSCHOOL
-            department.isBlank() && `class`.isBlank() && grade.isBlank() -> CurrentStage.ENTERGRADE
-            department.isBlank() && `class`.isBlank() -> CurrentStage.ENTERCLASS
-            department.isBlank() -> CurrentStage.ENTERDEPARTMENT
-            else -> CurrentStage.FINISH
+            school.isNotBlank() && grade.isNotEmpty() && `class`.isNotEmpty() && department.isNotEmpty() -> CurrentStage.FINISH
+            school.isNotEmpty() && grade.isNotEmpty() && `class`.isNotEmpty() -> CurrentStage.ENTERDEPARTMENT
+            school.isNotBlank() && grade.isNotEmpty() -> CurrentStage.ENTERCLASS
+            school.isNotBlank() && !schoolSelectorVisible -> CurrentStage.ENTERGRADE
+            else -> CurrentStage.ENTERSCHOOL
         }
     )
 
@@ -168,7 +184,6 @@ fun MainScreen(
                             .fillMaxWidth(),
                         label = "학과",
                         value = department,
-                        onValueChange = onDepartmentValueChange,
                         placeHolderText = "학과를 선택해주세요.",
                         readOnly = true,
                         onClick = {
@@ -225,8 +240,12 @@ fun MainScreen(
                     modifier = Modifier.fillMaxWidth(),
                     label = "학교이름",
                     value = school,
-                    onValueChange = onSchoolValueChange,
                     placeHolderText = "학교이름을 입력해주세요.",
+                    onValueChange = onSchoolValueChange,
+                    onClick = {
+                        setSchoolSelectorVisible(true)
+                        setCurrentStage(CurrentStage.ENTERSCHOOL)
+                    },
                     onTrailingIconClick = {
                         onSchoolValueChange("")
                     },
@@ -235,6 +254,17 @@ fun MainScreen(
                         focusManager.moveFocus(FocusDirection.Up)
                     })
                 )
+                AnimatedVisibility(visible = schoolSelectorVisible) {
+                    ColumnSpacer(dp = 8.dp)
+                    SchoolSelector(
+                        schools = Dummy.schools,
+                        onItemClick = { idx ->
+                            onSchoolValueChange(Dummy.schools[idx].first)
+                            setSchoolSelectorVisible(false)
+                            focusManager.clearFocus()
+                        }
+                    )
+                }
             }
 
             if (bottomSheetVisible) {

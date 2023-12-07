@@ -27,8 +27,7 @@ fun SchoolSelectorItem(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .onmiClickable(onClick = onClick)
-                .padding(horizontal = 16.dp)
+                .onmiClickable(rippleEnabled = false, onClick = onClick)
         ) {
             Column(
                 modifier = Modifier.padding(vertical = 16.dp),
