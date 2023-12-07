@@ -17,7 +17,7 @@ fun LabelTextFiled(
     modifier: Modifier = Modifier,
     label: String,
     value: String,
-    onValueChange: (String) -> Unit,
+    onValueChange: (String) -> Unit = {},
     placeHolderText: String,
     readOnly: Boolean = false,
     focusRequester: FocusRequester = FocusRequester(),
