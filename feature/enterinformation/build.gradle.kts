@@ -11,4 +11,6 @@ dependencies {
     implementation(project(":navigation"))
     implementation(project(":core:designsystem"))
     implementation(project(":core:ui"))
+
+    implementation(libs.bundles.orbit)
 }
