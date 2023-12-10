@@ -13,16 +13,12 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
-import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import khs.onmi.core.designsystem.component.ColumnSpacer
 import khs.onmi.core.designsystem.component.ONMIButton
 import khs.onmi.core.designsystem.component.TopNavigationBar
@@ -33,88 +29,28 @@ import khs.onmi.core.ui.LabelTextFiled
 import khs.onmi.enterinformation.component.DepartmentSelectorBottomSheet
 import khs.onmi.enterinformation.component.GreetingComponent
 import khs.onmi.enterinformation.component.SchoolSelector
+import khs.onmi.enterinformation.model.CurrentStage
+import khs.onmi.enterinformation.viewmodel.container.EnterInformationState
 import kotlinx.coroutines.launch
-
-sealed class CurrentStage {
-    object ENTERSCHOOL : CurrentStage()
-
-    object ENTERGRADE : CurrentStage()
-
-    object ENTERCLASS : CurrentStage()
-
-    object ENTERDEPARTMENT : CurrentStage()
-
-    object FINISH : CurrentStage()
-}
-
-object Dummy {
-    val departments = listOf(
-        "없음",
-        "SW 개발과",
-        "임베디드 개발과",
-        "스마트IoT과",
-        "임베디드SW과",
-        "e-비즈니스과",
-    )
-    val schools = listOf(
-        Pair("광주소프트웨어마이스터고", "광주광역시 광산구"),
-        Pair("광주소프트웨어마이스터고", "광주광역시 광산구"),
-        Pair("광주소프트웨어마이스터고", "광주광역시 광산구"),
-        Pair("광주소프트웨어마이스터고", "광주광역시 광산구"),
-        Pair("광주소프트웨어마이스터고", "광주광역시 광산구"),
-        Pair("광주소프트웨어마이스터고", "광주광역시 광산구"),
-    )
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
-    navController: NavController,
+    uiState: EnterInformationState,
+    setSchoolSelectorVisible: (visible: Boolean) -> Unit,
+    setDepartmentSelectorVisible: (visible: Boolean) -> Unit,
+    onSchoolValueChange: (school: String) -> Unit,
+    onGradeValueChange: (grade: String) -> Unit,
+    onClassValueChange: (`class`: String) -> Unit,
+    onDepartmentValueChange: (department: String) -> Unit,
+    onBackButtonClick: () -> Unit,
+    onFinishButtonClick: () -> Unit,
 ) {
     val focusManager = LocalFocusManager.current
-    val focusRequester = FocusRequester()
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
 
-    val (bottomSheetVisible, setBottomSheetVisible) = remember {
-        mutableStateOf(false)
-    }
-
-    val (schoolSelectorVisible, setSchoolSelectorVisible) = remember {
-        mutableStateOf(false)
-    }
-
-    val (department, onDepartmentValueChange) = remember {
-        mutableStateOf("")
-    }
-
-    val (`class`, onClassValueChange) = remember {
-        mutableStateOf("")
-    }
-
-    val (grade, onGradeValueChange) = remember {
-        mutableStateOf("")
-    }
-
-    val (school, onSchoolValueChange) = remember {
-        mutableStateOf("")
-    }
-
-    val (currentStage, setCurrentStage) = remember {
-        mutableStateOf<CurrentStage>(CurrentStage.ENTERSCHOOL)
-    }
-
-    setCurrentStage(
-        when {
-            school.isNotBlank() && grade.isNotEmpty() && `class`.isNotEmpty() && department.isNotEmpty() -> CurrentStage.FINISH
-            school.isNotEmpty() && grade.isNotEmpty() && `class`.isNotEmpty() -> CurrentStage.ENTERDEPARTMENT
-            school.isNotBlank() && grade.isNotEmpty() -> CurrentStage.ENTERCLASS
-            school.isNotBlank() && !schoolSelectorVisible -> CurrentStage.ENTERGRADE
-            else -> CurrentStage.ENTERSCHOOL
-        }
-    )
-
-    ONMITheme { color, typography ->
+    ONMITheme { color, _ ->
         Scaffold(
             modifier = Modifier
                 .fillMaxSize()
@@ -122,24 +58,23 @@ fun MainScreen(
             topBar = {
                 TopNavigationBar(
                     leading = {
-                        WrappedIconButton(onClick = { /*onBackClick*/ }) {
+                        WrappedIconButton(onClick = onBackButtonClick) {
                             ArrowBackIcon(tint = color.Black)
                         }
                     }
                 )
             },
             bottomBar = {
-                AnimatedVisibility(visible = currentStage == CurrentStage.ENTERDEPARTMENT || currentStage == CurrentStage.FINISH) {
+                AnimatedVisibility(visible = uiState.currentStage == CurrentStage.ENTERDEPARTMENT || uiState.currentStage == CurrentStage.FINISH) {
                     ONMIButton(
                         modifier = Modifier
                             .padding(16.dp)
                             .fillMaxWidth()
                             .height(52.dp),
-                        text = if (currentStage == CurrentStage.ENTERDEPARTMENT) "이대로하기" else "확인!",
-                        isEnabled = true
-                    ) {
-
-                    }
+                        text = if (uiState.currentStage == CurrentStage.ENTERDEPARTMENT) "이대로하기" else "확인!",
+                        isEnabled = true,
+                        onClick = onFinishButtonClick
+                    )
                 }
             }
         ) {
@@ -156,38 +91,23 @@ fun MainScreen(
             ) {
                 AnimatedVisibility(
                     modifier = Modifier.padding(bottom = 24.dp),
-                    visible = currentStage != CurrentStage.ENTERSCHOOL
+                    visible = uiState.currentStage != CurrentStage.ENTERSCHOOL
                 ) {
-                    GreetingComponent(
-                        greetings = when (currentStage) {
-                            CurrentStage.ENTERSCHOOL -> Pair("", "")
-                            CurrentStage.ENTERGRADE -> Pair("몇학년 이신가요?", "")
-                            CurrentStage.ENTERCLASS -> Pair("몇반 이신가요?", "")
-                            CurrentStage.ENTERDEPARTMENT -> Pair(
-                                "특정 학과에 다니시나요?",
-                                "학과는 없으면 안해도 괜찮아요!"
-                            )
-
-                            CurrentStage.FINISH -> Pair(
-                                "입력하신 정보가 정확한가요?",
-                                "정보는 설정에서 얼마든지 변경할 수 있어요."
-                            )
-                        },
-                    )
+                    GreetingComponent(greetings = Pair(uiState.greetingTitle, uiState.greetingBody))
                 }
                 AnimatedVisibility(
                     modifier = Modifier.padding(bottom = 24.dp),
-                    visible = currentStage == CurrentStage.ENTERDEPARTMENT || currentStage == CurrentStage.FINISH
+                    visible = uiState.currentStage == CurrentStage.ENTERDEPARTMENT || uiState.currentStage == CurrentStage.FINISH
                 ) {
                     LabelTextFiled(
                         modifier = Modifier
                             .fillMaxWidth(),
                         label = "학과",
-                        value = department,
+                        value = uiState.department,
                         placeHolderText = "학과를 선택해주세요.",
                         readOnly = true,
                         onClick = {
-                            setBottomSheetVisible(true)
+                            setDepartmentSelectorVisible(true)
                         },
                         onTrailingIconClick = {
                             onDepartmentValueChange("")
@@ -200,12 +120,12 @@ fun MainScreen(
                 }
                 AnimatedVisibility(
                     modifier = Modifier.padding(bottom = 24.dp),
-                    visible = currentStage == CurrentStage.ENTERCLASS || currentStage == CurrentStage.ENTERDEPARTMENT || currentStage == CurrentStage.FINISH
+                    visible = uiState.currentStage == CurrentStage.ENTERCLASS || uiState.currentStage == CurrentStage.ENTERDEPARTMENT || uiState.currentStage == CurrentStage.FINISH
                 ) {
                     LabelTextFiled(
                         modifier = Modifier.fillMaxWidth(),
                         label = "반",
-                        value = `class`,
+                        value = uiState.`class`,
                         onValueChange = onClassValueChange,
                         placeHolderText = "반을 입력해주세요.",
                         onTrailingIconClick = {
@@ -219,12 +139,12 @@ fun MainScreen(
                 }
                 AnimatedVisibility(
                     modifier = Modifier.padding(bottom = 24.dp),
-                    visible = currentStage != CurrentStage.ENTERSCHOOL
+                    visible = uiState.currentStage != CurrentStage.ENTERSCHOOL
                 ) {
                     LabelTextFiled(
                         modifier = Modifier.fillMaxWidth(),
                         label = "학년",
-                        value = grade,
+                        value = uiState.grade,
                         onValueChange = onGradeValueChange,
                         placeHolderText = "학년을 입력해주세요.",
                         onTrailingIconClick = {
@@ -239,12 +159,11 @@ fun MainScreen(
                 LabelTextFiled(
                     modifier = Modifier.fillMaxWidth(),
                     label = "학교이름",
-                    value = school,
+                    value = uiState.school,
                     placeHolderText = "학교이름을 입력해주세요.",
                     onValueChange = onSchoolValueChange,
                     onClick = {
                         setSchoolSelectorVisible(true)
-                        setCurrentStage(CurrentStage.ENTERSCHOOL)
                     },
                     onTrailingIconClick = {
                         onSchoolValueChange("")
@@ -254,12 +173,12 @@ fun MainScreen(
                         focusManager.moveFocus(FocusDirection.Up)
                     })
                 )
-                AnimatedVisibility(visible = schoolSelectorVisible) {
+                AnimatedVisibility(visible = uiState.schoolSelectorVisible) {
                     ColumnSpacer(dp = 8.dp)
                     SchoolSelector(
-                        schools = Dummy.schools,
+                        schools = uiState.schoolList,
                         onItemClick = { idx ->
-                            onSchoolValueChange(Dummy.schools[idx].first)
+                            onSchoolValueChange(uiState.schoolList[idx].first)
                             setSchoolSelectorVisible(false)
                             focusManager.clearFocus()
                         }
@@ -267,22 +186,22 @@ fun MainScreen(
                 }
             }
 
-            if (bottomSheetVisible) {
+            if (uiState.departmentSelectorVisible) {
                 DepartmentSelectorBottomSheet(
-                    departments = Dummy.departments,
+                    departments = uiState.departmentList,
                     sheetState = sheetState,
-                    selectedItemIdx = Dummy.departments.indexOf(department),
+                    selectedItemIdx = uiState.departmentList.indexOf(uiState.department),
                     onItemClick = { idx ->
-                        onDepartmentValueChange(Dummy.departments[idx])
+                        onDepartmentValueChange(uiState.departmentList[idx])
                         scope.launch { sheetState.hide() }.invokeOnCompletion {
                             if (!sheetState.isVisible) {
-                                setBottomSheetVisible(false)
+                                setDepartmentSelectorVisible(false)
                                 focusManager.clearFocus()
                             }
                         }
                     },
                     onDismissRequest = {
-                        setBottomSheetVisible(false)
+                        setDepartmentSelectorVisible(false)
                         focusManager.clearFocus()
                     }
                 )
