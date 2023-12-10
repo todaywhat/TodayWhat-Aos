@@ -41,7 +41,7 @@ fun ONMITextField(
     keyboardType: KeyboardType = KeyboardType.Text,
     imeAction: ImeAction = ImeAction.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
-    readOnly: Boolean = false,
+    isReadOnly: Boolean = false,
     focusRequester: FocusRequester = FocusRequester(),
     onClick: () -> Unit = {},
     onValueChange: (String) -> Unit,
@@ -99,7 +99,7 @@ fun ONMITextField(
             keyboardActions = keyboardActions,
             maxLines = 1,
             shape = RoundedCornerShape(8.dp),
-            readOnly = readOnly,
+            readOnly = isReadOnly,
         )
     }
 }

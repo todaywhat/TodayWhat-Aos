@@ -106,7 +106,7 @@ fun MainScreen(
                         label = "학과",
                         value = uiState.department,
                         placeHolderText = "학과를 선택해주세요.",
-                        readOnly = true,
+                        isReadOnly = true,
                         onClick = {
                             setDepartmentSelectorVisible(true)
                         },
