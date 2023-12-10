@@ -36,5 +36,10 @@ gradlePlugin {
             id = "khs.onmi.compose"
             implementationClass = "khs.onmi.convention.AndroidComposeConventionPlugin"
         }
+
+        register("AndoirdHilt") {
+            id = "khs.onmi.hilt"
+            implementationClass = "khs.onmi.convention.AndroidHiltConventionPlugin"
+        }
     }
 }
