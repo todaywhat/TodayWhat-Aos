@@ -24,6 +24,7 @@ compose-bom = "2023.03.00"
 
 # Library
 orbit = "6.1.0"
+hilt = "2.44"
 
 [libraries]
 # <--------------------[ AndroidX ]-------------------->
@@ -47,11 +48,14 @@ junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidXJunit" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso" }
 
-# <-------------------[orbit-mvi]------------------>
+# <-------------------[ orbit-mvi ]------------------>
 orbit-core = { group = "org.orbit-mvi", name = "orbit-core", version.ref = "orbit" }
 orbit-viewmodel = { group = "org.orbit-mvi", name = "orbit-viewmodel", version.ref = "orbit" }
 orbit-compose = { group = "org.orbit-mvi", name = "orbit-compose", version.ref = "orbit" }
 
+# <--------------------[ hilt ]----------------------->
+hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
+hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
 
 # <--- [ Define Dependeicies used in build-logic ] --->
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
@@ -64,6 +68,7 @@ compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = 
 com-android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
 com-android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
 org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+hilt-plugin = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 
 [bundles]
 compose = ["activity-compose", "compose-ui", "compose-ui-graphics",
