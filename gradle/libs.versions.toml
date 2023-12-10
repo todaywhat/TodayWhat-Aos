@@ -25,6 +25,7 @@ compose-bom = "2023.03.00"
 # Library
 orbit = "6.1.0"
 hilt = "2.44"
+hilt-navigation = "1.0.0"
 
 [libraries]
 # <--------------------[ AndroidX ]-------------------->
@@ -56,6 +57,7 @@ orbit-compose = { group = "org.orbit-mvi", name = "orbit-compose", version.ref =
 # <--------------------[ hilt ]----------------------->
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
+hilt-navigation = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hilt-navigation"}
 
 # <--- [ Define Dependeicies used in build-logic ] --->
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }

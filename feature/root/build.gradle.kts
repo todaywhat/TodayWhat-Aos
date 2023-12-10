@@ -1,6 +1,7 @@
 plugins {
     id("khs.onmi.library")
     id("khs.onmi.compose")
+    id("khs.onmi.hilt")
 }
 
 android {

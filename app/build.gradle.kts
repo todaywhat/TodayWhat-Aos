@@ -1,5 +1,6 @@
 plugins {
     id("khs.onmi.application")
+    id("khs.onmi.hilt")
 }
 
 android {
