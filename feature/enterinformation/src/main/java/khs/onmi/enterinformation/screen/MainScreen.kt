@@ -29,7 +29,7 @@ import khs.onmi.core.ui.LabelTextFiled
 import khs.onmi.enterinformation.component.DepartmentSelectorBottomSheet
 import khs.onmi.enterinformation.component.GreetingComponent
 import khs.onmi.enterinformation.component.SchoolSelector
-import khs.onmi.enterinformation.model.CurrentStage
+import khs.onmi.enterinformation.model.CurrentState
 import khs.onmi.enterinformation.viewmodel.container.EnterInformationState
 import kotlinx.coroutines.launch
 
@@ -39,6 +39,7 @@ fun MainScreen(
     uiState: EnterInformationState,
     setSchoolSelectorVisible: (visible: Boolean) -> Unit,
     setDepartmentSelectorVisible: (visible: Boolean) -> Unit,
+    setCurrentState: (state: CurrentState) -> Unit,
     onSchoolValueChange: (school: String) -> Unit,
     onGradeValueChange: (grade: String) -> Unit,
     onClassValueChange: (`class`: String) -> Unit,
@@ -65,13 +66,13 @@ fun MainScreen(
                 )
             },
             bottomBar = {
-                AnimatedVisibility(visible = uiState.currentStage == CurrentStage.ENTERDEPARTMENT || uiState.currentStage == CurrentStage.FINISH) {
+                AnimatedVisibility(visible = uiState.currentState == CurrentState.ENTERDEPARTMENT || uiState.currentState == CurrentState.FINISH) {
                     ONMIButton(
                         modifier = Modifier
                             .padding(16.dp)
                             .fillMaxWidth()
                             .height(52.dp),
-                        text = if (uiState.currentStage == CurrentStage.ENTERDEPARTMENT) "이대로하기" else "확인!",
+                        text = if (uiState.currentState == CurrentState.ENTERDEPARTMENT) "이대로하기" else "확인!",
                         isEnabled = true,
                         onClick = onFinishButtonClick
                     )
@@ -91,13 +92,13 @@ fun MainScreen(
             ) {
                 AnimatedVisibility(
                     modifier = Modifier.padding(bottom = 24.dp),
-                    visible = uiState.currentStage != CurrentStage.ENTERSCHOOL
+                    visible = uiState.currentState != CurrentState.ENTERSCHOOL
                 ) {
                     GreetingComponent(greetings = Pair(uiState.greetingTitle, uiState.greetingBody))
                 }
                 AnimatedVisibility(
                     modifier = Modifier.padding(bottom = 24.dp),
-                    visible = uiState.currentStage == CurrentStage.ENTERDEPARTMENT || uiState.currentStage == CurrentStage.FINISH
+                    visible = uiState.currentState == CurrentState.ENTERDEPARTMENT || uiState.currentState == CurrentState.FINISH
                 ) {
                     LabelTextFiled(
                         modifier = Modifier
@@ -120,7 +121,7 @@ fun MainScreen(
                 }
                 AnimatedVisibility(
                     modifier = Modifier.padding(bottom = 24.dp),
-                    visible = uiState.currentStage == CurrentStage.ENTERCLASS || uiState.currentStage == CurrentStage.ENTERDEPARTMENT || uiState.currentStage == CurrentStage.FINISH
+                    visible = uiState.currentState == CurrentState.ENTERCLASS || uiState.currentState == CurrentState.ENTERDEPARTMENT || uiState.currentState == CurrentState.FINISH
                 ) {
                     LabelTextFiled(
                         modifier = Modifier.fillMaxWidth(),
@@ -139,7 +140,7 @@ fun MainScreen(
                 }
                 AnimatedVisibility(
                     modifier = Modifier.padding(bottom = 24.dp),
-                    visible = uiState.currentStage != CurrentStage.ENTERSCHOOL
+                    visible = uiState.currentState != CurrentState.ENTERSCHOOL
                 ) {
                     LabelTextFiled(
                         modifier = Modifier.fillMaxWidth(),
@@ -164,6 +165,7 @@ fun MainScreen(
                     onValueChange = onSchoolValueChange,
                     onClick = {
                         setSchoolSelectorVisible(true)
+                        setCurrentState(CurrentState.ENTERSCHOOL)
                     },
                     onTrailingIconClick = {
                         onSchoolValueChange("")

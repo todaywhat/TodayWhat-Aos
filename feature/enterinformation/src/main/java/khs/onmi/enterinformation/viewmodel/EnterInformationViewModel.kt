@@ -2,7 +2,7 @@ package khs.onmi.enterinformation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import khs.onmi.enterinformation.model.CurrentStage
+import khs.onmi.enterinformation.model.CurrentState
 import khs.onmi.enterinformation.viewmodel.container.EnterInformationSideEffect
 import khs.onmi.enterinformation.viewmodel.container.EnterInformationState
 import org.orbitmvi.orbit.ContainerHost
@@ -47,9 +47,9 @@ class EnterInformationViewModel @Inject constructor(
         }
     }
 
-    fun setCurrentStage(currentStage: CurrentStage) = intent {
+    fun setCurrentState(currentState: CurrentState) = intent {
         reduce {
-            state.copy(currentStage = currentStage)
+            state.copy(currentState = currentState)
         }
     }
 
