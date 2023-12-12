@@ -1,6 +1,8 @@
 package khs.onmi.enterinformation.screen
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -66,7 +68,11 @@ fun MainScreen(
                 )
             },
             bottomBar = {
-                AnimatedVisibility(visible = uiState.currentState == CurrentState.ENTERDEPARTMENT || uiState.currentState == CurrentState.FINISH) {
+                AnimatedVisibility(
+                    visible = uiState.currentState == CurrentState.ENTERDEPARTMENT || uiState.currentState == CurrentState.FINISH,
+                    enter = slideInVertically { it },
+                    exit = slideOutVertically { it }
+                ) {
                     ONMIButton(
                         modifier = Modifier
                             .padding(16.dp)
@@ -92,7 +98,9 @@ fun MainScreen(
             ) {
                 AnimatedVisibility(
                     modifier = Modifier.padding(bottom = 24.dp),
-                    visible = uiState.currentState != CurrentState.ENTERSCHOOL
+                    visible = uiState.currentState != CurrentState.ENTERSCHOOL,
+                    enter = slideInVertically(),
+                    exit = slideOutVertically()
                 ) {
                     GreetingComponent(greetings = Pair(uiState.greetingTitle, uiState.greetingBody))
                 }
@@ -198,7 +206,7 @@ fun MainScreen(
                         scope.launch { sheetState.hide() }.invokeOnCompletion {
                             if (!sheetState.isVisible) {
                                 setDepartmentSelectorVisible(false)
-                                focusManager.clearFocus()
+                                focusManager.moveFocus(FocusDirection.Up)
                             }
                         }
                     },
