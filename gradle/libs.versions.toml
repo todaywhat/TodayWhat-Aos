@@ -26,6 +26,8 @@ compose-bom = "2023.03.00"
 orbit = "6.1.0"
 hilt = "2.44"
 hilt-navigation = "1.0.0"
+ktor = "2.3.7"
+kotlin-serialization = "1.6.21"
 
 [libraries]
 # <--------------------[ AndroidX ]-------------------->
@@ -54,10 +56,17 @@ orbit-core = { group = "org.orbit-mvi", name = "orbit-core", version.ref = "orbi
 orbit-viewmodel = { group = "org.orbit-mvi", name = "orbit-viewmodel", version.ref = "orbit" }
 orbit-compose = { group = "org.orbit-mvi", name = "orbit-compose", version.ref = "orbit" }
 
+# <--------------------[ Ktor ]---------------------->
+ktor-client-content-negotiation = { group = "io.ktor", name = "ktor-client-content-negotiation", version.ref = "ktor" }
+ktor-client-core = { group = "io.ktor", name = "ktor-client-core", version.ref = "ktor" }
+ktor-client-logging = { group = "io.ktor", name = "ktor-client-logging", version.ref = "ktor" }
+ktor-client-okhttp = { group = "io.ktor", name = "ktor-client-okhttp", version.ref = "ktor" }
+ktor-serialization-kotlinx-json = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version.ref = "ktor" }
+
 # <--------------------[ hilt ]----------------------->
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
-hilt-navigation = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hilt-navigation"}
+hilt-navigation = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hilt-navigation" }
 
 # <--- [ Define Dependeicies used in build-logic ] --->
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
@@ -71,10 +80,12 @@ com-android-application = { id = "com.android.application", version.ref = "andro
 com-android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
 org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 hilt-plugin = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin-serialization" }
 
 [bundles]
 compose = ["activity-compose", "compose-ui", "compose-ui-graphics",
     "compose-ui-tooling", "compose-ui-tooling-preview", "compose-ui-test-manifest",
     "compose-ui-test-manifest", "compose-ui-test-junit4", "compose-material3", "compose-nav"]
 orbit = ["orbit-core", "orbit-viewmodel", "orbit-compose"]
+ktor = ["ktor-client-content-negotiation", "ktor-client-core", "ktor-client-logging", "ktor-client-okhttp", "ktor-serialization-kotlinx-json"]
 
