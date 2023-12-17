@@ -16,6 +16,8 @@ android {
 dependencies {
     implementation(project(":feature:root"))
 
+    implementation(libs.bundles.ktor)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
 }
