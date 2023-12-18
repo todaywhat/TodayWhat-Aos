@@ -64,7 +64,7 @@ object KtorClient {
             defaultRequest {
                 url {
                     protocol = URLProtocol.HTTPS
-                    host = ""
+                    host = "https://open.neis.go.kr/hub"
                 }
             }
         }

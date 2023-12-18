@@ -1,5 +1,6 @@
 plugins {
     id("khs.onmi.library")
+    id("khs.onmi.hilt")
 }
 
 android {
@@ -7,5 +8,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":domain:school:domain"))
 
+    implementation(libs.bundles.ktor)
 }
