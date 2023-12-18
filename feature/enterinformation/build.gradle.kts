@@ -14,4 +14,5 @@ dependencies {
     implementation(project(":core:ui"))
 
     implementation(libs.bundles.orbit)
+    implementation(libs.hilt.navigation)
 }
