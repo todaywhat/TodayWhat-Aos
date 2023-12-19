@@ -1,6 +1,7 @@
 plugins {
     id("khs.onmi.library")
     id("khs.onmi.hilt")
+    id("kotlinx-serialization")
 }
 
 android {
@@ -11,4 +12,5 @@ dependencies {
     implementation(project(":domain:school:domain"))
 
     implementation(libs.bundles.ktor)
+    implementation(libs.kotlinx.serialization.json)
 }

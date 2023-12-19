@@ -27,9 +27,12 @@ orbit = "6.1.0"
 hilt = "2.44"
 hilt-navigation = "1.0.0"
 ktor = "2.3.7"
-kotlin-serialization = "1.6.21"
+kotlinxSerializationJson = "1.5.1"
 
 [libraries]
+# <-----------------[ KotlinX, Kotlin ]---------------->
+kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
+
 # <--------------------[ AndroidX ]-------------------->
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidXCore" }
 lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "androidXLifeCycle" }
@@ -57,11 +60,11 @@ orbit-viewmodel = { group = "org.orbit-mvi", name = "orbit-viewmodel", version.r
 orbit-compose = { group = "org.orbit-mvi", name = "orbit-compose", version.ref = "orbit" }
 
 # <--------------------[ Ktor ]---------------------->
-ktor-client-content-negotiation = { group = "io.ktor", name = "ktor-client-content-negotiation", version.ref = "ktor" }
 ktor-client-core = { group = "io.ktor", name = "ktor-client-core", version.ref = "ktor" }
-ktor-client-logging = { group = "io.ktor", name = "ktor-client-logging", version.ref = "ktor" }
-ktor-client-okhttp = { group = "io.ktor", name = "ktor-client-okhttp", version.ref = "ktor" }
-ktor-serialization-kotlinx-json = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version.ref = "ktor" }
+ktor-client-cio = { group = "io.ktor", name = "ktor-client-cio", version.ref = "ktor" }
+ktor-client-logging-jvm = { group = "io.ktor", name = "ktor-client-logging-jvm", version.ref = "ktor" }
+ktor-client-serialization = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version.ref = "ktor" }
+ktor-client-content-negotiation = { group = "io.ktor", name = "ktor-client-content-negotiation", version.ref = "ktor" }
 
 # <--------------------[ hilt ]----------------------->
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
@@ -80,12 +83,15 @@ com-android-application = { id = "com.android.application", version.ref = "andro
 com-android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
 org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 hilt-plugin = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
-kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin-serialization" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+
 
 [bundles]
 compose = ["activity-compose", "compose-ui", "compose-ui-graphics",
     "compose-ui-tooling", "compose-ui-tooling-preview", "compose-ui-test-manifest",
     "compose-ui-test-manifest", "compose-ui-test-junit4", "compose-material3", "compose-nav"]
 orbit = ["orbit-core", "orbit-viewmodel", "orbit-compose"]
-ktor = ["ktor-client-content-negotiation", "ktor-client-core", "ktor-client-logging", "ktor-client-okhttp", "ktor-serialization-kotlinx-json"]
+ktor = ["ktor-client-core", "ktor-client-cio", "ktor-client-logging-jvm", "ktor-client-serialization",
+    "ktor-client-content-negotiation"]
+
 

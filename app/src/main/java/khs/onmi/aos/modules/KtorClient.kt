@@ -7,17 +7,16 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import io.ktor.client.HttpClient
-import io.ktor.client.engine.okhttp.OkHttp
+import io.ktor.client.engine.cio.CIO
+import io.ktor.client.plugins.DefaultRequest
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
+import io.ktor.http.ContentType
 import io.ktor.http.URLProtocol
-import io.ktor.serialization.kotlinx.json.json
+import io.ktor.serialization.kotlinx.KotlinxSerializationConverter
 import kotlinx.serialization.json.Json
-import okhttp3.ConnectionPool
-import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @Module
@@ -27,7 +26,7 @@ object KtorClient {
     @Singleton
     @Provides
     fun provideKtorHttpClient(): HttpClient {
-        val client = HttpClient(OkHttp) {
+        val client = HttpClient(CIO) {
             install(Logging) {
                 level = LogLevel.ALL
                 logger = object : Logger {
@@ -36,35 +35,25 @@ object KtorClient {
                     }
                 }
             }
-            engine {
-                config {
-                    followRedirects(true)
-                    connectTimeout(timeout = 30, unit = TimeUnit.SECONDS)
-                    connectionPool(
-                        ConnectionPool(
-                            maxIdleConnections = 10,
-                            keepAliveDuration = 5,
-                            timeUnit = TimeUnit.MINUTES
-                        )
-                    )
-                }
-            }
 
             install(ContentNegotiation) {
-                json(
-                    Json {
-                        encodeDefaults = true
-                        prettyPrint = true
-                        isLenient = true
-                        ignoreUnknownKeys = true
-                    }
+                register(
+                    ContentType.Text.Html, KotlinxSerializationConverter(
+                        Json {
+                            prettyPrint = true
+                            isLenient = true
+                            ignoreUnknownKeys = true
+                        }
+                    )
                 )
             }
 
-            defaultRequest {
+            install(DefaultRequest) {
                 url {
                     protocol = URLProtocol.HTTPS
-                    host = "https://open.neis.go.kr/hub"
+                    host = "open.neis.go.kr"
+                    parameters["Type"] = "json"
+                    parameters["KEY"] = "89dd382b78b3410cbe49dd8f448fef87"
                 }
             }
         }

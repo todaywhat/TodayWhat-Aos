@@ -62,6 +62,7 @@ fun MainRoute(
             onGradeValueChange = ::onGradeValueChange,
             onClassValueChange = ::onClassValueChange,
             onDepartmentValueChange = ::onDepartmentValueChange,
+            sendSchoolSearchRequest = ::searchSchoolByName,
             onBackButtonClick = {},
             onFinishButtonClick = {}
         )
