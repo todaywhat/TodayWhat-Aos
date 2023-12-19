@@ -13,6 +13,9 @@ dependencies {
     implementation(project(":core:designsystem"))
     implementation(project(":core:ui"))
 
+    implementation(project(":domain:school:domain"))
+    implementation(project(":domain:school:data"))
+
     implementation(libs.bundles.orbit)
     implementation(libs.hilt.navigation)
 }

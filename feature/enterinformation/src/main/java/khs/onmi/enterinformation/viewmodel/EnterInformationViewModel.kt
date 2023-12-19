@@ -1,10 +1,12 @@
 package khs.onmi.enterinformation.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import khs.onmi.enterinformation.model.CurrentState
 import khs.onmi.enterinformation.viewmodel.container.EnterInformationSideEffect
 import khs.onmi.enterinformation.viewmodel.container.EnterInformationState
+import khs.onmi.school.domain.usecase.SearchSchoolByNameUseCase
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.reduce
@@ -13,7 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class EnterInformationViewModel @Inject constructor(
-
+    private val searchSchoolByNameUseCase: SearchSchoolByNameUseCase,
 ) : ContainerHost<EnterInformationState, EnterInformationSideEffect>, ViewModel() {
 
     override val container = container<EnterInformationState, EnterInformationSideEffect>(
@@ -21,29 +23,16 @@ class EnterInformationViewModel @Inject constructor(
     )
 
     init {
-        setDummy()
+        searchSchoolByName()
     }
 
-    private fun setDummy() = intent {
-        reduce {
-            state.copy(
-                schoolList = listOf(
-                    Pair("광주소프트웨어마이스터고", "광주광역시 광산구"),
-                    Pair("광주소프트웨어마이스터고", "광주광역시 광산구"),
-                    Pair("광주소프트웨어마이스터고", "광주광역시 광산구"),
-                    Pair("광주소프트웨어마이스터고", "광주광역시 광산구"),
-                    Pair("광주소프트웨어마이스터고", "광주광역시 광산구"),
-                    Pair("광주소프트웨어마이스터고", "광주광역시 광산구"),
-                ),
-                departmentList = listOf(
-                    "없음",
-                    "SW 개발과",
-                    "임베디드 개발과",
-                    "스마트IoT과",
-                    "임베디드SW과",
-                    "e-비즈니스과",
-                ),
-            )
+    fun searchSchoolByName() = intent {
+        searchSchoolByNameUseCase(
+            searchKeyword = state.school
+        ).onSuccess {
+            reduce {
+                state.copy(schoolList = it.map { Pair(it.schoolName, it.schoolLocation) })
+            }
         }
     }
 
