@@ -18,10 +18,12 @@ class SchoolDataSourceImpl @Inject constructor(
         return httpClient.get {
             url("/hub/schoolInfo")
             parameter("SCHUL_NM", searchKeyword)
-        }.body<SearchSchoolByNameResponseListDto>().schoolInfo[1].row.map {
+        }.body<SearchSchoolByNameResponseListDto>().schoolInfo[1].row.map { response ->
             SearchSchoolByNameResponseDto(
-                it.schoolName,
-                it.schoolLocation
+                educationCode = response.educationCode,
+                schoolCode = response.schoolCode,
+                schoolName = response.schoolName,
+                schoolLocation = response.schoolLocation
             )
         }
     }
