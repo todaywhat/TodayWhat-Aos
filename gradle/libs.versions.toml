@@ -28,17 +28,18 @@ hilt = "2.44"
 hilt-navigation = "1.0.0"
 ktor = "2.3.7"
 kotlinxSerializationJson = "1.5.1"
+room = "2.4.3"
 
 [libraries]
-# <-----------------[ KotlinX, Kotlin ]---------------->
+# kotlinx, kotlin
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 
-# <--------------------[ AndroidX ]-------------------->
+# androidx
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidXCore" }
 lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "androidXLifeCycle" }
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "androidXAppcompat" }
 
-# <--------------------[ Compose ]-------------------->
+# compose
 activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
 compose-ui = { group = "androidx.compose.ui", name = "ui", version.ref = "composeUi" }
 compose-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics", version.ref = "composeUi" }
@@ -49,29 +50,34 @@ compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4
 compose-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "composeMaterial3" }
 compose-nav = { group = "androidx.navigation", name = "navigation-compose", version.ref = "composeNav" }
 
-# <--------------------[ Test ]-------------------->
+# test
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidXJunit" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso" }
 
-# <-------------------[ orbit-mvi ]------------------>
+# orbit-mvi
 orbit-core = { group = "org.orbit-mvi", name = "orbit-core", version.ref = "orbit" }
 orbit-viewmodel = { group = "org.orbit-mvi", name = "orbit-viewmodel", version.ref = "orbit" }
 orbit-compose = { group = "org.orbit-mvi", name = "orbit-compose", version.ref = "orbit" }
 
-# <--------------------[ Ktor ]---------------------->
+# ktor
 ktor-client-core = { group = "io.ktor", name = "ktor-client-core", version.ref = "ktor" }
 ktor-client-cio = { group = "io.ktor", name = "ktor-client-cio", version.ref = "ktor" }
 ktor-client-logging-jvm = { group = "io.ktor", name = "ktor-client-logging-jvm", version.ref = "ktor" }
 ktor-client-serialization = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version.ref = "ktor" }
 ktor-client-content-negotiation = { group = "io.ktor", name = "ktor-client-content-negotiation", version.ref = "ktor" }
 
-# <--------------------[ hilt ]----------------------->
+# hilt
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
 hilt-navigation = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hilt-navigation" }
 
-# <--- [ Define Dependeicies used in build-logic ] --->
+# room
+room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
+
+# Define Dependeicies used in build-logic
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
 kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
