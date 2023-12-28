@@ -1,5 +1,6 @@
 plugins {
     id("khs.onmi.library")
+    id("khs.onmi.hilt")
     id("kotlin-kapt")
 }
 
