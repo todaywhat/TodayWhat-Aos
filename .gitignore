@@ -13,6 +13,7 @@
 /.idea/misc.xml
 /.idea/inspectionProfiles/Project_Default.xml
 /.idea/DtonatorPreferences.xml
+/.idea/compiler.xml
 .DS_Store
 /build
 /captures
