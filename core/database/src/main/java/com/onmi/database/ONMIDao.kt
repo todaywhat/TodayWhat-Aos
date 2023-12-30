@@ -9,11 +9,11 @@ import androidx.room.Query
 @Dao
 interface ONMIDao {
     @Query("SELECT * FROM user_table")
-    fun getUserInfo(): UserEntity
+    suspend fun getUserInfo(): UserEntity
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun saveUserInfo(userEntity: UserEntity)
+    suspend fun saveUserInfo(userEntity: UserEntity)
 
     @Delete
-    fun deleteUserInfo(userEntity: UserEntity)
+    suspend fun deleteUserInfo(userEntity: UserEntity)
 }
