@@ -2,8 +2,11 @@ package khs.onmi.enterinformation.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
+import com.onmi.database.ONMIDao
+import com.onmi.database.UserEntity
 import dagger.hilt.android.lifecycle.HiltViewModel
 import khs.onmi.enterinformation.model.CurrentState
+import khs.onmi.enterinformation.model.School
 import khs.onmi.enterinformation.viewmodel.container.EnterInformationSideEffect
 import khs.onmi.enterinformation.viewmodel.container.EnterInformationState
 import khs.onmi.school.domain.usecase.SearchSchoolByNameUseCase
@@ -16,6 +19,7 @@ import javax.inject.Inject
 @HiltViewModel
 class EnterInformationViewModel @Inject constructor(
     private val searchSchoolByNameUseCase: SearchSchoolByNameUseCase,
+    private val userDao: ONMIDao,
 ) : ContainerHost<EnterInformationState, EnterInformationSideEffect>, ViewModel() {
 
     override val container = container<EnterInformationState, EnterInformationSideEffect>(
@@ -31,8 +35,41 @@ class EnterInformationViewModel @Inject constructor(
             searchKeyword = state.school
         ).onSuccess {
             reduce {
-                state.copy(schoolList = it.map { Pair(it.schoolName, it.schoolLocation) })
+                state.copy(schoolList = it.map { school ->
+                    School(
+                        schoolCode = school.schoolCode,
+                        educationCode = school.educationCode,
+                        schoolName = school.schoolName,
+                        schoolLocation = school.schoolLocation,
+                    )
+                })
             }
+        }
+    }
+
+    fun saveEnteredUserInfo(
+        schoolCode: String,
+        educationCode: String,
+        schoolName: String,
+        grade: Int,
+        `class`: Int,
+        department: String,
+    ) = intent {
+        kotlin.runCatching {
+            userDao.saveUserInfo(
+                UserEntity(
+                    schoolCode = schoolCode,
+                    educationCode = educationCode,
+                    schoolName = schoolName,
+                    grade = grade,
+                    `class` = `class`,
+                    department = department,
+                )
+            )
+        }.onFailure {
+            Log.d("logtag", it.toString())
+        }.onSuccess {
+            Log.d("logtag", "success")
         }
     }
 
