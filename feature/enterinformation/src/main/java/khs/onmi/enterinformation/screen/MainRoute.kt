@@ -64,7 +64,16 @@ fun MainRoute(
             onDepartmentValueChange = ::onDepartmentValueChange,
             sendSchoolSearchRequest = ::searchSchoolByName,
             onBackButtonClick = {},
-            onFinishButtonClick = {}
+            onFinishButtonClick = {
+                saveEnteredUserInfo(
+                    schoolCode = uiState.schoolList.find { it.schoolName == uiState.school }?.schoolCode ?: "",
+                    educationCode = uiState.schoolList.find { it.schoolName == uiState.school }?.educationCode ?: "",
+                    schoolName = uiState.school,
+                    grade = uiState.grade.toInt(),
+                    `class` = uiState.`class`.toInt(),
+                    department = uiState.department,
+                )
+            }
         )
     }
 }

@@ -194,9 +194,14 @@ fun MainScreen(
                 AnimatedVisibility(visible = uiState.schoolSelectorVisible) {
                     ColumnSpacer(dp = 8.dp)
                     SchoolSelector(
-                        schools = uiState.schoolList,
+                        schools = uiState.schoolList.map { school ->
+                            Pair(
+                                school.schoolName,
+                                school.schoolLocation
+                            )
+                        },
                         onItemClick = { idx ->
-                            onSchoolValueChange(uiState.schoolList[idx].first)
+                            onSchoolValueChange(uiState.schoolList[idx].schoolName)
                             setSchoolSelectorVisible(false)
                             focusManager.clearFocus()
                         }
