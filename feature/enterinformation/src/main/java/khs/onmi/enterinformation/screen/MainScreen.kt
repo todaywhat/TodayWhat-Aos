@@ -67,6 +67,7 @@ fun MainScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .background(color.BackgroundMain),
+            containerColor = color.BackgroundMain,
             topBar = {
                 TopNavigationBar(
                     leading = {

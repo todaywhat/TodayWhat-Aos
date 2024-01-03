@@ -37,6 +37,7 @@ fun DepartmentSelectorBottomSheet(
     ONMITheme { color, typography ->
         ModalBottomSheet(
             modifier = Modifier.fillMaxHeight(0.5f),
+            containerColor = color.BackgroundMain,
             sheetState = sheetState,
             onDismissRequest = onDismissRequest,
             dragHandle = null,
