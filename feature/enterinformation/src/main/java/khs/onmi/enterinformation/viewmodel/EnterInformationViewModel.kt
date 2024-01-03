@@ -9,6 +9,7 @@ import khs.onmi.enterinformation.model.CurrentState
 import khs.onmi.enterinformation.model.School
 import khs.onmi.enterinformation.viewmodel.container.EnterInformationSideEffect
 import khs.onmi.enterinformation.viewmodel.container.EnterInformationState
+import khs.onmi.school.domain.usecase.GetSchoolDepartmentsUseCase
 import khs.onmi.school.domain.usecase.SearchSchoolByNameUseCase
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.syntax.simple.intent
@@ -19,6 +20,7 @@ import javax.inject.Inject
 @HiltViewModel
 class EnterInformationViewModel @Inject constructor(
     private val searchSchoolByNameUseCase: SearchSchoolByNameUseCase,
+    private val getSchoolDepartmentsUseCase: GetSchoolDepartmentsUseCase,
     private val userDao: UserDao,
 ) : ContainerHost<EnterInformationState, EnterInformationSideEffect>, ViewModel() {
     override val container = container<EnterInformationState, EnterInformationSideEffect>(
@@ -42,6 +44,24 @@ class EnterInformationViewModel @Inject constructor(
                         schoolLocation = school.schoolLocation,
                     )
                 })
+            }
+        }
+    }
+
+    fun getSchoolDepartments(
+        educationCode: String,
+        schoolCode: String,
+    ) = intent {
+        getSchoolDepartmentsUseCase(
+            educationCode = educationCode,
+            schoolCode = schoolCode,
+        ).onSuccess {
+            reduce {
+                state.copy(departmentList = it.map { it.department })
+            }
+        }.onFailure {
+            reduce {
+                state.copy(departmentList = emptyList())
             }
         }
     }

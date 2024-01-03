@@ -63,6 +63,12 @@ fun MainRoute(
             onClassValueChange = ::onClassValueChange,
             onDepartmentValueChange = ::onDepartmentValueChange,
             sendSchoolSearchRequest = ::searchSchoolByName,
+            onSchoolItemClick = { educationCode, schoolCode ->
+                viewModel.getSchoolDepartments(
+                    educationCode = educationCode,
+                    schoolCode = schoolCode,
+                )
+            },
             onBackButtonClick = {},
             onFinishButtonClick = {
                 saveEnteredUserInfo(

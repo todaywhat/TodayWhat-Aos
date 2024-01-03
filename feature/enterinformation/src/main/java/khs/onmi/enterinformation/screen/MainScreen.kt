@@ -48,6 +48,7 @@ fun MainScreen(
     onGradeValueChange: (grade: String) -> Unit,
     onClassValueChange: (`class`: String) -> Unit,
     onDepartmentValueChange: (department: String) -> Unit,
+    onSchoolItemClick: (educationCode: String, schoolCode: String) -> Unit,
     sendSchoolSearchRequest: () -> Unit,
     onBackButtonClick: () -> Unit,
     onFinishButtonClick: () -> Unit,
@@ -203,6 +204,10 @@ fun MainScreen(
                         onItemClick = { idx ->
                             onSchoolValueChange(uiState.schoolList[idx].schoolName)
                             setSchoolSelectorVisible(false)
+                            onSchoolItemClick(
+                                uiState.schoolList[idx].educationCode,
+                                uiState.schoolList[idx].schoolCode
+                            )
                             focusManager.clearFocus()
                         }
                     )
