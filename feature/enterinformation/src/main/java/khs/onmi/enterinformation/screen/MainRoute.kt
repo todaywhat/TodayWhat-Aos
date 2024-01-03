@@ -7,6 +7,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import khs.onmi.enterinformation.model.CurrentState
 import khs.onmi.enterinformation.viewmodel.EnterInformationViewModel
+import khs.onmi.enterinformation.viewmodel.container.EnterInformationSideEffect
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
@@ -19,7 +20,9 @@ fun MainRoute(
     LaunchedEffect(key1 = Unit) {
         viewModel.container.sideEffectFlow.collectLatest { sideEffect ->
             when (sideEffect) {
-                else -> {}
+                is EnterInformationSideEffect.Navigate -> {
+                    navController.navigate(sideEffect.route)
+                }
             }
         }
     }
@@ -72,8 +75,10 @@ fun MainRoute(
             onBackButtonClick = {},
             onFinishButtonClick = {
                 saveEnteredUserInfo(
-                    schoolCode = uiState.schoolList.find { it.schoolName == uiState.school }?.schoolCode ?: "",
-                    educationCode = uiState.schoolList.find { it.schoolName == uiState.school }?.educationCode ?: "",
+                    schoolCode = uiState.schoolList.find { it.schoolName == uiState.school }?.schoolCode
+                        ?: "",
+                    educationCode = uiState.schoolList.find { it.schoolName == uiState.school }?.educationCode
+                        ?: "",
                     schoolName = uiState.school,
                     grade = uiState.grade.toInt(),
                     `class` = uiState.`class`.toInt(),
