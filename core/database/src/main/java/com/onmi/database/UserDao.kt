@@ -2,17 +2,16 @@ package com.onmi.database
 
 import androidx.room.Dao
 import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Upsert
 
 @Dao
-interface ONMIDao {
+interface UserDao {
     @Query("SELECT * FROM user_table")
     suspend fun getUserInfo(): UserEntity
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun saveUserInfo(userEntity: UserEntity)
+    @Upsert
+    suspend fun upsertUserInfo(userEntity: UserEntity)
 
     @Delete
     suspend fun deleteUserInfo(userEntity: UserEntity)

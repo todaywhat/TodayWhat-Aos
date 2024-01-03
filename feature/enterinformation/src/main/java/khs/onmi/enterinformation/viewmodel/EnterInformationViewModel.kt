@@ -2,7 +2,7 @@ package khs.onmi.enterinformation.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
-import com.onmi.database.ONMIDao
+import com.onmi.database.UserDao
 import com.onmi.database.UserEntity
 import dagger.hilt.android.lifecycle.HiltViewModel
 import khs.onmi.enterinformation.model.CurrentState
@@ -19,9 +19,8 @@ import javax.inject.Inject
 @HiltViewModel
 class EnterInformationViewModel @Inject constructor(
     private val searchSchoolByNameUseCase: SearchSchoolByNameUseCase,
-    private val userDao: ONMIDao,
+    private val userDao: UserDao,
 ) : ContainerHost<EnterInformationState, EnterInformationSideEffect>, ViewModel() {
-
     override val container = container<EnterInformationState, EnterInformationSideEffect>(
         EnterInformationState()
     )
@@ -56,7 +55,7 @@ class EnterInformationViewModel @Inject constructor(
         department: String,
     ) = intent {
         kotlin.runCatching {
-            userDao.saveUserInfo(
+            userDao.upsertUserInfo(
                 UserEntity(
                     schoolCode = schoolCode,
                     educationCode = educationCode,
@@ -66,10 +65,8 @@ class EnterInformationViewModel @Inject constructor(
                     department = department,
                 )
             )
-        }.onFailure {
-            Log.d("logtag", it.toString())
         }.onSuccess {
-            Log.d("logtag", "success")
+            Log.d("logtag", it.toString())
         }
     }
 
