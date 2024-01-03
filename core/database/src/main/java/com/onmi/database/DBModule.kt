@@ -14,11 +14,11 @@ object DBModule {
 
     @Singleton
     @Provides
-    fun provideAppDatabase(
+    fun provideONMIDatabase(
         @ApplicationContext context: Context
     ): ONMIDatabase = ONMIDatabase.getInstance(context)
 
     @Singleton
     @Provides
-    fun provideAlbumDao(database: ONMIDatabase): ONMIDao = database.onmiDao()
+    fun provideUserDao(database: ONMIDatabase): UserDao = database.userDao()
 }
