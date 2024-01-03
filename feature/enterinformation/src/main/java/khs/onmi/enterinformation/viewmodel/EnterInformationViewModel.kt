@@ -1,6 +1,5 @@
 package khs.onmi.enterinformation.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.onmi.database.UserDao
 import com.onmi.database.UserEntity
@@ -9,10 +8,12 @@ import khs.onmi.enterinformation.model.CurrentState
 import khs.onmi.enterinformation.model.School
 import khs.onmi.enterinformation.viewmodel.container.EnterInformationSideEffect
 import khs.onmi.enterinformation.viewmodel.container.EnterInformationState
+import khs.onmi.navigation.ONMINavRoutes
 import khs.onmi.school.domain.usecase.GetSchoolDepartmentsUseCase
 import khs.onmi.school.domain.usecase.SearchSchoolByNameUseCase
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.syntax.simple.intent
+import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
 import javax.inject.Inject
@@ -86,7 +87,7 @@ class EnterInformationViewModel @Inject constructor(
                 )
             )
         }.onSuccess {
-            Log.d("logtag", it.toString())
+            postSideEffect(EnterInformationSideEffect.Navigate(ONMINavRoutes.MAIN))
         }
     }
 

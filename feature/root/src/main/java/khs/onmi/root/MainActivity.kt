@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import khs.onmi.enterinformation.navigation.enterInformationNavGraph
+import khs.onmi.main.navigation.mainNavGraph
 import khs.onmi.navigation.ONMINavRoutes
 
 @AndroidEntryPoint
@@ -21,6 +22,8 @@ class MainActivity : ComponentActivity() {
                 startDestination = ONMINavRoutes.ENTERINFOMATION
             ) {
                 enterInformationNavGraph(navController = navController)
+
+                mainNavGraph(navController = navController)
             }
         }
     }

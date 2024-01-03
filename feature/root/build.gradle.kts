@@ -11,4 +11,5 @@ android {
 dependencies {
     implementation(project(":navigation"))
     implementation(project(":feature:enterinformation"))
+    implementation(project(":feature:main"))
 }
