@@ -14,6 +14,7 @@ activityCompose = "1.7.0"
 composeMaterial3 = "1.1.2"
 composeCompiler = "1.4.3"
 composeNav = "2.5.3"
+composePager = "1.4.3"
 
 # Test
 junit = "4.13.2"
@@ -49,6 +50,7 @@ compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-mani
 compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4", version.ref = "composeUi" }
 compose-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "composeMaterial3" }
 compose-nav = { group = "androidx.navigation", name = "navigation-compose", version.ref = "composeNav" }
+compose-foundation-pager = { group = "androidx.compose.foundation", name = "foundation", version.ref = "composePager" }
 
 # test
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -96,7 +98,7 @@ kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", versi
 compose = ["activity-compose", "compose-ui", "compose-ui-graphics",
     "compose-ui-tooling", "compose-ui-tooling-preview", "compose-ui-test-manifest",
     "compose-ui-test-manifest", "compose-ui-test-junit4", "compose-material3", "compose-nav"]
-orbit = ["orbit-core", "orbit-viewmodel", "orbit-compose"]
+orbit = ["orbit-core", "orbit-viewmodel", "orbit-compose", "compose-foundation-pager"]
 ktor = ["ktor-client-core", "ktor-client-cio", "ktor-client-logging-jvm", "ktor-client-serialization",
     "ktor-client-content-negotiation"]
 
