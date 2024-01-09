@@ -21,7 +21,7 @@ import khs.onmi.core.designsystem.icon.LargeAllergiesIcon
 import khs.onmi.core.designsystem.theme.ONMITheme
 
 @Composable
-fun MealsItem(
+fun MealItem(
     meal: String,
     isAllergyFood: Boolean,
     modifier: Modifier = Modifier,
@@ -87,7 +87,7 @@ fun TimeTableItem(
 @Preview
 @Composable
 fun MealsItemPre() {
-    MealsItem(
+    MealItem(
         meal = "급식 메뉴",
         isAllergyFood = true,
         modifier = Modifier

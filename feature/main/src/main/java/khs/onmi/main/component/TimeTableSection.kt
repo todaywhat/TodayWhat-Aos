@@ -1,6 +1,7 @@
 package khs.onmi.main.component
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -19,6 +20,7 @@ fun TimeTableSection(timeTableList: List<Pair<String, String>>) {
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
+        item { Spacer(modifier = Modifier.height(32.dp)) }
         itemsIndexed(timeTableList) { _, item ->
             TimeTableItem(
                 modifier = Modifier
@@ -29,6 +31,7 @@ fun TimeTableSection(timeTableList: List<Pair<String, String>>) {
                 subject = item.second
             )
         }
+        item { Spacer(modifier = Modifier.height(16.dp)) }
     }
 }
 
