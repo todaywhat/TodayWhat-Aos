@@ -8,7 +8,7 @@ import androidx.room.Upsert
 @Dao
 interface UserDao {
     @Query("SELECT * FROM user_table")
-    suspend fun getUserInfo(): UserEntity
+    suspend fun getUserInfo(): UserEntity?
 
     @Upsert
     suspend fun upsertUserInfo(userEntity: UserEntity)

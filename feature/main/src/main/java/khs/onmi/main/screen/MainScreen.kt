@@ -74,8 +74,8 @@ fun MainScreen(uiState: MainState) {
                 when (index) {
                     0 -> MealsSection(
                         breakfast = uiState.breakfast,
-                        lunch = uiState.breakfast,
-                        dinner = uiState.breakfast
+                        lunch = uiState.lunch,
+                        dinner = uiState.dinner
                     )
 
                     1 -> TimeTableSection(
