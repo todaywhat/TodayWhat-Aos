@@ -14,9 +14,9 @@ import khs.onmi.core.designsystem.theme.ONMITheme
 
 @Composable
 fun MealsSection(
-    breakfast: List<String>?,
-    lunch: List<String>?,
-    dinner: List<String>?,
+    breakfast: Pair<List<String>, Float>,
+    lunch: Pair<List<String>, Float>,
+    dinner: Pair<List<String>, Float>,
 ) {
     ONMITheme { color, _ ->
         LazyColumn(
@@ -25,16 +25,16 @@ fun MealsSection(
                 .padding(horizontal = 16.dp)
         ) {
             item { Spacer(modifier = Modifier.height(32.dp)) }
-            breakfast?.let {
+            breakfast.first.takeIf { it.isNotEmpty() }?.let { meals ->
                 item {
                     MealsItem(
                         name = "아침",
-                        kcal = 124,
-                        meals = breakfast
+                        kcal = breakfast.second,
+                        meals = meals
                     )
                 }
             }
-            lunch?.let {
+            lunch.first.takeIf { it.isNotEmpty() }?.let { meals ->
                 item {
                     Divider(
                         thickness = 1.dp,
@@ -43,12 +43,12 @@ fun MealsSection(
                     )
                     MealsItem(
                         name = "점심",
-                        kcal = 396,
-                        meals = lunch
+                        kcal = lunch.second,
+                        meals = meals
                     )
                 }
             }
-            dinner?.let {
+            dinner.first.takeIf { it.isNotEmpty() }?.let { meals ->
                 item {
                     Divider(
                         thickness = 1.dp,
@@ -57,8 +57,8 @@ fun MealsSection(
                     )
                     MealsItem(
                         name = "저녁",
-                        kcal = 1980,
-                        meals = dinner
+                        kcal = dinner.second,
+                        meals = meals
                     )
                 }
             }
@@ -73,5 +73,9 @@ fun MealsSection(
 fun MealsSectionPre() {
     val mealsDummy = listOf("쌀밥", "쇠고기미역국", "소불고기", "배추김치", "무생채", "유기농요구르트")
 
-    MealsSection(breakfast = mealsDummy, lunch = mealsDummy, dinner = mealsDummy)
+    MealsSection(
+        breakfast = Pair(mealsDummy, 123.4F),
+        lunch = Pair(mealsDummy, 123.4F),
+        dinner = Pair(mealsDummy, 123.4F)
+    )
 }

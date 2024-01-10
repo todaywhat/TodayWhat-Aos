@@ -15,20 +15,20 @@ import androidx.compose.ui.unit.dp
 import khs.onmi.core.designsystem.component.TimeTableItem
 
 @Composable
-fun TimeTableSection(timeTableList: List<Pair<String, String>>) {
+fun TimeTableSection(timeTableList: List<String>) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         item { Spacer(modifier = Modifier.height(32.dp)) }
-        itemsIndexed(timeTableList) { _, item ->
+        itemsIndexed(timeTableList) { index, subject ->
             TimeTableItem(
                 modifier = Modifier
                     .height(52.dp)
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
-                time = item.first,
-                subject = item.second
+                time = (index + 1).toString(),
+                subject = subject
             )
         }
         item { Spacer(modifier = Modifier.height(16.dp)) }
@@ -38,14 +38,6 @@ fun TimeTableSection(timeTableList: List<Pair<String, String>>) {
 @Preview
 @Composable
 fun TimeTableSectionPre() {
-    val timeTableList = listOf(
-        Pair("1", "한국사"),
-        Pair("2", "한국사"),
-        Pair("3", "한국사"),
-        Pair("4", "한국사"),
-        Pair("5", "한국사"),
-        Pair("6", "한국사"),
-        Pair("7", "한국사"),
-    )
+    val timeTableList = listOf("국어", "영어", "수학", "사회", "과학", "기술가정", "역사", "한문")
     TimeTableSection(timeTableList)
 }
