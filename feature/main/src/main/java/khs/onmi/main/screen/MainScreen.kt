@@ -13,7 +13,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import khs.onmi.core.designsystem.component.InfoCard
 import khs.onmi.core.designsystem.component.TopNavigationBar
@@ -21,10 +20,11 @@ import khs.onmi.core.designsystem.theme.ONMITheme
 import khs.onmi.main.component.MainTabRow
 import khs.onmi.main.component.MealsSection
 import khs.onmi.main.component.TimeTableSection
+import khs.onmi.main.viewmodel.container.MainState
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun MainScreen() {
+fun MainScreen(uiState: MainState) {
     val pagerState = rememberPagerState()
 
     ONMITheme { color, typography ->
@@ -51,9 +51,9 @@ fun MainScreen() {
                             .height(95.dp)
                             .padding(horizontal = 16.dp),
                         isMeal = pagerState.currentPage == 0,
-                        school = "광주소프트웨어마이스터고",
-                        grade = 3,
-                        `class` = 2
+                        school = uiState.schoolName,
+                        grade = uiState.grade,
+                        `class` = uiState.`class`
                     )
                     Spacer(modifier = Modifier.height(25.dp))
                     MainTabRow(
@@ -73,30 +73,16 @@ fun MainScreen() {
             ) { index ->
                 when (index) {
                     0 -> MealsSection(
-                        breakfast = listOf("쌀밥"),
-                        lunch = null,
-                        dinner = null
+                        breakfast = uiState.breakfast,
+                        lunch = uiState.breakfast,
+                        dinner = uiState.breakfast
                     )
 
                     1 -> TimeTableSection(
-                        timeTableList = listOf(
-                            Pair("1", "한국사"),
-                            Pair("2", "한국사"),
-                            Pair("3", "한국사"),
-                            Pair("4", "한국사"),
-                            Pair("5", "한국사"),
-                            Pair("6", "한국사"),
-                            Pair("7", "한국사"),
-                        )
+                        timeTableList = uiState.timetable
                     )
                 }
             }
         }
     }
-}
-
-@Preview
-@Composable
-fun MainScreenPre() {
-    MainScreen()
 }

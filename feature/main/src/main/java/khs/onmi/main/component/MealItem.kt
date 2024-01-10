@@ -17,7 +17,7 @@ import khs.onmi.core.designsystem.theme.ONMITheme
 @Composable
 fun MealsItem(
     name: String,
-    kcal: Int,
+    kcal: Float,
     meals: List<String>,
 ) {
     ONMITheme { color, typography ->
