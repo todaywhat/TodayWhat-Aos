@@ -32,15 +32,15 @@ fun MealsSection(
                         kcal = breakfast.second,
                         meals = meals
                     )
-                }
-            }
-            lunch.first.takeIf { it.isNotEmpty() }?.let { meals ->
-                item {
                     Divider(
                         thickness = 1.dp,
                         color = color.UnselectedSecondary,
                         modifier = Modifier.padding(vertical = 32.dp)
                     )
+                }
+            }
+            lunch.first.takeIf { it.isNotEmpty() }?.let { meals ->
+                item {
                     MealsItem(
                         name = "점심",
                         kcal = lunch.second,
