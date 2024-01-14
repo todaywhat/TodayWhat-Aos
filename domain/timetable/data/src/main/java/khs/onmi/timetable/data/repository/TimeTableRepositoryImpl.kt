@@ -8,6 +8,8 @@ class TimeTableRepositoryImpl @Inject constructor(
     private val dataSource: TimeTableDataSource,
 ) : TimeTableRepository {
     override suspend fun getTimeTable(
+        schoolCode: String,
+        educationCode: String,
         grade: Int,
         `class`: Int,
         department: String,
@@ -15,6 +17,8 @@ class TimeTableRepositoryImpl @Inject constructor(
         endDate: String,
     ): List<String> {
         return dataSource.getTimeTable(
+            schoolCode = schoolCode,
+            educationCode = educationCode,
             grade = grade,
             `class` = `class`,
             department = department,

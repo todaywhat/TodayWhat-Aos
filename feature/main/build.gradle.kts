@@ -1,6 +1,7 @@
 plugins {
     id("khs.onmi.library")
     id("khs.onmi.compose")
+    id("khs.onmi.hilt")
 }
 
 android {
@@ -12,6 +13,9 @@ dependencies {
     implementation(project(":core:designsystem"))
     implementation(project(":core:ui"))
     implementation(project(":core:database"))
+
+    implementation(project(":domain:timetable:domain"))
+    implementation(project(":domain:timetable:data"))
 
     implementation(libs.bundles.orbit)
     implementation(libs.hilt.navigation)

@@ -12,6 +12,8 @@ class TimeTableDataSourceImpl @Inject constructor(
     private val httpClient: HttpClient,
 ) : TimeTableDataSource {
     override suspend fun getTimeTable(
+        schoolCode: String,
+        educationCode: String,
         grade: Int,
         `class`: Int,
         department: String,
@@ -20,9 +22,11 @@ class TimeTableDataSourceImpl @Inject constructor(
     ): List<String> {
         return httpClient.get {
             url("/hub/hisTimetable")
+            parameter("ATPT_OFCDC_SC_CODE", educationCode)
+            parameter("SD_SCHUL_CODE", schoolCode)
+            parameter("DDDEP_NM", department)
             parameter("GRADE", grade)
             parameter("CLASS_NM", `class`)
-            parameter("DDDEP_NM", department)
             parameter("TI_FROM_YMD", beginningDate)
             parameter("TI_TO_YMD", endDate)
         }.body<GetTimeTableResponseListDto>().hisTimetable[1].row.map { it.subject }

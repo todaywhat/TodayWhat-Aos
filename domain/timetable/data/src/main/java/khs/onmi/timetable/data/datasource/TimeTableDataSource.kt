@@ -3,6 +3,8 @@ package khs.onmi.timetable.data.datasource
 interface TimeTableDataSource {
 
     suspend fun getTimeTable(
+        schoolCode: String,
+        educationCode: String,
         grade: Int,
         `class`: Int,
         department: String,

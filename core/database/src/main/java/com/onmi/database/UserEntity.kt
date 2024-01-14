@@ -10,6 +10,6 @@ data class UserEntity(
     var educationCode: String = "",
     var schoolName: String = "",
     var grade: Int = 0,
-    var `class`: Int = 0,
+    var classroom: Int = 0,
     var department: String = "",
 )
