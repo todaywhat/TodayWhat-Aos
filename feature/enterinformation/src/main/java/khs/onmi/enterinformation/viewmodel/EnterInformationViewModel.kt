@@ -1,5 +1,6 @@
 package khs.onmi.enterinformation.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.onmi.database.UserDao
 import com.onmi.database.UserEntity
@@ -76,13 +77,23 @@ class EnterInformationViewModel @Inject constructor(
         department: String,
     ) = intent {
         kotlin.runCatching {
+            Log.d(
+                "logtag", UserEntity(
+                    schoolCode = schoolCode,
+                    educationCode = educationCode,
+                    schoolName = schoolName,
+                    grade = grade,
+                    classroom = `class`,
+                    department = department,
+                ).toString()
+            )
             userDao.upsertUserInfo(
                 UserEntity(
                     schoolCode = schoolCode,
                     educationCode = educationCode,
                     schoolName = schoolName,
                     grade = grade,
-                    `class` = `class`,
+                    classroom = `class`,
                     department = department,
                 )
             )
