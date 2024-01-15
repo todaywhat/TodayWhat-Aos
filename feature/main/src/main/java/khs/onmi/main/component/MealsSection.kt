@@ -14,9 +14,9 @@ import khs.onmi.core.designsystem.theme.ONMITheme
 
 @Composable
 fun MealsSection(
-    breakfast: Pair<List<String>, Float>,
-    lunch: Pair<List<String>, Float>,
-    dinner: Pair<List<String>, Float>,
+    breakfast: Pair<List<String>, String>,
+    lunch: Pair<List<String>, String>,
+    dinner: Pair<List<String>, String>,
 ) {
     ONMITheme { color, _ ->
         LazyColumn(
@@ -74,8 +74,8 @@ fun MealsSectionPre() {
     val mealsDummy = listOf("쌀밥", "쇠고기미역국", "소불고기", "배추김치", "무생채", "유기농요구르트")
 
     MealsSection(
-        breakfast = Pair(mealsDummy, 123.4F),
-        lunch = Pair(mealsDummy, 123.4F),
-        dinner = Pair(mealsDummy, 123.4F)
+        breakfast = Pair(mealsDummy, "123.4 Kcal"),
+        lunch = Pair(mealsDummy, "123.4 Kcal"),
+        dinner = Pair(mealsDummy, "123.4 Kcal")
     )
 }
