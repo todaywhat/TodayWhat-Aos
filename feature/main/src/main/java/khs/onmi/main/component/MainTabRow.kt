@@ -51,7 +51,8 @@ fun MainTabRow(
                         coroutineScope.launch {
                             pagerState.animateScrollToPage(index)
                         }
-                    }
+                    },
+                    selectedContentColor = color.TextSecondary
                 )
             }
         }

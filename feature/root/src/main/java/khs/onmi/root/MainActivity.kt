@@ -6,7 +6,9 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
+import khs.onmi.core.designsystem.theme.ONMITheme
 import khs.onmi.enterinformation.navigation.enterInformationNavGraph
 import khs.onmi.main.navigation.mainNavGraph
 import khs.onmi.navigation.ONMINavRoutes
@@ -19,18 +21,22 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         viewModel.checkUserAlreadyEnteredInfo { isEntered ->
             setContent {
-                val navController = rememberNavController()
+                ONMITheme { color, _ ->
+                    val navController = rememberNavController()
+                    val systemUiController = rememberSystemUiController()
+                    systemUiController.setSystemBarsColor(color = color.BackgroundMain)
 
-                NavHost(
-                    navController = navController,
-                    startDestination = if (isEntered) ONMINavRoutes.MAIN else ONMINavRoutes.ENTERINFOMATION
-                ) {
-                    enterInformationNavGraph(navController = navController)
+                    NavHost(
+                        navController = navController,
+                        startDestination = if (isEntered) ONMINavRoutes.MAIN else ONMINavRoutes.ENTERINFOMATION
+                    ) {
+                        enterInformationNavGraph(navController = navController)
 
-                    mainNavGraph(
-                        activity = this@MainActivity,
-                        navController = navController
-                    )
+                        mainNavGraph(
+                            activity = this@MainActivity,
+                            navController = navController
+                        )
+                    }
                 }
             }
         }
