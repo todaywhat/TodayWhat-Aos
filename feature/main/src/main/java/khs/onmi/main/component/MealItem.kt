@@ -17,7 +17,7 @@ import khs.onmi.core.designsystem.theme.ONMITheme
 @Composable
 fun MealsItem(
     name: String,
-    kcal: Float,
+    kcal: String,
     meals: List<String>,
 ) {
     ONMITheme { color, typography ->
@@ -34,7 +34,7 @@ fun MealsItem(
                     color = color.TextSecondary
                 )
                 Text(
-                    text = "$kcal Kcal",
+                    text = kcal,
                     modifier = Modifier.align(Alignment.TopEnd),
                     style = typography.Body2,
                     color = color.TextSecondary

@@ -1,7 +1,7 @@
-package khs.onmi.timetable.domain.usecase
+package khs.onmi.meal.domain.usecase
 
 import com.onmi.database.UserDao
-import khs.onmi.timetable.domain.repository.TimeTableRepository
+import khs.onmi.meal.domain.repository.MealRepository
 import kotlinx.coroutines.runBlocking
 import java.lang.RuntimeException
 import java.text.SimpleDateFormat
@@ -9,22 +9,18 @@ import java.util.Date
 import java.util.Locale
 import javax.inject.Inject
 
-class GetTodayTimeTableUseCase @Inject constructor(
-    private val repository: TimeTableRepository,
+class GetTodayMealsUseCase @Inject constructor(
+    private val repository: MealRepository,
     private val userDao: UserDao,
 ) {
     suspend operator fun invoke() = kotlin.runCatching {
         val userInfo =
             runBlocking { userDao.getUserInfo() } ?: throw RuntimeException("fail to get user info")
 
-        repository.getTimeTable(
-            schoolCode = userInfo.schoolCode,
+        repository.getTodayMeals(
             educationCode = userInfo.educationCode,
-            grade = userInfo.grade,
-            `class` = userInfo.classroom,
-            department = userInfo.department,
-            beginningDate = convertMillisToDateString(System.currentTimeMillis()),
-            endDate = convertMillisToDateString(System.currentTimeMillis()),
+            schoolCode = userInfo.schoolCode,
+            date = convertMillisToDateString(System.currentTimeMillis())
         )
     }
 

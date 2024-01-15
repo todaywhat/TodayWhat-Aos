@@ -17,6 +17,9 @@ dependencies {
     implementation(project(":domain:timetable:domain"))
     implementation(project(":domain:timetable:data"))
 
+    implementation(project(":domain:meal:domain"))
+    implementation(project(":domain:meal:data"))
+
     implementation(libs.bundles.orbit)
     implementation(libs.hilt.navigation)
 }
