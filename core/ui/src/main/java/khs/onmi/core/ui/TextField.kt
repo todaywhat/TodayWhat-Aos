@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import khs.onmi.core.designsystem.component.ColumnSpacer
 import khs.onmi.core.designsystem.component.ONMITextField
@@ -23,6 +24,7 @@ fun LabelTextFiled(
     focusRequester: FocusRequester = FocusRequester(),
     onClick: () -> Unit = {},
     onTrailingIconClick: () -> Unit,
+    keyboardType: KeyboardType = KeyboardType.Text,
     imeAction: ImeAction = ImeAction.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
 ) {
@@ -43,6 +45,7 @@ fun LabelTextFiled(
                 onTrailingIconClick = onTrailingIconClick,
                 focusRequester = focusRequester,
                 onClick = onClick,
+                keyboardType = keyboardType,
                 imeAction = imeAction,
                 keyboardActions = keyboardActions
             )

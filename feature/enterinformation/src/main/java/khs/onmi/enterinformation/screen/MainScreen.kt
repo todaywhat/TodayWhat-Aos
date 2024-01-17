@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import khs.onmi.core.designsystem.component.ColumnSpacer
 import khs.onmi.core.designsystem.component.ONMIButton
@@ -151,6 +152,7 @@ fun MainScreen(
                             onClassValueChange("")
                         },
                         imeAction = ImeAction.Next,
+                        keyboardType = KeyboardType.NumberPassword,
                         keyboardActions = KeyboardActions(onNext = {
                             focusManager.moveFocus(FocusDirection.Up)
                         })
@@ -169,6 +171,7 @@ fun MainScreen(
                         onTrailingIconClick = {
                             onGradeValueChange("")
                         },
+                        keyboardType = KeyboardType.NumberPassword,
                         imeAction = ImeAction.Next,
                         keyboardActions = KeyboardActions(onNext = {
                             focusManager.moveFocus(FocusDirection.Up)
