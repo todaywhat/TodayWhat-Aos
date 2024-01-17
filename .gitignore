@@ -14,6 +14,8 @@
 /.idea/inspectionProfiles/Project_Default.xml
 /.idea/DtonatorPreferences.xml
 /.idea/compiler.xml
+/keystore
+/app/release
 .DS_Store
 /build
 /captures
