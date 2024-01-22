@@ -1,6 +1,7 @@
 package khs.onmi.enterinformation.viewmodel
 
 import android.util.Log
+import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.ViewModel
 import com.onmi.database.UserDao
 import com.onmi.database.UserEntity
@@ -127,14 +128,18 @@ class EnterInformationViewModel @Inject constructor(
     }
 
     fun onGradeValueChange(grade: String) = intent {
-        reduce {
-            state.copy(grade = grade)
+        if (grade.isDigitsOnly()) {
+            reduce {
+                state.copy(grade = grade)
+            }
         }
     }
 
     fun onClassValueChange(`class`: String) = intent {
-        reduce {
-            state.copy(`class` = `class`)
+        if (`class`.isDigitsOnly()) {
+            reduce {
+                state.copy(`class` = `class`)
+            }
         }
     }
 

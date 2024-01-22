@@ -6,6 +6,11 @@ plugins {
 android {
     namespace = "khs.onmi.aos"
 
+    defaultConfig {
+        versionCode = 2
+        versionName = "1.0.1"
+    }
+
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
