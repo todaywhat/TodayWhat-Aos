@@ -13,8 +13,8 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import khs.onmi.core.designsystem.component.TopNavigationBar
-import khs.onmi.core.designsystem.icon.AllergiesIcon
 import khs.onmi.core.designsystem.icon.ArrowBackIcon
+import khs.onmi.core.designsystem.icon.PaperIcon
 import khs.onmi.core.designsystem.icon.RightArrowIcon
 import khs.onmi.core.designsystem.theme.ONMITheme
 import khs.onmi.core.designsystem.utils.WrappedIconButton
@@ -62,7 +62,7 @@ fun MainScreen(
                             SettingItemsData(
                                 trailing = { RightArrowIcon(tint = color.UnselectedPrimary) },
                                 text = "이용 약관",
-                                leading = { AllergiesIcon(tint = color.Black) },
+                                leading = { PaperIcon(tint = color.Black) },
                                 onClick = { uriHandler.openUri("https://todaywhat.notion.site/28382ec3595e412f9862a9faf4b02a97?pvs=4") }
                             )
                         )

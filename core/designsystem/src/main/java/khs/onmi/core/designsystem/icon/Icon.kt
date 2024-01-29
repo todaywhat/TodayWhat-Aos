@@ -180,6 +180,19 @@ fun ArrowBackIcon(
     )
 }
 
+@Composable
+fun PaperIcon(
+    tint: Color,
+    modifier: Modifier = Modifier,
+) {
+    Icon(
+        painter = painterResource(id = R.drawable.ic_paper),
+        contentDescription = "Paper Icon",
+        tint = tint,
+        modifier = modifier
+    )
+}
+
 @Preview
 @Composable
 fun IconsPre() {
@@ -198,6 +211,7 @@ fun IconsPre() {
             RightArrowIcon(tint = color.TextPrimary)
             XMarkCircleFillIcon(tint = color.TextPrimary)
             ArrowBackIcon(tint = color.TextPrimary)
+            PaperIcon(tint = color.TextPrimary)
         }
     }
 }
