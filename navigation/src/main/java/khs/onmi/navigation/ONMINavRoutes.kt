@@ -10,4 +10,9 @@ object ONMINavRoutes {
     object Main {
         const val MAIN = "main-main"
     }
+
+    const val SETUP = "setup"
+    object Setup {
+        const val MAIN = "setup-main"
+    }
 }
