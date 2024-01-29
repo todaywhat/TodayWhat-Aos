@@ -28,5 +28,8 @@ fun MainRoute(
 
     val uiState = viewModel.container.stateFlow.collectAsState().value
 
-    MainScreen(uiState = uiState)
+    MainScreen(
+        uiState = uiState,
+        navigate = { navController.navigate(it) }
+    )
 }

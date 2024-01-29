@@ -12,6 +12,7 @@ import khs.onmi.core.designsystem.theme.ONMITheme
 import khs.onmi.enterinformation.navigation.enterInformationNavGraph
 import khs.onmi.main.navigation.mainNavGraph
 import khs.onmi.navigation.ONMINavRoutes
+import khs.onmi.setup.navigation.setupNavGraph
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -36,6 +37,8 @@ class MainActivity : ComponentActivity() {
                             activity = this@MainActivity,
                             navController = navController
                         )
+
+                        setupNavGraph(navController = navController)
                     }
                 }
             }
