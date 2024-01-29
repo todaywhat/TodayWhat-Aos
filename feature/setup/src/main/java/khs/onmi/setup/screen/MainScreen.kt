@@ -9,6 +9,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import khs.onmi.core.designsystem.component.TopNavigationBar
@@ -22,7 +23,11 @@ import khs.onmi.setup.component.SettingListComponent
 import khs.onmi.setup.model.SettingItemsData
 
 @Composable
-fun MainScreen() {
+fun MainScreen(
+    onBackButtonClick: () -> Unit,
+) {
+    val uriHandler = LocalUriHandler.current
+
     ONMITheme { color, typography ->
         Scaffold(
             modifier = Modifier.fillMaxSize(),
@@ -30,7 +35,7 @@ fun MainScreen() {
             topBar = {
                 TopNavigationBar(
                     leading = {
-                        WrappedIconButton(onClick = {}) {
+                        WrappedIconButton(onClick = onBackButtonClick) {
                             ArrowBackIcon(tint = color.Black)
                         }
                     }
@@ -58,7 +63,7 @@ fun MainScreen() {
                                 trailing = { RightArrowIcon(tint = color.UnselectedPrimary) },
                                 text = "이용 약관",
                                 leading = { AllergiesIcon(tint = color.Black) },
-                                onClick = { /*TODO*/ }
+                                onClick = { uriHandler.openUri("https://todaywhat.notion.site/28382ec3595e412f9862a9faf4b02a97?pvs=4") }
                             )
                         )
                     )
@@ -71,5 +76,5 @@ fun MainScreen() {
 @Preview
 @Composable
 fun MainScreenPre() {
-    MainScreen()
+    MainScreen {}
 }

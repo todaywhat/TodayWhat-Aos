@@ -7,5 +7,7 @@ import androidx.navigation.NavController
 fun MainRoute(
     navController: NavController,
 ) {
-    MainScreen()
+    MainScreen {
+        navController.popBackStack()
+    }
 }

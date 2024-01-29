@@ -16,15 +16,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import khs.onmi.core.designsystem.component.InfoCard
 import khs.onmi.core.designsystem.component.TopNavigationBar
+import khs.onmi.core.designsystem.icon.SettingIcon
 import khs.onmi.core.designsystem.theme.ONMITheme
+import khs.onmi.core.designsystem.utils.WrappedIconButton
 import khs.onmi.main.component.MainTabRow
 import khs.onmi.main.component.MealsSection
 import khs.onmi.main.component.TimeTableSection
 import khs.onmi.main.viewmodel.container.MainState
+import khs.onmi.navigation.ONMINavRoutes
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun MainScreen(uiState: MainState) {
+fun MainScreen(
+    uiState: MainState,
+    navigate: (route: String) -> Unit,
+) {
     val pagerState = rememberPagerState()
 
     ONMITheme { color, typography ->
@@ -43,7 +49,11 @@ fun MainScreen(uiState: MainState) {
                                 color = color.Black
                             )
                         },
-                        trailing = { /*TODO: 설정, 알림 기능 추가 후 아이콘 추가*/ }
+                        trailing = {
+                            WrappedIconButton(onClick = { navigate(ONMINavRoutes.SETUP) }) {
+                                SettingIcon(tint = color.Black)
+                            }
+                        }
                     )
                     Spacer(modifier = Modifier.height(21.dp))
                     InfoCard(
