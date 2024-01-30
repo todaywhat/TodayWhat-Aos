@@ -1,4 +1,4 @@
-package khs.onmi.setup.component
+package khs.onmi.setting.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

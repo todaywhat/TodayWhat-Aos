@@ -1,4 +1,4 @@
-package khs.onmi.setup.component
+package khs.onmi.setting.component
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -17,7 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import khs.onmi.core.designsystem.theme.ONMITheme
-import khs.onmi.setup.model.SettingItemsData
+import khs.onmi.setting.model.SettingItemsData
 
 @Composable
 fun SettingListComponent(

@@ -1,4 +1,4 @@
-package khs.onmi.setup
+package khs.onmi.setting
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

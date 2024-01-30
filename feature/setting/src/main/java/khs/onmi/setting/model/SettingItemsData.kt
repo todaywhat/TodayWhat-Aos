@@ -1,4 +1,4 @@
-package khs.onmi.setup.model
+package khs.onmi.setting.model
 
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.runtime.Composable

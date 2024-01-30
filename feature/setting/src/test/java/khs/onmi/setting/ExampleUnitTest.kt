@@ -1,4 +1,4 @@
-package khs.onmi.setup
+package khs.onmi.setting
 
 import org.junit.Test
 

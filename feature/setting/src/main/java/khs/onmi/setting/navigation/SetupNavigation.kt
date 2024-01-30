@@ -1,21 +1,21 @@
-package khs.onmi.setup.navigation
+package khs.onmi.setting.navigation
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import khs.onmi.navigation.ONMINavRoutes
-import khs.onmi.setup.screen.MainRoute
+import khs.onmi.setting.screen.MainRoute
 
-fun NavGraphBuilder.setupNavGraph(
+fun NavGraphBuilder.settingNavGraph(
     navController: NavController,
 ) {
     navigation(
-        startDestination = ONMINavRoutes.Setup.MAIN,
-        route = ONMINavRoutes.SETUP
+        startDestination = ONMINavRoutes.Setting.MAIN,
+        route = ONMINavRoutes.SETTING
     ) {
         composable(
-            route = ONMINavRoutes.Setup.MAIN
+            route = ONMINavRoutes.Setting.MAIN
         ) {
             MainRoute(
                 navController = navController
