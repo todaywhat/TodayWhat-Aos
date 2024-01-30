@@ -50,7 +50,7 @@ fun MainScreen(
                             )
                         },
                         trailing = {
-                            WrappedIconButton(onClick = { navigate(ONMINavRoutes.SETUP) }) {
+                            WrappedIconButton(onClick = { navigate(ONMINavRoutes.SETTING) }) {
                                 SettingIcon(tint = color.Black)
                             }
                         }

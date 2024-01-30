@@ -12,7 +12,7 @@ dependencies {
     implementation(project(":navigation"))
     implementation(project(":feature:enterinformation"))
     implementation(project(":feature:main"))
-    implementation(project(":feature:setup"))
+    implementation(project(":feature:setting"))
     implementation(project(":core:database"))
     implementation(project(":core:designsystem"))
 

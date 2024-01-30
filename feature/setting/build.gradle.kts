@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "khs.onmi.setup"
+    namespace = "khs.onmi.setting"
 }
 
 dependencies {

@@ -1,4 +1,4 @@
-package khs.onmi.setup.screen
+package khs.onmi.setting.screen
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -18,9 +18,9 @@ import khs.onmi.core.designsystem.icon.PaperIcon
 import khs.onmi.core.designsystem.icon.RightArrowIcon
 import khs.onmi.core.designsystem.theme.ONMITheme
 import khs.onmi.core.designsystem.utils.WrappedIconButton
-import khs.onmi.setup.component.RoundedWhiteBox
-import khs.onmi.setup.component.SettingListComponent
-import khs.onmi.setup.model.SettingItemsData
+import khs.onmi.setting.component.RoundedWhiteBox
+import khs.onmi.setting.component.SettingListComponent
+import khs.onmi.setting.model.SettingItemsData
 
 @Composable
 fun MainScreen(
