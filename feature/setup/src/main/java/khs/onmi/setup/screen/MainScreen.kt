@@ -24,7 +24,7 @@ import khs.onmi.setup.model.SettingItemsData
 
 @Composable
 fun MainScreen(
-    onBackButtonClick: () -> Unit,
+    onBackPressed: () -> Unit,
 ) {
     val uriHandler = LocalUriHandler.current
 
@@ -35,7 +35,7 @@ fun MainScreen(
             topBar = {
                 TopNavigationBar(
                     leading = {
-                        WrappedIconButton(onClick = onBackButtonClick) {
+                        WrappedIconButton(onClick = onBackPressed) {
                             ArrowBackIcon(tint = color.Black)
                         }
                     }
