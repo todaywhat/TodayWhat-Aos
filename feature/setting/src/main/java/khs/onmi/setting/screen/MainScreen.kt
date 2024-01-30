@@ -21,7 +21,7 @@ import khs.onmi.core.designsystem.utils.WrappedIconButton
 import khs.onmi.setting.component.RoundedWhiteBox
 import khs.onmi.setting.component.SettingListComponent
 import khs.onmi.setting.model.SettingItemsData
-import khs.onmi.setting.util.NameSpace
+import khs.onmi.setting.util.WebLink
 
 @Composable
 fun MainScreen(
@@ -64,7 +64,7 @@ fun MainScreen(
                                 trailing = { RightArrowIcon(tint = color.UnselectedPrimary) },
                                 text = "이용 약관",
                                 leading = { PaperIcon(tint = color.Black) },
-                                onClick = { uriHandler.openUri(NameSpace.PolicyUrl) }
+                                onClick = { uriHandler.openUri(WebLink.PolicyUrl) }
                             )
                         )
                     )
