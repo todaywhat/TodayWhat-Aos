@@ -7,7 +7,7 @@ import androidx.navigation.NavController
 fun MainRoute(
     navController: NavController,
 ) {
-    MainScreen {
-        navController.popBackStack()
-    }
+    MainScreen(
+        onBackPressed = { navController.popBackStack() }
+    )
 }
