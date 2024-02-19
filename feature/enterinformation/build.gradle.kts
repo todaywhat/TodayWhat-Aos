@@ -14,8 +14,8 @@ dependencies {
     implementation(project(":core:ui"))
     implementation(project(":core:database"))
 
-    implementation(project(":domain:school:domain"))
-    implementation(project(":domain:school:data"))
+    implementation(project(":domain"))
+    implementation(project(":data"))
 
     implementation(libs.bundles.orbit)
     implementation(libs.hilt.navigation)
