@@ -1,5 +1,6 @@
 package com.onmi.data.dto.school.response
 
+import com.onmi.domain.model.school.response.SearchSchoolByNameResponseModel
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -18,11 +19,11 @@ data class SearchSchoolByNameResponseDto(
     val schoolLocation: String,
 )
 
-//fun SearchSchoolByNameResponseDto.toModel(): SearchSchoolByNameResponseModel {
-//    return SearchSchoolByNameResponseModel(
-//        educationCode = this.educationCode,
-//        schoolCode = this.schoolCode,
-//        schoolName = this.schoolName,
-//        schoolLocation = this.schoolLocation
-//    )
-//}
+fun SearchSchoolByNameResponseDto.toModel(): SearchSchoolByNameResponseModel {
+    return SearchSchoolByNameResponseModel(
+        educationCode = this.educationCode,
+        schoolCode = this.schoolCode,
+        schoolName = this.schoolName,
+        schoolLocation = this.schoolLocation
+    )
+}

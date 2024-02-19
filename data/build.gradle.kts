@@ -9,6 +9,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":domain"))
 
     implementation(libs.bundles.ktor)
     implementation(libs.kotlinx.serialization.json)

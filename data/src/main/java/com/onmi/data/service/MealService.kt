@@ -4,7 +4,7 @@ import com.onmi.data.dto.meal.response.GetTodayMealsResponse
 
 interface MealService {
 
-    suspend fun getTodayMeals(
+    suspend fun getMeals(
         educationCode: String,
         schoolCode: String,
         date: String,

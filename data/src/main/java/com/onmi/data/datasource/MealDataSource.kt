@@ -15,7 +15,7 @@ class MealDataSource @Inject constructor(
     private val httpClient: HttpClient
 ): MealService {
 
-    override suspend fun getTodayMeals(
+    override suspend fun getMeals(
         educationCode: String,
         schoolCode: String,
         date: String,
