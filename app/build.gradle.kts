@@ -19,6 +19,8 @@ android {
 }
 
 dependencies {
+    implementation(project(":data"))
+    implementation(project(":domain"))
     implementation(project(":feature:root"))
 
     implementation(libs.bundles.ktor)

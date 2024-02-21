@@ -2,11 +2,11 @@ package khs.onmi.main.viewmodel
 
 import androidx.lifecycle.ViewModel
 import com.onmi.database.UserDao
+import com.onmi.domain.usecase.meal.GetTodayMealsUseCase
+import com.onmi.domain.usecase.timetable.GetTodayTimeTableUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import khs.onmi.main.viewmodel.container.MainSideEffect
 import khs.onmi.main.viewmodel.container.MainState
-import khs.onmi.meal.domain.usecase.GetTodayMealsUseCase
-import khs.onmi.timetable.domain.usecase.GetTodayTimeTableUseCase
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
