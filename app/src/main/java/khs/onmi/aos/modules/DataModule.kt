@@ -1,4 +1,4 @@
-package com.onmi.data.di
+package khs.onmi.aos.modules
 
 import com.onmi.data.datasource.MealDataSource
 import com.onmi.data.datasource.SchoolDataSource
@@ -18,7 +18,7 @@ internal interface DataModule {
 
     @Singleton
     @Binds
-    fun bindSchoolDataSource(
+    fun bindMealDataSource(
         impl: MealDataSource,
     ): MealService
 
@@ -30,7 +30,7 @@ internal interface DataModule {
 
     @Singleton
     @Binds
-    fun bindSchoolDataSource(
+    fun bindTimeTableDataSource(
         impl: TimeTableDataSource,
     ): TimeTableService
 }
