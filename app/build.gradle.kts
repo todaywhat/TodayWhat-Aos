@@ -22,6 +22,7 @@ dependencies {
     implementation(project(":data"))
     implementation(project(":domain"))
     implementation(project(":feature:root"))
+    implementation(project(":feature:widget"))
 
     implementation(libs.bundles.ktor)
 
