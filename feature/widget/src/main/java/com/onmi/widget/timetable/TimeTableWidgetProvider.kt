@@ -1,11 +1,13 @@
-package com.onmi.widget
+package com.onmi.widget.timetable
 
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.ComponentName
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.widget.RemoteViews
+import com.onmi.widget.R
 
 class TimeTableWidgetProvider : AppWidgetProvider() {
 
@@ -28,17 +30,6 @@ class TimeTableWidgetProvider : AppWidgetProvider() {
         newOptions: Bundle
     ) {
         super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions)
-
-        val minWidth = newOptions.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH)
-        val minHeight = newOptions.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT)
-
-        val views = when {
-            minWidth >= 360 && minHeight <= 360 -> RemoteViews(context.packageName, R.layout.time_table_widget_medium)
-            minHeight >= 360 -> RemoteViews(context.packageName, R.layout.time_table_widget_big)
-            else -> RemoteViews(context.packageName, R.layout.time_table_widget_small)
-        }
-
-        appWidgetManager.updateAppWidget(appWidgetId, views)
     }
 
     // 위젯이 업데이트 될 때 호출, 위젯 메타데이터 xml에서 updatePeriodMillis로 업데이트 주기를 설정할 수 있음
@@ -51,8 +42,9 @@ class TimeTableWidgetProvider : AppWidgetProvider() {
         val widget = ComponentName(context, TimeTableWidgetProvider::class.java)
 
         appWidgetIds.forEach { _ ->
-            val views =
-                RemoteViews(context.packageName, R.layout.time_table_widget_small)
+            val serviceIntent = Intent(context, TimeTableWidgetRemoteViewsService::class.java)
+            val views = RemoteViews(context.packageName, R.layout.time_table_widget_small)
+            views.setRemoteAdapter(R.id.timeTableSmallList, serviceIntent)
 
             appWidgetManager.updateAppWidget(widget, views)
         }

@@ -3,7 +3,7 @@
 
     <application>
         <receiver
-            android:name=".TimeTableWidgetProvider"
+            android:name=".timetable.TimeTableWidgetProvider"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -12,5 +12,10 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/time_table_widget_meta_data" />
         </receiver>
+        <service
+            android:name=".timetable.TimeTableWidgetRemoteViewsService"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
     </application>
 </manifest>
