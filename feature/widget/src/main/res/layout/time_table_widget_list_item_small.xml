@@ -9,17 +9,23 @@
         android:id="@+id/subjectTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:fontFamily="@font/suit_medium"
+        android:maxLines="1"
         android:paddingEnd="2dp"
-        android:text="1"
-        android:textColor="#3E3D3F"
-        android:textSize="12sp" />
+        android:textColor="@color/TextSecondary"
+        android:textFontWeight="500"
+        android:textSize="16sp" />
 
     <TextView
         android:id="@+id/subjectName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="일본어"
-        android:textColor="#000000"
-        android:textSize="12sp" />
+        android:ellipsize="end"
+        android:fontFamily="@font/suit_medium"
+        android:maxLines="1"
+        android:textColor="@color/Black"
+        android:textFontWeight="500"
+        android:textSize="16sp" />
 
 </LinearLayout>
