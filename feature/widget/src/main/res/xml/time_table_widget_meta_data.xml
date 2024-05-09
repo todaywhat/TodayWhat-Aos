@@ -1,5 +1,7 @@
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:initialLayout="@layout/time_table_widget_small"
     android:minWidth="160dp"
     android:minHeight="110dp"
-    android:initialLayout="@layout/time_table_widget_small"
+    android:previewImage="@drawable/small_time_table_widget_preview"
+    android:description="@string/time_table_widget_description"
     android:updatePeriodMillis="846000" />
