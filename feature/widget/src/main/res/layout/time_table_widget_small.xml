@@ -14,6 +14,6 @@
         android:divider="@android:color/transparent"
         android:dividerHeight="6.83dp"
         android:listSelector="@android:color/transparent"
-        tools:listitem="@layout/time_table_widget_list_item_small" />
+        tools:listitem="@layout/small_time_table_widget_list_item" />
 
 </LinearLayout>

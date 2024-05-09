@@ -1,22 +1,22 @@
-package com.onmi.widget.timetable
+package com.onmi.widget.meal
 
 import android.content.Context
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
 import com.onmi.widget.R
 
-class TimeTableRemoteViewsFactory(
+class MealRemoteViewsFactory(
     private val context: Context
 ) : RemoteViewsService.RemoteViewsFactory {
 
     private var data = listOf(
-        "일본어",
-        "일본어",
-        "웹 프로그래밍 실무",
-        "웹 프로그래밍 실무",
-        "인공지능 프로그래밍",
-        "인공지능 프로그래밍",
-        "스마트문화앱 시스템 설계"
+        "친환경백미찹쌀밥",
+        "매콤어묵우국",
+        "청포묵무침",
+        "닭갈비",
+        "치즈소떡소떡&양념소스",
+        "상큼이주스",
+        "닭가슴살양상추샐러드&오이셀러개맛없어"
     )
 
     override fun onCreate() {}
@@ -29,11 +29,10 @@ class TimeTableRemoteViewsFactory(
 
     override fun getViewAt(position: Int): RemoteViews {
         val listviewWidget =
-            RemoteViews(context.packageName, R.layout.small_time_table_widget_list_item)
+            RemoteViews(context.packageName, R.layout.small_meal_widget_list_item)
 
         listviewWidget.run {
-            setTextViewText(R.id.subjectTime, "${position + 1}")
-            setTextViewText(R.id.subjectName, data[position])
+            setTextViewText(R.id.mealName, data[position])
         }
 
         return listviewWidget

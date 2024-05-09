@@ -1,5 +1,5 @@
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
     android:minWidth="160dp"
     android:minHeight="110dp"
-    android:initialLayout="@layout/time_table_widget_small"
-    android:updatePeriodMillis="846000" />
+    android:updatePeriodMillis="846000"
+    android:initialLayout="@layout/meal_widget_small"/>
