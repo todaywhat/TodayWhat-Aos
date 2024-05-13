@@ -2,6 +2,7 @@
 <resources>
     <color name="Black">#000000</color>
     <color name="BackgroundMain">#FFFFFF</color>
+    <color name="CardBackground">#F8F8F8</color>
     <color name="TextSecondary">#3E3D3F</color>
     <color name="TextPrimary">#1F1F1F</color>
 </resources>
