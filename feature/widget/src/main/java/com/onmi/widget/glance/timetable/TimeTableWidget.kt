@@ -5,10 +5,12 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
+import androidx.glance.GlanceTheme
+import androidx.glance.LocalContext
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.GlanceAppWidgetReceiver
 import androidx.glance.appwidget.lazy.LazyColumn
@@ -24,52 +26,60 @@ import androidx.glance.layout.fillMaxSize
 import androidx.glance.layout.height
 import androidx.glance.layout.padding
 import androidx.glance.layout.width
-import androidx.glance.text.Text
+import com.onmi.widget.glance.theme.ONMIWidgetColorScheme
+import com.onmi.widget.glance.util.SuitText
 
 class TimeTableWidget : GlanceAppWidget() {
-
     override val stateDefinition = TimeTableInfoStateDefinition
 
     @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun provideGlance(context: Context, id: GlanceId) {
         provideContent {
-            when (val state = currentState<TimeTableInfo>()) {
-                is TimeTableInfo.Available -> {
-                    SuccessContent(timeTable = state.timeTableData)
-                }
-
-                is TimeTableInfo.Loading -> {
-                    LoadingContent()
-                }
-
-                is TimeTableInfo.Unavailable -> {
-                    UnavailableContent()
-                }
-            }
-
             LaunchedEffect(key1 = Unit) {
                 TimeTableWorker.enqueue(context)
+            }
+
+            GlanceTheme(colors = ONMIWidgetColorScheme.colors) {
+                when (val state = currentState<TimeTableInfo>()) {
+                    is TimeTableInfo.Available -> {
+                        SuccessContent(timeTable = state.timeTableData)
+                    }
+
+                    is TimeTableInfo.Loading -> {
+                        LoadingContent()
+                    }
+
+                    is TimeTableInfo.Unavailable -> {
+                        UnavailableContent()
+                    }
+                }
             }
         }
     }
 
     @Composable
     private fun SuccessContent(timeTable: List<String>) {
+        val context = LocalContext.current
+
         LazyColumn(
             modifier = GlanceModifier
                 .fillMaxSize()
                 .padding(12.dp)
-                .background(Color.White),
+                .background(GlanceTheme.colors.onPrimary),
         ) {
             itemsIndexed(timeTable) { index, item ->
                 Column {
-                    Row {
-                        Text(
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        SuitText(
                             text = "${index + 1}",
+                            color = GlanceTheme.colors.secondary.getColor(context),
+                            fontSize = 14.sp,
                         )
                         Spacer(modifier = GlanceModifier.width(2.dp))
-                        Text(
+                        SuitText(
                             text = item,
+                            color = GlanceTheme.colors.tertiary.getColor(context),
+                            fontSize = 14.sp,
                         )
                     }
                     if (timeTable.lastIndex != index) {
@@ -82,27 +92,39 @@ class TimeTableWidget : GlanceAppWidget() {
 
     @Composable
     fun LoadingContent() {
+        val context = LocalContext.current
+
         Column(
             modifier = GlanceModifier
                 .fillMaxSize()
-                .background(Color.White),
+                .background(GlanceTheme.colors.onPrimary),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(text = "시간표 정보를 불러올 수 없습니다.")
+            SuitText(
+                text = "시간표 정보를 불러올 수 없습니다.",
+                color = GlanceTheme.colors.tertiary.getColor(context),
+                fontSize = 14.sp,
+            )
         }
     }
 
     @Composable
     fun UnavailableContent() {
+        val context = LocalContext.current
+
         Column(
             modifier = GlanceModifier
                 .fillMaxSize()
-                .background(Color.White),
+                .background(GlanceTheme.colors.onPrimary),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(text = "시간표 정보 불러오는중..")
+            SuitText(
+                text = "시간표 정보 불러오는중..",
+                color = GlanceTheme.colors.tertiary.getColor(context),
+                fontSize = 14.sp,
+            )
         }
     }
 }

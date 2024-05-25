@@ -22,6 +22,7 @@ dependencies {
 
     implementation(libs.androidx.glance.appwidget)
     implementation(libs.androidx.glance.appwidget.material)
+    implementation(libs.compose.material3)
     implementation(libs.androidx.work.runtime)
     implementation(libs.hilt.work)
     implementation(libs.kotlinx.serialization.json)
