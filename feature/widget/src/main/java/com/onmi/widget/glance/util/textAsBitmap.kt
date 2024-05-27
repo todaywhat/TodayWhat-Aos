@@ -15,7 +15,7 @@ fun Context.textAsBitmap(
     fontSize: TextUnit,
     color: Color = Color.Black,
     letterSpacing: Float = 0.1f,
-    font: Int
+    font: Int,
 ): Bitmap {
     val paint = TextPaint(Paint.ANTI_ALIAS_FLAG)
     paint.textSize = spToPx(fontSize.value)

@@ -6,63 +6,63 @@
         <provider
             android:name="androidx.startup.InitializationProvider"
             android:authorities="${applicationId}.androidx-startup"
-            tools:node="remove">
-        </provider>
-<!--        <receiver-->
-<!--            android:name=".timetable.TimeTableWidgetProvider"-->
-<!--            android:exported="true">-->
-<!--            <intent-filter>-->
-<!--                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />-->
-<!--            </intent-filter>-->
-<!--            <meta-data-->
-<!--                android:name="android.appwidget.provider"-->
-<!--                android:resource="@xml/time_table_widget_meta_data" />-->
-<!--        </receiver>-->
-<!--        <service-->
-<!--            android:name=".timetable.TimeTableWidgetRemoteViewsService"-->
-<!--            android:enabled="true"-->
-<!--            android:exported="true"-->
-<!--            android:permission="android.permission.BIND_REMOTEVIEWS" />-->
+            tools:node="remove"></provider>
+        <!--        <receiver-->
+        <!--            android:name=".timetable.TimeTableWidgetProvider"-->
+        <!--            android:exported="true">-->
+        <!--            <intent-filter>-->
+        <!--                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />-->
+        <!--            </intent-filter>-->
+        <!--            <meta-data-->
+        <!--                android:name="android.appwidget.provider"-->
+        <!--                android:resource="@xml/time_table_widget_meta_data" />-->
+        <!--        </receiver>-->
+        <!--        <service-->
+        <!--            android:name=".timetable.TimeTableWidgetRemoteViewsService"-->
+        <!--            android:enabled="true"-->
+        <!--            android:exported="true"-->
+        <!--            android:permission="android.permission.BIND_REMOTEVIEWS" />-->
 
-<!--        <receiver-->
-<!--            android:name=".meal.MealWidgetProvider"-->
-<!--            android:exported="true">-->
-<!--            <intent-filter>-->
-<!--                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />-->
-<!--            </intent-filter>-->
-<!--            <meta-data-->
-<!--                android:name="android.appwidget.provider"-->
-<!--                android:resource="@xml/meal_widget_meta_data" />-->
-<!--        </receiver>-->
-<!--        <service-->
-<!--            android:name=".meal.MealWidgetRemoteViewsService"-->
-<!--            android:enabled="true"-->
-<!--            android:exported="true"-->
-<!--            android:permission="android.permission.BIND_REMOTEVIEWS" />-->
+        <!--        <receiver-->
+        <!--            android:name=".meal.MealWidgetProvider"-->
+        <!--            android:exported="true">-->
+        <!--            <intent-filter>-->
+        <!--                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />-->
+        <!--            </intent-filter>-->
+        <!--            <meta-data-->
+        <!--                android:name="android.appwidget.provider"-->
+        <!--                android:resource="@xml/meal_widget_meta_data" />-->
+        <!--        </receiver>-->
+        <!--        <service-->
+        <!--            android:name=".meal.MealWidgetRemoteViewsService"-->
+        <!--            android:enabled="true"-->
+        <!--            android:exported="true"-->
+        <!--            android:permission="android.permission.BIND_REMOTEVIEWS" />-->
 
-<!--        <receiver-->
-<!--            android:name=".combined.CombinedWidgetProvider"-->
-<!--            android:exported="true">-->
-<!--            <intent-filter>-->
-<!--                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />-->
-<!--            </intent-filter>-->
-<!--            <meta-data-->
-<!--                android:name="android.appwidget.provider"-->
-<!--                android:resource="@xml/combined_widget_meta_data" />-->
-<!--        </receiver>-->
+        <!--        <receiver-->
+        <!--            android:name=".combined.CombinedWidgetProvider"-->
+        <!--            android:exported="true">-->
+        <!--            <intent-filter>-->
+        <!--                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />-->
+        <!--            </intent-filter>-->
+        <!--            <meta-data-->
+        <!--                android:name="android.appwidget.provider"-->
+        <!--                android:resource="@xml/combined_widget_meta_data" />-->
+        <!--        </receiver>-->
 
-<!--        <service-->
-<!--            android:name=".combined.CombinedWidgetTimeTableRemoteViewsService"-->
-<!--            android:enabled="true"-->
-<!--            android:exported="true"-->
-<!--            android:permission="android.permission.BIND_REMOTEVIEWS" />-->
-<!--        <service-->
-<!--            android:name=".combined.CombinedWidgetMealRemoteViewsService"-->
-<!--            android:enabled="true"-->
-<!--            android:exported="true"-->
-<!--            android:permission="android.permission.BIND_REMOTEVIEWS" />-->
+        <!--        <service-->
+        <!--            android:name=".combined.CombinedWidgetTimeTableRemoteViewsService"-->
+        <!--            android:enabled="true"-->
+        <!--            android:exported="true"-->
+        <!--            android:permission="android.permission.BIND_REMOTEVIEWS" />-->
+        <!--        <service-->
+        <!--            android:name=".combined.CombinedWidgetMealRemoteViewsService"-->
+        <!--            android:enabled="true"-->
+        <!--            android:exported="true"-->
+        <!--            android:permission="android.permission.BIND_REMOTEVIEWS" />-->
 
-        <receiver android:name=".glance.timetable.TimeTableWidgetReceiver"
+        <receiver
+            android:name=".glance.timetable.TimeTableWidgetReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -70,6 +70,16 @@
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/glance_timetable_widget_info" />
+        </receiver>
+        <receiver
+            android:name=".glance.meal.MealWidgetReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/glance_meal_widget_info" />
         </receiver>
     </application>
 </manifest>

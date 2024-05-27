@@ -25,7 +25,7 @@ fun SuitText(
                 fontSize = fontSize,
                 color = color,
                 font = khs.onmi.core.designsystem.R.font.suit_bold,
-                letterSpacing = letterSpacing.value
+                letterSpacing = letterSpacing.value,
             )
         ),
         contentDescription = null,
