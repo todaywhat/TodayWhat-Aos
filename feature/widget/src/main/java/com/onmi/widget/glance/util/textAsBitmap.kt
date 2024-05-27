@@ -14,13 +14,11 @@ fun Context.textAsBitmap(
     text: String,
     fontSize: TextUnit,
     color: Color = Color.Black,
-    letterSpacing: Float = 0.1f,
     font: Int,
 ): Bitmap {
     val paint = TextPaint(Paint.ANTI_ALIAS_FLAG)
     paint.textSize = spToPx(fontSize.value)
     paint.color = color.toArgb()
-    paint.letterSpacing = letterSpacing
     paint.typeface = ResourcesCompat.getFont(this, font)
 
     val baseline = -paint.ascent()

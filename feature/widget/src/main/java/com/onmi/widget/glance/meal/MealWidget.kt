@@ -70,9 +70,11 @@ class MealWidget : GlanceAppWidget() {
                 Spacer(modifier = GlanceModifier.height(1.37.dp))
             }
             itemsIndexed(mealList) { index, item ->
+                val text = if (item.length >= 14) item.substring(0, 13) + "..." else item
+
                 Column {
                     SuitText(
-                        text = item,
+                        text = text,
                         color = GlanceTheme.colors.tertiary.getColor(context),
                         fontSize = 14.sp
                     )
