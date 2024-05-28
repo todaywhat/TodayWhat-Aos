@@ -10,7 +10,7 @@ sealed interface MealInfo {
 
     @Serializable
     data class Available(
-        val time: String,
+        val mealTime: String,
         val mealList: List<String>,
     ) : MealInfo
 
