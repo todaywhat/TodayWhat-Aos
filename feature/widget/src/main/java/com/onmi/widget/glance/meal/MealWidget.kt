@@ -1,7 +1,10 @@
 package com.onmi.widget.glance.meal
 
 import android.content.Context
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.glance.GlanceId
@@ -14,6 +17,7 @@ import androidx.glance.appwidget.lazy.LazyColumn
 import androidx.glance.appwidget.lazy.itemsIndexed
 import androidx.glance.appwidget.provideContent
 import androidx.glance.background
+import androidx.glance.currentState
 import androidx.glance.layout.Alignment
 import androidx.glance.layout.Column
 import androidx.glance.layout.Spacer
@@ -26,24 +30,30 @@ import com.onmi.widget.glance.util.SuitText
 class MealWidget : GlanceAppWidget() {
     override val stateDefinition = MealInfoStateDefinition
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun provideGlance(context: Context, id: GlanceId) {
         provideContent {
-            val dummy = listOf(
-                "친환경백미찹쌀밥",
-                "매콤어묵우국",
-                "청포묵무침",
-                "닭갈비",
-                "치즈소떡소떡&양념소스",
-                "배추김치",
-                "상큼이주스",
-                "닭가슴살양상추샐러드&오리엔탈소스"
-            )
+            LaunchedEffect(key1 = Unit) {
+                MealWorker.enqueue(context)
+            }
 
             GlanceTheme(colors = ONMIWidgetColorScheme.colors) {
-                SuccessContent(
-                    mealTime = "아침",
-                    mealList = dummy
-                )
+                when (val state = currentState<MealInfo>()) {
+                    is MealInfo.Available -> {
+                        SuccessContent(
+                            mealTime = state.mealTime,
+                            mealList = state.mealList
+                        )
+                    }
+
+                    is MealInfo.Loading -> {
+                        LoadingContent()
+                    }
+
+                    is MealInfo.Unavailable -> {
+                        UnavailableContent()
+                    }
+                }
             }
         }
     }
