@@ -1,4 +1,4 @@
-package com.onmi.widget.glance.util
+package com.onmi.widget.util
 
 import android.content.Context
 import android.graphics.Bitmap

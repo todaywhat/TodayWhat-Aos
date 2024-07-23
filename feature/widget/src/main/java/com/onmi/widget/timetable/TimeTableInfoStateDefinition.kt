@@ -1,4 +1,4 @@
-package com.onmi.widget.glance.meal
+package com.onmi.widget.timetable
 
 import android.content.Context
 import androidx.datastore.core.CorruptionException
@@ -13,12 +13,12 @@ import java.io.File
 import java.io.InputStream
 import java.io.OutputStream
 
-object MealInfoStateDefinition : GlanceStateDefinition<MealInfo> {
+object TimeTableInfoStateDefinition : GlanceStateDefinition<TimeTableInfo> {
 
-    private const val DATA_STORE_FILENAME = "MealInfo"
+    private const val DATA_STORE_FILENAME = "TimeTableInfo"
 
-    private val Context.datastore by dataStore(DATA_STORE_FILENAME, MealInfoSerializer)
-    override suspend fun getDataStore(context: Context, fileKey: String): DataStore<MealInfo> {
+    private val Context.datastore by dataStore(DATA_STORE_FILENAME, TimeTableInfoSerializer)
+    override suspend fun getDataStore(context: Context, fileKey: String): DataStore<TimeTableInfo> {
         return context.datastore
     }
 
@@ -26,22 +26,22 @@ object MealInfoStateDefinition : GlanceStateDefinition<MealInfo> {
         return context.dataStoreFile(DATA_STORE_FILENAME)
     }
 
-    object MealInfoSerializer : Serializer<MealInfo> {
-        override val defaultValue = MealInfo.Loading
+    object TimeTableInfoSerializer : Serializer<TimeTableInfo> {
+        override val defaultValue = TimeTableInfo.Loading
 
-        override suspend fun readFrom(input: InputStream): MealInfo = try {
+        override suspend fun readFrom(input: InputStream): TimeTableInfo = try {
             Json.decodeFromString(
-                MealInfo.serializer(),
+                TimeTableInfo.serializer(),
                 input.readBytes().decodeToString()
             )
         } catch (exception: SerializationException) {
             throw CorruptionException("Could not read data: ${exception.message}")
         }
 
-        override suspend fun writeTo(t: MealInfo, output: OutputStream) {
+        override suspend fun writeTo(t: TimeTableInfo, output: OutputStream) {
             output.use {
                 it.write(
-                    Json.encodeToString(MealInfo.serializer(), t).encodeToByteArray()
+                    Json.encodeToString(TimeTableInfo.serializer(), t).encodeToByteArray()
                 )
             }
         }

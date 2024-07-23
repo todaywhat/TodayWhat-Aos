@@ -1,4 +1,4 @@
-package com.onmi.widget.glance.meal
+package com.onmi.widget.meal
 
 import android.content.Context
 import android.os.Build
@@ -13,7 +13,7 @@ import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import com.onmi.domain.usecase.meal.GetTodayMealsUseCase
-import com.onmi.widget.glance.timetable.TimeTableWidget
+import com.onmi.widget.timetable.TimeTableWidget
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import java.time.Duration

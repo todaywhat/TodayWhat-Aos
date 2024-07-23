@@ -1,4 +1,4 @@
-package com.onmi.widget.glance.meal
+package com.onmi.widget.meal
 
 import kotlinx.serialization.Serializable
 

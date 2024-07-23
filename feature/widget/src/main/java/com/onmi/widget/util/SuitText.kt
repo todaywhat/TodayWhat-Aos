@@ -1,4 +1,4 @@
-package com.onmi.widget.glance.util
+package com.onmi.widget.util
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color

@@ -1,4 +1,4 @@
-package com.onmi.widget.glance.combined
+package com.onmi.widget.combined
 
 import android.content.Context
 import androidx.datastore.core.DataStore

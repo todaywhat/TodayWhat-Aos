@@ -1,4 +1,4 @@
-package com.onmi.widget.glance.timetable
+package com.onmi.widget.timetable
 
 import kotlinx.serialization.Serializable
 

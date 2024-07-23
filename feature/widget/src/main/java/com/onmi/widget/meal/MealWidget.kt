@@ -1,4 +1,4 @@
-package com.onmi.widget.glance.timetable
+package com.onmi.widget.meal
 
 import android.content.Context
 import android.os.Build
@@ -20,36 +20,37 @@ import androidx.glance.background
 import androidx.glance.currentState
 import androidx.glance.layout.Alignment
 import androidx.glance.layout.Column
-import androidx.glance.layout.Row
 import androidx.glance.layout.Spacer
 import androidx.glance.layout.fillMaxSize
 import androidx.glance.layout.height
 import androidx.glance.layout.padding
-import androidx.glance.layout.width
-import com.onmi.widget.glance.theme.ONMIWidgetColorScheme
-import com.onmi.widget.glance.util.SuitText
+import com.onmi.widget.theme.ONMIWidgetColorScheme
+import com.onmi.widget.util.SuitText
 
-class TimeTableWidget : GlanceAppWidget() {
-    override val stateDefinition = TimeTableInfoStateDefinition
+class MealWidget : GlanceAppWidget() {
+    override val stateDefinition = MealInfoStateDefinition
 
     @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun provideGlance(context: Context, id: GlanceId) {
         provideContent {
             LaunchedEffect(key1 = Unit) {
-                TimeTableWorker.enqueue(context)
+                MealWorker.enqueue(context)
             }
 
             GlanceTheme(colors = ONMIWidgetColorScheme.colors) {
-                when (val state = currentState<TimeTableInfo>()) {
-                    is TimeTableInfo.Available -> {
-                        SuccessContent(timeTable = state.timeTableData)
+                when (val state = currentState<MealInfo>()) {
+                    is MealInfo.Available -> {
+                        SuccessContent(
+                            mealTime = state.mealTime,
+                            mealList = state.mealList
+                        )
                     }
 
-                    is TimeTableInfo.Loading -> {
+                    is MealInfo.Loading -> {
                         LoadingContent()
                     }
 
-                    is TimeTableInfo.Unavailable -> {
+                    is MealInfo.Unavailable -> {
                         UnavailableContent()
                     }
                 }
@@ -58,7 +59,10 @@ class TimeTableWidget : GlanceAppWidget() {
     }
 
     @Composable
-    private fun SuccessContent(timeTable: List<String>) {
+    private fun SuccessContent(
+        mealTime: String,
+        mealList: List<String>,
+    ) {
         val context = LocalContext.current
 
         LazyColumn(
@@ -67,24 +71,25 @@ class TimeTableWidget : GlanceAppWidget() {
                 .padding(12.dp)
                 .background(GlanceTheme.colors.onPrimary),
         ) {
-            itemsIndexed(timeTable) { index, item ->
+            item {
+                SuitText(
+                    text = "[$mealTime]",
+                    color = GlanceTheme.colors.primary.getColor(context),
+                    fontSize = 14.sp
+                )
+                Spacer(modifier = GlanceModifier.height(1.37.dp))
+            }
+            itemsIndexed(mealList) { index, item ->
+                val text = if (item.length >= 14) item.substring(0, 13) + "..." else item
+
                 Column {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        SuitText(
-                            modifier = GlanceModifier.width(12.dp),
-                            text = "${index + 1}",
-                            color = GlanceTheme.colors.secondary.getColor(context),
-                            fontSize = 14.sp,
-                        )
-                        Spacer(modifier = GlanceModifier.width(2.dp))
-                        SuitText(
-                            text = item,
-                            color = GlanceTheme.colors.tertiary.getColor(context),
-                            fontSize = 14.sp,
-                        )
-                    }
-                    if (timeTable.lastIndex != index) {
-                        Spacer(modifier = GlanceModifier.height(6.68.dp))
+                    SuitText(
+                        text = text,
+                        color = GlanceTheme.colors.tertiary.getColor(context),
+                        fontSize = 14.sp
+                    )
+                    if (mealList.lastIndex != index) {
+                        Spacer(modifier = GlanceModifier.height(1.37.dp))
                     }
                 }
             }
@@ -103,7 +108,7 @@ class TimeTableWidget : GlanceAppWidget() {
             verticalAlignment = Alignment.CenterVertically
         ) {
             SuitText(
-                text = "시간표 정보를 불러올 수 없습니다.",
+                text = "급식 정보를 불러올 수 없습니다.",
                 color = GlanceTheme.colors.tertiary.getColor(context),
                 fontSize = 14.sp,
             )
@@ -122,7 +127,7 @@ class TimeTableWidget : GlanceAppWidget() {
             verticalAlignment = Alignment.CenterVertically
         ) {
             SuitText(
-                text = "시간표 정보 불러오는중..",
+                text = "급식 정보 불러오는중..",
                 color = GlanceTheme.colors.tertiary.getColor(context),
                 fontSize = 14.sp,
             )
@@ -130,7 +135,7 @@ class TimeTableWidget : GlanceAppWidget() {
     }
 }
 
-class TimeTableWidgetReceiver : GlanceAppWidgetReceiver() {
+class MealWidgetReceiver : GlanceAppWidgetReceiver() {
     override val glanceAppWidget: GlanceAppWidget
-        get() = TimeTableWidget()
+        get() = MealWidget()
 }

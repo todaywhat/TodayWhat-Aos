@@ -1,4 +1,4 @@
-package com.onmi.widget.glance.combined
+package com.onmi.widget.combined
 
 import android.content.Context
 import android.os.Build
@@ -25,8 +25,8 @@ import androidx.glance.layout.fillMaxSize
 import androidx.glance.layout.height
 import androidx.glance.layout.padding
 import androidx.glance.layout.width
-import com.onmi.widget.glance.theme.ONMIWidgetColorScheme
-import com.onmi.widget.glance.util.SuitText
+import com.onmi.widget.theme.ONMIWidgetColorScheme
+import com.onmi.widget.util.SuitText
 
 class CombinedWidget : GlanceAppWidget() {
 
