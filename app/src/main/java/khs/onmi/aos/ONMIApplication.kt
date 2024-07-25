@@ -13,7 +13,8 @@ class ONMIApplication : Application(), Configuration.Provider {
     lateinit var hiltWorkerFactory: HiltWorkerFactory
 
     // Worker에 Hilt를 주입할 때 기본생성자를 사용하지 않기 위해서 해당 옵션 추가
-    override fun getWorkManagerConfiguration() = Configuration.Builder()
-        .setWorkerFactory(hiltWorkerFactory)
-        .build()
+    override val workManagerConfiguration: Configuration
+        get() = Configuration.Builder()
+            .setWorkerFactory(hiltWorkerFactory)
+            .build()
 }

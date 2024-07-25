@@ -30,4 +30,5 @@ dependencies {
     // Work & Hilt
     implementation(libs.androidx.work.runtime)
     implementation(libs.hilt.work)
+    ksp(libs.androidx.hilt.compiler)
 }
