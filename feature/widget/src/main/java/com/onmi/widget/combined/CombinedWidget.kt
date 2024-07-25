@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.glance.GlanceId
@@ -17,6 +18,8 @@ import androidx.glance.appwidget.lazy.LazyColumn
 import androidx.glance.appwidget.lazy.itemsIndexed
 import androidx.glance.appwidget.provideContent
 import androidx.glance.background
+import androidx.glance.currentState
+import androidx.glance.layout.Alignment
 import androidx.glance.layout.Column
 import androidx.glance.layout.Row
 import androidx.glance.layout.Spacer
@@ -29,34 +32,33 @@ import com.onmi.widget.theme.ONMIWidgetColorScheme
 import com.onmi.widget.util.SuitText
 
 class CombinedWidget : GlanceAppWidget() {
+    override val stateDefinition = CombinedStateDefinition
 
     @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun provideGlance(context: Context, id: GlanceId) {
         provideContent {
+            LaunchedEffect(key1 = Unit) {
+                CombinedWorker.enqueue(context)
+            }
+
             GlanceTheme(colors = ONMIWidgetColorScheme.colors) {
-                SuccessContent(
-                    timeTable = listOf(
-                        "일본어",
-                        "일본어",
-                        "웹 프로그래밍 실무",
-                        "웹 프로그래밍 실무",
-                        "스마트문화체험",
-                        "인공지능실무",
-                        "스마트문화체험",
-                        "인공지능실무"
-                    ),
-                    mealTime = "아침",
-                    mealList = listOf(
-                        "친환경 백미밥",
-                        "매콤어묵무국",
-                        "청포묵무침",
-                        "닭갈비",
-                        "치즈소떡소떡",
-                        "배추김치",
-                        "상큼이주스",
-                        "닭가슴살양상추볶음"
-                    ),
-                )
+                when (val state = currentState<CombinedInfo>()) {
+                    is CombinedInfo.Available -> {
+                        SuccessContent(
+                            mealTime = state.mealTime,
+                            mealList = state.mealList,
+                            timeTable = state.subjectList,
+                        )
+                    }
+
+                    is CombinedInfo.Loading -> {
+                        LoadingContent()
+                    }
+
+                    is CombinedInfo.Unavailable -> {
+                        UnavailableContent()
+                    }
+                }
             }
         }
     }
@@ -142,6 +144,44 @@ class CombinedWidget : GlanceAppWidget() {
                     }
                 }
             }
+        }
+    }
+
+    @Composable
+    fun LoadingContent() {
+        val context = LocalContext.current
+
+        Column(
+            modifier = GlanceModifier
+                .fillMaxSize()
+                .background(GlanceTheme.colors.onPrimary),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            SuitText(
+                text = "급식, 시간표 정보를 불러올 수 없습니다.",
+                color = GlanceTheme.colors.tertiary.getColor(context),
+                fontSize = 14.sp,
+            )
+        }
+    }
+
+    @Composable
+    fun UnavailableContent() {
+        val context = LocalContext.current
+
+        Column(
+            modifier = GlanceModifier
+                .fillMaxSize()
+                .background(GlanceTheme.colors.onPrimary),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            SuitText(
+                text = "급식, 시간표 정보 불러오는중..",
+                color = GlanceTheme.colors.tertiary.getColor(context),
+                fontSize = 14.sp,
+            )
         }
     }
 }

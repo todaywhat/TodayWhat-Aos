@@ -14,6 +14,7 @@ import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import com.onmi.domain.usecase.meal.GetTodayMealsUseCase
 import com.onmi.widget.timetable.TimeTableWidget
+import com.onmi.widget.util.MealTime
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import java.time.Duration
@@ -30,26 +31,17 @@ class MealWorker @AssistedInject constructor(
         private val uniqueWorkName = MealWorker::class.java.simpleName
 
         @RequiresApi(Build.VERSION_CODES.O)
-        fun enqueue(context: Context, force: Boolean = false) {
+        fun enqueue(context: Context) {
             val manager = WorkManager.getInstance(context)
             val requestBuilder = PeriodicWorkRequestBuilder<MealWorker>(
                 Duration.ofMinutes(30)
             )
-            var workPolicy = ExistingPeriodicWorkPolicy.KEEP
-
-            if (force) {
-                workPolicy = ExistingPeriodicWorkPolicy.REPLACE
-            }
 
             manager.enqueueUniquePeriodicWork(
                 uniqueWorkName,
-                workPolicy,
+                ExistingPeriodicWorkPolicy.CANCEL_AND_REENQUEUE,
                 requestBuilder.build()
             )
-        }
-
-        fun cancel(context: Context) {
-            WorkManager.getInstance(context).cancelUniqueWork(uniqueWorkName)
         }
     }
 
@@ -61,22 +53,20 @@ class MealWorker @AssistedInject constructor(
                 .onSuccess {
                     setWidgetState(
                         when (getTimePeriod()) {
-                            "MORNING" -> MealInfo.Available(
-                                mealTime = it.breakfast.second,
+                            MealTime.Morning -> MealInfo.Available(
+                                mealTime = "아침",
                                 mealList = it.breakfast.first
                             )
 
-                            "LUNCH" -> MealInfo.Available(
-                                mealTime = it.lunch.second,
+                            MealTime.Lunch -> MealInfo.Available(
+                                mealTime = "점심",
                                 mealList = it.lunch.first
                             )
 
-                            "DINNER" -> MealInfo.Available(
-                                mealTime = it.dinner.second,
+                            MealTime.Dinner -> MealInfo.Available(
+                                mealTime = "저녁",
                                 mealList = it.dinner.first
                             )
-
-                            else -> MealInfo.Unavailable
                         }
                     )
                 }.onFailure {
@@ -105,15 +95,15 @@ class MealWorker @AssistedInject constructor(
 
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun getTimePeriod(): String {
+    private fun getTimePeriod(): MealTime {
         val currentTime = LocalTime.now()
         val morningEnd = LocalTime.of(7, 35)
         val lunchEnd = LocalTime.of(12, 35)
 
         return when {
-            currentTime.isBefore(morningEnd) -> "MORNING"
-            currentTime.isBefore(lunchEnd) -> "LUNCH"
-            else -> "DINNER"
+            currentTime.isBefore(morningEnd) -> MealTime.Morning
+            currentTime.isBefore(lunchEnd) -> MealTime.Lunch
+            else -> MealTime.Dinner
         }
     }
 }

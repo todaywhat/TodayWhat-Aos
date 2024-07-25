@@ -28,26 +28,17 @@ class TimeTableWorker @AssistedInject constructor(
         private val uniqueWorkName = TimeTableWorker::class.java.simpleName
 
         @RequiresApi(Build.VERSION_CODES.O)
-        fun enqueue(context: Context, force: Boolean = false) {
+        fun enqueue(context: Context) {
             val manager = WorkManager.getInstance(context)
             val requestBuilder = PeriodicWorkRequestBuilder<TimeTableWorker>(
                 Duration.ofMinutes(30)
             )
-            var workPolicy = ExistingPeriodicWorkPolicy.KEEP
-
-            if (force) {
-                workPolicy = ExistingPeriodicWorkPolicy.REPLACE
-            }
 
             manager.enqueueUniquePeriodicWork(
                 uniqueWorkName,
-                workPolicy,
+                ExistingPeriodicWorkPolicy.CANCEL_AND_REENQUEUE,
                 requestBuilder.build()
             )
-        }
-
-        fun cancel(context: Context) {
-            WorkManager.getInstance(context).cancelUniqueWork(uniqueWorkName)
         }
     }
 
