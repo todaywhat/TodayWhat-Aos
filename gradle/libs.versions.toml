@@ -29,12 +29,12 @@ compose-bom = "2023.03.00"
 
 # Library
 orbit = "6.1.0"
-hilt = "2.44"
+hilt = "2.50"
+androidXHilt = "1.2.0"
 hilt-navigation = "1.0.0"
 ktor = "2.3.7"
 kotlinxSerializationJson = "1.5.1"
 room = "2.5.0"
-hiltWork = "1.2.0"
 
 [libraries]
 # kotlinx, kotlin
@@ -85,8 +85,9 @@ ktor-client-content-negotiation = { group = "io.ktor", name = "ktor-client-conte
 # hilt
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
+hilt-work = { group = "androidx.hilt", name = "hilt-work", version.ref = "androidXHilt" }
+androidx-hilt-compiler = { group = "androidx.hilt", name = "hilt-compiler", version.ref = "androidXHilt" }
 hilt-navigation = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hilt-navigation" }
-hilt-work = { group = "androidx.hilt", name = "hilt-work", version = "1.0.0" }
 
 # room
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
@@ -105,7 +106,7 @@ com-android-library = { id = "com.android.library", version.ref = "androidGradle
 org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 hilt-plugin = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
-
+com-google-devtools-ksp = { id = "com.google.devtools.ksp", version = "1.8.10-1.0.9" }
 
 [bundles]
 compose = ["activity-compose", "compose-ui", "compose-ui-graphics",

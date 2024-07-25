@@ -5,6 +5,11 @@ plugins {
     alias(libs.plugins.org.jetbrains.kotlin.android) apply false
     alias(libs.plugins.com.android.library) apply false
     alias(libs.plugins.hilt.plugin) apply false
+    alias(libs.plugins.com.google.devtools.ksp) apply false
     alias(libs.plugins.kotlin.serialization) apply false
+}
+
+tasks.register("clean", Delete::class) {
+    delete(rootProject.buildDir)
 }
 true // Needed to make the Suppress annotation work for the plugins block
