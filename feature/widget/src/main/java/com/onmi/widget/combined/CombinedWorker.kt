@@ -48,6 +48,7 @@ class CombinedWorker @AssistedInject constructor(
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun doWork(): Result = coroutineScope {
         try {
             val getTodayMealsRequest = async { getTodayMealsUseCase() }
