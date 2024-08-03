@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/BackgroundMain"
+    android:orientation="vertical">
+
+    <ListView
+        android:id="@+id/timeTableSmallList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="12dp"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="6.83dp"
+        android:listSelector="@android:color/transparent"
+        tools:listitem="@layout/small_time_table_widget_list_item" />
+
+</LinearLayout>

@@ -8,7 +8,6 @@ interface TimeTableRepository {
         grade: Int,
         `class`: Int,
         department: String,
-        beginningDate: String,
-        endDate: String,
+        date: String,
     ): List<String>
 }

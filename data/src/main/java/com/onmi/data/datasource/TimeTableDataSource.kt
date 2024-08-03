@@ -19,8 +19,7 @@ class TimeTableDataSource @Inject constructor(
         grade: Int,
         `class`: Int,
         department: String,
-        beginningDate: String,
-        endDate: String,
+        date: String,
     ): List<String> {
         return httpClient.get {
             url("/hub/hisTimetable")
@@ -29,8 +28,7 @@ class TimeTableDataSource @Inject constructor(
             parameter("DDDEP_NM", department)
             parameter("GRADE", grade)
             parameter("CLASS_NM", `class`)
-            parameter("TI_FROM_YMD", beginningDate)
-            parameter("TI_TO_YMD", endDate)
+            parameter("ALL_TI_YMD", date)
         }.body<GetTimeTableResponseListDto>().hisTimetable[1].row.map { it.subject }
     }
 }

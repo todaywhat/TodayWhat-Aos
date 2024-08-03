@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/BackgroundMain"
+    android:orientation="vertical"
+    android:padding="12dp">
+
+    <TextView
+        android:id="@+id/mealTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="1.38dp"
+        android:ellipsize="end"
+        android:fontFamily="@font/suit_medium"
+        android:maxLines="1"
+        android:paddingEnd="2dp"
+        android:text="[아침]"
+        android:textColor="@color/TextPrimary"
+        android:textFontWeight="500"
+        android:textSize="16sp" />
+
+    <ListView
+        android:id="@+id/mealSmallList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="1.38dp"
+        android:listSelector="@android:color/transparent"
+        tools:listitem="@layout/small_meal_widget_list_item" />
+
+</LinearLayout>

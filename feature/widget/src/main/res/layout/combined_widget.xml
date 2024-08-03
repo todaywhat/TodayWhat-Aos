@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/BackgroundMain"
+    android:baselineAligned="false"
+    android:orientation="horizontal"
+    android:padding="8dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginEnd="8dp"
+        android:layout_weight="1"
+        android:background="@drawable/corner_radius"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/suit_bold"
+            android:padding="8dp"
+            android:text="시간표"
+            android:textColor="@color/TextPrimary"
+            android:textFontWeight="700"
+            android:textSize="16dp" />
+
+        <ListView
+            android:id="@+id/timeTableGridView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="8dp"
+            android:listSelector="@android:color/transparent"
+            android:paddingHorizontal="8dp"
+            android:paddingBottom="8dp"
+            tools:listitem="@layout/small_time_table_widget_list_item" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="@drawable/corner_radius"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/combinedWidgetMealTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/suit_bold"
+            android:padding="8dp"
+            android:text="아침"
+            android:textColor="@color/TextPrimary"
+            android:textFontWeight="700"
+            android:textSize="16dp" />
+
+        <ListView
+            android:id="@+id/mealGridView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="8dp"
+            android:listSelector="@android:color/transparent"
+            android:paddingHorizontal="8dp"
+            android:paddingBottom="8dp"
+            tools:listitem="@layout/small_meal_widget_list_item" />
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -22,8 +22,10 @@ dependencies {
     implementation(project(":data"))
     implementation(project(":domain"))
     implementation(project(":feature:root"))
+    implementation(project(":feature:widget"))
 
     implementation(libs.bundles.ktor)
+    implementation(libs.hilt.work)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
