@@ -99,7 +99,7 @@ room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 
 # firebase
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version = "33.1.2" }
-implementation = { group = "com.google.firebase", name = "firebase-analytics" }
+firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics" }
 
 # Define Dependeicies used in build-logic
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
