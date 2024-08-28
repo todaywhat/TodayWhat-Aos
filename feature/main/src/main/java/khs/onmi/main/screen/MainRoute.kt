@@ -1,12 +1,16 @@
 package khs.onmi.main.screen
 
 import android.app.Activity
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import khs.onmi.core.common.android.EventLogger
+import khs.onmi.core.common.android.Screen
 import khs.onmi.main.viewmodel.MainViewModel
 
 @Composable
@@ -24,6 +28,10 @@ fun MainRoute(
         } else {
             activity.finish()
         }
+    }
+
+    LaunchedEffect(key1 = Unit) {
+        EventLogger.pageShowed(Screen.MAIN)
     }
 
     val uiState = viewModel.container.stateFlow.collectAsState().value
