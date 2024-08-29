@@ -114,7 +114,7 @@ org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.re
 hilt-plugin = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 com-google-devtools-ksp = { id = "com.google.devtools.ksp", version = "1.9.0-1.0.13" }
-com-google-gms-google-services = { id = "com.google.gms.google-services", version = "4.4.2" }
+com-google-gms-google-services = { id = "com.google.gms.google-services", version = "4.4.0" }
 
 [bundles]
 compose = ["activity-compose", "compose-ui", "compose-ui-graphics",

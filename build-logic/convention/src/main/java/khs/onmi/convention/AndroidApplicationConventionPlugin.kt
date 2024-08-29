@@ -17,7 +17,7 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
             extensions.configure<ApplicationExtension> {
                 configureKotlinAndroid(this)
                 defaultConfig {
-                    applicationId = "com.onmi.aos"
+                    applicationId = "khs.onmi.aos"
                     minSdk = 24
                     targetSdk = 34
                     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
