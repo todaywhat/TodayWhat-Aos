@@ -63,6 +63,21 @@ enum class Allergy(val value: String) {
     SHELLFISH("조개류");
 }
 
+enum class WidgetFamily(val value: String) {
+    SYSTEM_SMALL("systemSmall"),
+    SYSTEM_MEDIUM("systemMedium"),
+    SYSTEM_LARGE("systemLarge"),
+    SYSTEM_EXTRA_LARGE("systemExtraLarge"),
+    ACCESSORY_CIRCULAR("accessoryCircular"),
+    ACCESSORY_RECTANGULAR("accessoryRectangular"),
+}
+
+enum class WidgetKind(val value: String) {
+    MEAL("TodayWhatMealWidget"),
+    TIMETABLE("TodayWhatTimeWidget"),
+    MEAL_TIMETABLE("TodayWhatMealTimetableWidget"),
+}
+
 object EventLogger {
 
     fun pageShowed(screen: Screen) {
@@ -87,8 +102,11 @@ object EventLogger {
         }
     }
 
-    fun widgetConfiguration() {
-
+    fun widgetConfiguration(family: WidgetFamily, kind: WidgetKind) {
+        firebaseAnalytics.logEvent("widget_configuration") {
+            param("family", family.value)
+            param("kind", kind.value)
+        }
     }
 
     fun clickIsOnModifiedTimeTableToggle(isOnModifiedTimeTable: Boolean) {
