@@ -17,6 +17,9 @@ import com.onmi.widget.timetable.TimeTableWidget
 import com.onmi.widget.util.MealTime
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
+import khs.onmi.core.common.android.EventLogger
+import khs.onmi.core.common.android.WidgetFamily
+import khs.onmi.core.common.android.WidgetKind
 import java.time.Duration
 import java.time.LocalTime
 
@@ -26,6 +29,10 @@ class MealWorker @AssistedInject constructor(
     @Assisted workParams: WorkerParameters,
     private var getTodayMealsUseCase: GetTodayMealsUseCase,
 ) : CoroutineWorker(context, workParams) {
+
+    init {
+        EventLogger.widgetConfiguration(WidgetFamily.SYSTEM_SMALL, WidgetKind.MEAL)
+    }
 
     companion object {
         private val uniqueWorkName = MealWorker::class.java.simpleName

@@ -3,6 +3,7 @@ package khs.onmi.aos
 import android.app.Application
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
+import com.google.firebase.FirebaseApp
 import dagger.hilt.android.HiltAndroidApp
 import javax.inject.Inject
 
@@ -17,4 +18,10 @@ class ONMIApplication : Application(), Configuration.Provider {
         get() = Configuration.Builder()
             .setWorkerFactory(hiltWorkerFactory)
             .build()
+
+    override fun onCreate() {
+        super.onCreate()
+
+        FirebaseApp.initializeApp(this)
+    }
 }

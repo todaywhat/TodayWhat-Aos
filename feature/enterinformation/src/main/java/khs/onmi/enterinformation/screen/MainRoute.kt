@@ -83,6 +83,8 @@ fun MainRoute(
                     grade = uiState.grade.toInt(),
                     `class` = uiState.`class`.toInt(),
                     department = uiState.department,
+                    schoolType = uiState.schoolList.find { it.schoolName == uiState.school }?.schoolType
+                        ?: "",
                 )
             }
         )

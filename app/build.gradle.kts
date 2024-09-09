@@ -1,6 +1,7 @@
 plugins {
     id("khs.onmi.application")
     id("khs.onmi.hilt")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -29,4 +30,7 @@ dependencies {
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
+
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
 }

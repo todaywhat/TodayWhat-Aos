@@ -15,6 +15,9 @@ import androidx.work.WorkerParameters
 import com.onmi.domain.usecase.timetable.GetTodayTimeTableUseCase
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
+import khs.onmi.core.common.android.EventLogger
+import khs.onmi.core.common.android.WidgetFamily
+import khs.onmi.core.common.android.WidgetKind
 import java.time.Duration
 
 @HiltWorker
@@ -23,6 +26,10 @@ class TimeTableWorker @AssistedInject constructor(
     @Assisted workParams: WorkerParameters,
     private var getTimeTableUseCase: GetTodayTimeTableUseCase
 ) : CoroutineWorker(context, workParams) {
+
+    init {
+        EventLogger.widgetConfiguration(WidgetFamily.SYSTEM_SMALL, WidgetKind.TIMETABLE)
+    }
 
     companion object {
         private val uniqueWorkName = TimeTableWorker::class.java.simpleName

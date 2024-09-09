@@ -18,6 +18,7 @@ android {
 
 dependencies {
     implementation(project(":core:designsystem"))
+    implementation(project(":core:common-android"))
     implementation(project(":domain"))
 
     implementation(libs.kotlinx.serialization.json)

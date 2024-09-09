@@ -25,7 +25,8 @@ class SchoolDataSource @Inject constructor(
                 educationCode = response.educationCode,
                 schoolCode = response.schoolCode,
                 schoolName = response.schoolName,
-                schoolLocation = response.schoolLocation
+                schoolLocation = response.schoolLocation,
+                schoolType = response.schoolType
             )
         }
     }

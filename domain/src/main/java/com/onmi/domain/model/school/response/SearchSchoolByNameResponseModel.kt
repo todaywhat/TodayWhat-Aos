@@ -5,4 +5,5 @@ data class SearchSchoolByNameResponseModel(
     val schoolCode: String,
     val schoolName: String,
     val schoolLocation: String,
+    val schoolType: String,
 )

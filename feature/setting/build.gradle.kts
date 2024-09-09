@@ -10,4 +10,5 @@ android {
 dependencies {
     implementation(project(":navigation"))
     implementation(project(":core:designsystem"))
+    implementation(project(":core:common-android"))
 }

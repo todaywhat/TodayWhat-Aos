@@ -1,6 +1,7 @@
 package khs.onmi.main.screen
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.interaction.DragInteraction
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,8 +13,15 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import khs.onmi.core.common.android.EventLogger
+import khs.onmi.core.common.android.SelectedType
 import khs.onmi.core.designsystem.component.InfoCard
 import khs.onmi.core.designsystem.component.TopNavigationBar
 import khs.onmi.core.designsystem.icon.SettingIcon
@@ -32,6 +40,23 @@ fun MainScreen(
     navigate: (route: String) -> Unit,
 ) {
     val pagerState = rememberPagerState()
+    var dragStartPage by remember { mutableStateOf(pagerState.currentPage) }
+
+    // 메인페이지 Pager 로깅 관련 코드
+    LaunchedEffect(pagerState) {
+        pagerState.interactionSource.interactions.collect { interaction ->
+            when {
+                interaction is DragInteraction.Start -> {
+                    dragStartPage = pagerState.currentPage
+                }
+
+                (interaction is DragInteraction.Stop || interaction is DragInteraction.Cancel) && pagerState.currentPage != dragStartPage -> {
+                    if (pagerState.currentPage == 0) EventLogger.selectedMealTab(SelectedType.SWIPED)
+                    else EventLogger.selectTimeTableTab(SelectedType.SWIPED)
+                }
+            }
+        }
+    }
 
     ONMITheme { color, typography ->
         Scaffold(

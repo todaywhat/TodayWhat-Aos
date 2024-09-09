@@ -1,6 +1,5 @@
 package khs.onmi.enterinformation.viewmodel
 
-import android.util.Log
 import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.ViewModel
 import com.onmi.database.UserDao
@@ -8,6 +7,7 @@ import com.onmi.database.UserEntity
 import com.onmi.domain.usecase.school.GetSchoolDepartmentsUseCase
 import com.onmi.domain.usecase.school.SearchSchoolByNameUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import khs.onmi.core.common.android.EventLogger
 import khs.onmi.enterinformation.model.CurrentState
 import khs.onmi.enterinformation.model.School
 import khs.onmi.enterinformation.viewmodel.container.EnterInformationSideEffect
@@ -45,6 +45,7 @@ class EnterInformationViewModel @Inject constructor(
                         educationCode = school.educationCode,
                         schoolName = school.schoolName,
                         schoolLocation = school.schoolLocation,
+                        schoolType = school.schoolType,
                     )
                 })
             }
@@ -73,32 +74,30 @@ class EnterInformationViewModel @Inject constructor(
         schoolCode: String,
         educationCode: String,
         schoolName: String,
+        schoolType: String,
         grade: Int,
         `class`: Int,
         department: String,
     ) = intent {
         kotlin.runCatching {
-            Log.d(
-                "logtag", UserEntity(
-                    schoolCode = schoolCode,
-                    educationCode = educationCode,
-                    schoolName = schoolName,
-                    grade = grade,
-                    classroom = `class`,
-                    department = department,
-                ).toString()
-            )
             userDao.upsertUserInfo(
                 UserEntity(
                     schoolCode = schoolCode,
                     educationCode = educationCode,
                     schoolName = schoolName,
+                    schoolType = schoolType,
                     grade = grade,
                     classroom = `class`,
                     department = department,
                 )
             )
         }.onSuccess {
+            EventLogger.setUserProperties(
+                "school_type" to schoolType,
+                "is_skip_weekend" to "false",
+                "is_custom_time_table" to "false",
+                "is_skip_after_dinner" to "false",
+            )
             postSideEffect(EnterInformationSideEffect.Navigate(ONMINavRoutes.MAIN))
         }
     }

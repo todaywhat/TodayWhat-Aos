@@ -10,6 +10,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import khs.onmi.core.common.android.EventLogger
+import khs.onmi.core.common.android.SelectedType
 import khs.onmi.core.designsystem.theme.ONMITheme
 import khs.onmi.main.util.customTabIndicatorOffset
 import kotlinx.coroutines.launch
@@ -48,6 +50,9 @@ fun MainTabRow(
                     },
                     selected = pagerState.currentPage == index,
                     onClick = {
+                        if (index == 0) EventLogger.selectedMealTab(SelectedType.TAPPED)
+                        else EventLogger.selectTimeTableTab(SelectedType.TAPPED)
+
                         coroutineScope.launch {
                             pagerState.animateScrollToPage(index)
                         }

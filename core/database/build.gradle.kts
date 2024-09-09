@@ -5,6 +5,10 @@ plugins {
 
 android {
     namespace = "khs.onmi.core.database"
+
+    ksp {
+        arg("room.schemaLocation", "$projectDir/schemas")
+    }
 }
 
 dependencies {
