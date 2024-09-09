@@ -5,7 +5,7 @@ import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.analytics.logEvent
 import com.google.firebase.ktx.Firebase
 
-val firebaseAnalytics: FirebaseAnalytics by lazy { Firebase.analytics }
+private val firebaseAnalytics: FirebaseAnalytics by lazy { Firebase.analytics }
 
 enum class Screen(val value: String) {
     MAIN("main_page"),
@@ -79,6 +79,12 @@ enum class WidgetKind(val value: String) {
 }
 
 object EventLogger {
+
+    fun setUserProperties(vararg properties: Pair<String, String>) {
+        properties.forEach { property ->
+            firebaseAnalytics.setUserProperty(property.first, property.second)
+        }
+    }
 
     fun pageShowed(screen: Screen) {
         firebaseAnalytics.logEvent("page_showed") {
