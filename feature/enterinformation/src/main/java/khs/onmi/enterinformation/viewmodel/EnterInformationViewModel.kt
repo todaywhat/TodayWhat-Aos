@@ -45,6 +45,7 @@ class EnterInformationViewModel @Inject constructor(
                         educationCode = school.educationCode,
                         schoolName = school.schoolName,
                         schoolLocation = school.schoolLocation,
+                        schoolType = school.schoolType,
                     )
                 })
             }
@@ -73,6 +74,7 @@ class EnterInformationViewModel @Inject constructor(
         schoolCode: String,
         educationCode: String,
         schoolName: String,
+        schoolType: String,
         grade: Int,
         `class`: Int,
         department: String,

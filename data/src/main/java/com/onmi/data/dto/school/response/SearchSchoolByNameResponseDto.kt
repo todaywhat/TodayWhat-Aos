@@ -17,6 +17,9 @@ data class SearchSchoolByNameResponseDto(
 
     @SerialName("ORG_RDNMA")
     val schoolLocation: String,
+
+    @SerialName("SCHUL_KND_SC_NM")
+    val schoolType: String,
 )
 
 fun SearchSchoolByNameResponseDto.toModel(): SearchSchoolByNameResponseModel {
@@ -24,6 +27,7 @@ fun SearchSchoolByNameResponseDto.toModel(): SearchSchoolByNameResponseModel {
         educationCode = this.educationCode,
         schoolCode = this.schoolCode,
         schoolName = this.schoolName,
-        schoolLocation = this.schoolLocation
+        schoolLocation = this.schoolLocation,
+        schoolType = this.schoolType
     )
 }

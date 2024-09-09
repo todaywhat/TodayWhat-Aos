@@ -5,4 +5,5 @@ data class School(
     val educationCode: String,
     val schoolName: String,
     val schoolLocation: String,
+    val schoolType: String,
 )
