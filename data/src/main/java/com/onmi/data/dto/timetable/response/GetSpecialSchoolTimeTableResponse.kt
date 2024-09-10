@@ -5,7 +5,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class GetTimeTableResponseListDto(
-    @SerialName("hisTimetable")
-    val hisTimetable: List<CommonResponse<GetTimeTableResponseDto>>,
+data class GetSpecialSchoolTimeTableResponse(
+    @SerialName("spsTimetable")
+    val timetable: List<CommonResponse<GetTimeTableResponseDto>>,
 )
