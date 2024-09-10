@@ -10,6 +10,7 @@ class TimeTableRepositoryImpl @Inject constructor(
 
     override suspend fun getTimeTable(
         schoolCode: String,
+        schoolType: String,
         educationCode: String,
         grade: Int,
         `class`: Int,
@@ -18,6 +19,7 @@ class TimeTableRepositoryImpl @Inject constructor(
     ): List<String> {
         return service.getTimeTable(
             schoolCode = schoolCode,
+            schoolType = schoolType,
             educationCode = educationCode,
             grade = grade,
             `class` = `class`,
