@@ -23,7 +23,8 @@ class GetTodayTimeTableUseCase @Inject constructor(
             grade = userInfo.grade,
             `class` = userInfo.classroom,
             department = userInfo.department,
-            date = convertMillisToDateString(System.currentTimeMillis()),
+//            date = convertMillisToDateString(System.currentTimeMillis()),
+            date = "20240902"
         )
     }
 
