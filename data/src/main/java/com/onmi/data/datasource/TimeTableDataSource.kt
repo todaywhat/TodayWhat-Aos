@@ -1,7 +1,7 @@
 package com.onmi.data.datasource
 
 import com.onmi.data.dto.timetable.response.GetElementarySchoolTimTableResponse
-import com.onmi.data.dto.timetable.response.GetHighSchoolTimeTableResponseListDto
+import com.onmi.data.dto.timetable.response.GetHighSchoolTimeTableResponse
 import com.onmi.data.dto.timetable.response.GetMiddleSchoolTimeTableResponse
 import com.onmi.data.dto.timetable.response.GetSpecialSchoolTimeTableResponse
 import com.onmi.data.service.TimeTableService
@@ -55,7 +55,7 @@ class TimeTableDataSource @Inject constructor(
         return when (schoolType) {
             "els" -> response.body<GetElementarySchoolTimTableResponse>().timetable?.getOrNull(1)?.row?.map { it.subject }
             "mis" -> response.body<GetMiddleSchoolTimeTableResponse>().timetable?.getOrNull(1)?.row?.map { it.subject }
-            "his" -> response.body<GetHighSchoolTimeTableResponseListDto>().timetable?.getOrNull(1)?.row?.map { it.subject }
+            "his" -> response.body<GetHighSchoolTimeTableResponse>().timetable?.getOrNull(1)?.row?.map { it.subject }
             "sps" -> response.body<GetSpecialSchoolTimeTableResponse>().timetable?.getOrNull(1)?.row?.map { it.subject }
             else -> emptyList()
         }

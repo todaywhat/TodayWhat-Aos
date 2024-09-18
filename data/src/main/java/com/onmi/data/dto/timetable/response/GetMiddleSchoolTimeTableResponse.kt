@@ -7,5 +7,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class GetMiddleSchoolTimeTableResponse(
     @SerialName("misTimetable")
-    val timetable: List<CommonResponse<GetTimeTableResponseDto>>? = null,
+    val timetable: List<CommonResponse<GetTimeTableResponse>>? = null,
 )
