@@ -7,6 +7,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import khs.onmi.core.common.android.EventLogger
 import khs.onmi.core.common.android.Screen
+import khs.onmi.navigation.ONMINavRoutes
 import khs.onmi.setting.viewmodel.SettingViewModel
 
 @Composable
@@ -22,6 +23,7 @@ fun SettingRoute(
 
     MainScreen(
         uiState = uiState,
+        onEnterInformationClick = { navController.navigate(ONMINavRoutes.EnterInformation.MAIN) },
         onBackPressed = { navController.popBackStack() }
     )
 }

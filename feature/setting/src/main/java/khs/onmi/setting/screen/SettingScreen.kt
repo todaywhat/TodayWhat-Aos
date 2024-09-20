@@ -21,6 +21,7 @@ import khs.onmi.core.designsystem.icon.ArrowBackIcon
 import khs.onmi.core.designsystem.icon.PaperIcon
 import khs.onmi.core.designsystem.icon.RightArrowIcon
 import khs.onmi.core.designsystem.icon.SchoolIcon
+import khs.onmi.core.designsystem.modifier.onmiClickable
 import khs.onmi.core.designsystem.theme.ONMITheme
 import khs.onmi.core.designsystem.utils.WrappedIconButton
 import khs.onmi.setting.component.RoundedWhiteBox
@@ -32,6 +33,7 @@ import khs.onmi.setting.viewmodel.container.SettingState
 @Composable
 fun MainScreen(
     uiState: SettingState,
+    onEnterInformationClick: () -> Unit,
     onBackPressed: () -> Unit,
 ) {
     val uriHandler = LocalUriHandler.current
@@ -72,7 +74,7 @@ fun MainScreen(
                     color = color.Black
                 )
                 Spacer(modifier = Modifier.height(12.dp))
-                RoundedWhiteBox {
+                RoundedWhiteBox(onClick = onEnterInformationClick) {
                     Column(modifier = Modifier.fillMaxWidth()) {
                         SchoolIcon(tint = color.Black)
                         Spacer(modifier = Modifier.height(12.dp))
