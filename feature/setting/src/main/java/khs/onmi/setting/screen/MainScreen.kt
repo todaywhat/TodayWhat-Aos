@@ -1,5 +1,6 @@
 package khs.onmi.setting.screen
 
+import android.app.Activity
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,8 +9,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import khs.onmi.core.designsystem.component.TopNavigationBar
@@ -28,8 +32,16 @@ fun MainScreen(
     onBackPressed: () -> Unit,
 ) {
     val uriHandler = LocalUriHandler.current
+    val view = LocalView.current
 
     ONMITheme { color, typography ->
+        if (!view.isInEditMode) {
+            SideEffect {
+                val window = (view.context as Activity).window
+                window.statusBarColor = color.BackgroundSecondary.toArgb()
+            }
+        }
+
         Scaffold(
             modifier = Modifier.fillMaxSize(),
             containerColor = color.BackgroundSecondary,
