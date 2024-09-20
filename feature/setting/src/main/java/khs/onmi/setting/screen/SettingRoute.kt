@@ -10,7 +10,7 @@ import khs.onmi.core.common.android.Screen
 import khs.onmi.setting.viewmodel.SettingViewModel
 
 @Composable
-fun MainRoute(
+fun SettingRoute(
     navController: NavController,
     viewModel: SettingViewModel = hiltViewModel()
 ) {
