@@ -44,4 +44,10 @@ class SettingViewModel @Inject constructor(
             postSideEffect(SettingSideEffect.ShowToast("사용자 정보를 가져오는데 실패했습니다."))
         }
     }
+
+    fun onSkipWeekendToggleValueChanged(value: Boolean) = intent {
+        reduce {
+            state.copy(skipWeekend = value)
+        }
+    }
 }

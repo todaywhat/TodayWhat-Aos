@@ -11,9 +11,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalUriHandler
@@ -25,7 +24,6 @@ import khs.onmi.core.designsystem.icon.PaperIcon
 import khs.onmi.core.designsystem.icon.RiceIcon
 import khs.onmi.core.designsystem.icon.RightArrowIcon
 import khs.onmi.core.designsystem.icon.SchoolIcon
-import khs.onmi.core.designsystem.modifier.onmiClickable
 import khs.onmi.core.designsystem.theme.ONMITheme
 import khs.onmi.core.designsystem.utils.WrappedIconButton
 import khs.onmi.setting.component.RoundedWhiteBox
@@ -34,14 +32,15 @@ import khs.onmi.setting.component.ToggleItem
 import khs.onmi.setting.model.SettingItemsData
 import khs.onmi.setting.util.WebLink
 import khs.onmi.setting.viewmodel.container.SettingState
+import kotlinx.coroutines.delay
 
 @Composable
-fun MainScreen(
+fun SettingScreen(
     uiState: SettingState,
-    onEnterInformationClick: () -> Unit,
     onBackPressed: () -> Unit,
+    onEnterInformationClick: () -> Unit,
+    onSkipWeekendToggleValueChanged: (value: Boolean) -> Unit,
 ) {
-    val (value, onValueChange) = remember { mutableStateOf(false) }
     val uriHandler = LocalUriHandler.current
     val view = LocalView.current
 
@@ -114,8 +113,8 @@ fun MainScreen(
                     ToggleItem(
                         icon = { RiceIcon(tint = color.Black) },
                         title = "주말 건너뛰기",
-                        value = value,
-                        onValueChange = onValueChange
+                        value = uiState.skipWeekend,
+                        onValueChange = onSkipWeekendToggleValueChanged
                     )
                 }
             }

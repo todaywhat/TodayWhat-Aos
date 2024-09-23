@@ -21,9 +21,10 @@ fun SettingRoute(
         EventLogger.pageShowed(Screen.SETTING)
     }
 
-    MainScreen(
+    SettingScreen(
         uiState = uiState,
+        onBackPressed = { navController.popBackStack() },
         onEnterInformationClick = { navController.navigate(ONMINavRoutes.EnterInformation.MAIN) },
-        onBackPressed = { navController.popBackStack() }
+        onSkipWeekendToggleValueChanged = viewModel::onSkipWeekendToggleValueChanged
     )
 }
