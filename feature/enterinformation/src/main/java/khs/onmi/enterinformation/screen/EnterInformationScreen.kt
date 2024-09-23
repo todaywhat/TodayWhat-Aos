@@ -40,7 +40,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(
+fun EnterInformationScreen(
     uiState: EnterInformationState,
     setSchoolSelectorVisible: (visible: Boolean) -> Unit,
     setDepartmentSelectorVisible: (visible: Boolean) -> Unit,

@@ -11,7 +11,7 @@ import khs.onmi.enterinformation.viewmodel.container.EnterInformationSideEffect
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
-fun MainRoute(
+fun EnterInformationRoute(
     navController: NavController,
     viewModel: EnterInformationViewModel = hiltViewModel(),
 ) {
@@ -56,7 +56,7 @@ fun MainRoute(
     }
 
     with(viewModel) {
-        MainScreen(
+        EnterInformationScreen(
             uiState = uiState,
             setSchoolSelectorVisible = ::setSchoolSelectorVisible,
             setDepartmentSelectorVisible = ::setDepartmentSelectorVisible,
