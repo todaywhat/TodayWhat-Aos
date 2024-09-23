@@ -80,7 +80,7 @@ class EnterInformationViewModel @Inject constructor(
         department: String,
     ) = intent {
         kotlin.runCatching {
-            userDao.upsertUserInfo(
+            userDao.replaceUserInfo(
                 UserEntity(
                     schoolCode = schoolCode,
                     educationCode = educationCode,

@@ -10,14 +10,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import khs.onmi.core.designsystem.modifier.onmiClickable
 import khs.onmi.core.designsystem.theme.ONMITheme
 
 @Composable
-fun RoundedWhiteBox(content: @Composable BoxScope.() -> Unit) {
+fun RoundedWhiteBox(onClick: (() -> Unit)? = null, content: @Composable BoxScope.() -> Unit) {
     ONMITheme { color, _ ->
         Box(
             modifier = Modifier
                 .clip(RoundedCornerShape(16.dp))
+                .onmiClickable(onClick = onClick)
                 .background(color.CardBackgroundSecondary)
                 .padding(horizontal = 16.dp, vertical = 20.dp)
                 .wrapContentSize(),

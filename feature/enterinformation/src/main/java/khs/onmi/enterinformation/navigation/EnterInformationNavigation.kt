@@ -4,7 +4,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import khs.onmi.enterinformation.screen.MainRoute
+import khs.onmi.enterinformation.screen.EnterInformationRoute
 import khs.onmi.navigation.ONMINavRoutes
 
 fun NavGraphBuilder.enterInformationNavGraph(
@@ -17,7 +17,7 @@ fun NavGraphBuilder.enterInformationNavGraph(
         composable(
             route = ONMINavRoutes.EnterInformation.MAIN
         ) {
-            MainRoute(
+            EnterInformationRoute(
                 navController = navController
             )
         }
