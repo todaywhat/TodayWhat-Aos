@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class GetTimeTableResponseDto(
+data class GetTimeTableResponse(
     @SerialName("ITRT_CNTNT")
     val subject: String,
 )

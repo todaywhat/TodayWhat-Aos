@@ -169,6 +169,12 @@ object EventLogger {
         }
     }
 
+    fun clickNoticeItem(noticeId: String) {
+        firebaseAnalytics.logEvent("click_notice_item") {
+            param("notice_id", noticeId)
+        }
+    }
+
     fun completeModifyTimeTable(weekday: Weekday) {
         firebaseAnalytics.logEvent("complete_modify_time_table") {
             param("week", weekday.value)
