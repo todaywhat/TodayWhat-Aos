@@ -2,6 +2,7 @@ package com.onmi.domain.usecase.timetable
 
 import com.onmi.database.UserDao
 import com.onmi.domain.repository.TimeTableRepository
+import com.onmi.domain.util.DateUtils
 import kotlinx.coroutines.runBlocking
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -23,7 +24,8 @@ class GetTodayTimeTableUseCase @Inject constructor(
             grade = userInfo.grade,
             `class` = userInfo.classroom,
             department = userInfo.department,
-            date = convertMillisToDateString(System.currentTimeMillis()),
+            date = if (DateUtils.checkIsWeekend() && userInfo.isSkipWeekend) DateUtils.getNextMondayDate()
+            else convertMillisToDateString(System.currentTimeMillis()),
         )
     }
 
