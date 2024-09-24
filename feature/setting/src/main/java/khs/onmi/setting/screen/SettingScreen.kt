@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
@@ -32,7 +31,6 @@ import khs.onmi.setting.component.ToggleItem
 import khs.onmi.setting.model.SettingItemsData
 import khs.onmi.setting.util.WebLink
 import khs.onmi.setting.viewmodel.container.SettingState
-import kotlinx.coroutines.delay
 
 @Composable
 fun SettingScreen(
@@ -113,7 +111,7 @@ fun SettingScreen(
                     ToggleItem(
                         icon = { RiceIcon(tint = color.Black) },
                         title = "주말 건너뛰기",
-                        value = uiState.skipWeekend,
+                        value = uiState.isSkipWeekend,
                         onValueChange = onSkipWeekendToggleValueChanged
                     )
                 }

@@ -34,7 +34,8 @@ class SettingViewModel @Inject constructor(
                     state.copy(
                         schoolName = it.schoolName,
                         grade = it.grade,
-                        `class` = it.classroom
+                        `class` = it.classroom,
+                        isSkipWeekend = it.isSkipWeekend
                     )
                 }
             } else {
@@ -46,8 +47,9 @@ class SettingViewModel @Inject constructor(
     }
 
     fun onSkipWeekendToggleValueChanged(value: Boolean) = intent {
+        onmiDao.setIsSkipWeekend(isSkipWeekend = value)
         reduce {
-            state.copy(skipWeekend = value)
+            state.copy(isSkipWeekend = value)
         }
     }
 }
