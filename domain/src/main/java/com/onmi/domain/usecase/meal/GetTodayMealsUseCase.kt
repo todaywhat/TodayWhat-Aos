@@ -3,6 +3,7 @@ package com.onmi.domain.usecase.meal
 import com.onmi.database.UserDao
 import com.onmi.domain.repository.MealRepository
 import com.onmi.domain.util.DateUtils
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -15,7 +16,7 @@ class GetTodayMealsUseCase @Inject constructor(
 ) {
     suspend operator fun invoke() = kotlin.runCatching {
         val userInfo = runBlocking {
-            userDao.getUserInfo()
+            userDao.getUserInfo().first()
         } ?: throw RuntimeException("fail to get user info")
 
         repository.getMeals(

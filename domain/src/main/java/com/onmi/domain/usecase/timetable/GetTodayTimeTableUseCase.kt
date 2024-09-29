@@ -3,6 +3,7 @@ package com.onmi.domain.usecase.timetable
 import com.onmi.database.UserDao
 import com.onmi.domain.repository.TimeTableRepository
 import com.onmi.domain.util.DateUtils
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -15,7 +16,8 @@ class GetTodayTimeTableUseCase @Inject constructor(
 ) {
     suspend operator fun invoke() = kotlin.runCatching {
         val userInfo =
-            runBlocking { userDao.getUserInfo() } ?: throw RuntimeException("fail to get user info")
+            runBlocking { userDao.getUserInfo().first() }
+                ?: throw RuntimeException("fail to get user info")
 
         repository.getTimeTable(
             schoolCode = userInfo.schoolCode,

@@ -5,6 +5,7 @@ import com.onmi.database.UserDao
 import dagger.hilt.android.lifecycle.HiltViewModel
 import khs.onmi.setting.viewmodel.container.SettingSideEffect
 import khs.onmi.setting.viewmodel.container.SettingState
+import kotlinx.coroutines.flow.collectLatest
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
@@ -29,17 +30,19 @@ class SettingViewModel @Inject constructor(
         kotlin.runCatching {
             onmiDao.getUserInfo()
         }.onSuccess {
-            if (it != null) {
-                reduce {
-                    state.copy(
-                        schoolName = it.schoolName,
-                        grade = it.grade,
-                        `class` = it.classroom,
-                        isSkipWeekend = it.isSkipWeekend
-                    )
+            it.collectLatest { userEntity ->
+                if (userEntity != null) {
+                    reduce {
+                        state.copy(
+                            schoolName = userEntity.schoolName,
+                            grade = userEntity.grade,
+                            `class` = userEntity.classroom,
+                            isSkipWeekend = userEntity.isSkipWeekend
+                        )
+                    }
+                } else {
+                    postSideEffect(SettingSideEffect.ShowToast("사용자 정보를 가져오는데 실패했습니다."))
                 }
-            } else {
-                postSideEffect(SettingSideEffect.ShowToast("사용자 정보를 가져오는데 실패했습니다."))
             }
         }.onFailure {
             postSideEffect(SettingSideEffect.ShowToast("사용자 정보를 가져오는데 실패했습니다."))

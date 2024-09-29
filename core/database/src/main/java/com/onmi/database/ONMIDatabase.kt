@@ -8,9 +8,9 @@ import androidx.room.RoomDatabase
 
 @Database(
     entities = [UserEntity::class],
-    version = 3,
+    version = 4,
     exportSchema = true,
-    autoMigrations = [AutoMigration(from = 2, to = 3)]
+    autoMigrations = [AutoMigration(from = 3, to = 4)]
 )
 abstract class ONMIDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao

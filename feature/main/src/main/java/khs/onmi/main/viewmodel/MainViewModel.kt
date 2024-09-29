@@ -7,6 +7,7 @@ import com.onmi.domain.usecase.timetable.GetTodayTimeTableUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import khs.onmi.main.viewmodel.container.MainSideEffect
 import khs.onmi.main.viewmodel.container.MainState
+import kotlinx.coroutines.flow.collectLatest
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
@@ -25,25 +26,27 @@ class MainViewModel @Inject constructor(
     )
 
     init {
-        getTodayTimeTable()
         getUserInfo()
-        getTodayMeals()
     }
 
     private fun getUserInfo() = intent {
         kotlin.runCatching {
             onmiDao.getUserInfo()
         }.onSuccess {
-            if (it != null) {
-                reduce {
-                    state.copy(
-                        schoolName = it.schoolName,
-                        grade = it.grade,
-                        `class` = it.classroom
-                    )
+            it.collectLatest { userEntity ->
+                if (userEntity != null) {
+                    getTodayTimeTable()
+                    getTodayMeals()
+                    reduce {
+                        state.copy(
+                            schoolName = userEntity.schoolName,
+                            grade = userEntity.grade,
+                            `class` = userEntity.classroom
+                        )
+                    }
+                } else {
+                    postSideEffect(MainSideEffect.ShowToast("사용자 정보를 가져오는데 실패했습니다."))
                 }
-            } else {
-                postSideEffect(MainSideEffect.ShowToast("사용자 정보를 가져오는데 실패했습니다."))
             }
         }.onFailure {
             postSideEffect(MainSideEffect.ShowToast("사용자 정보를 가져오는데 실패했습니다."))
