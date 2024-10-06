@@ -11,8 +11,10 @@ import java.util.Locale
 object DateUtils {
     fun checkIsWeekend(): Boolean {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val dayOfWeek = LocalDate.now().dayOfWeek.value
-            dayOfWeek in 6..7
+            when (LocalDate.now().dayOfWeek) {
+                DayOfWeek.SATURDAY, DayOfWeek.SUNDAY -> true
+                else -> false
+            }
         } else {
             val dayOfWeek = Calendar.getInstance().get(Calendar.DAY_OF_WEEK)
             dayOfWeek == Calendar.SATURDAY || dayOfWeek == Calendar.SUNDAY
