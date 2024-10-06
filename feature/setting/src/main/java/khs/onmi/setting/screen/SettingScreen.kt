@@ -1,6 +1,7 @@
 package khs.onmi.setting.screen
 
 import android.app.Activity
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,22 +20,24 @@ import androidx.compose.ui.unit.dp
 import khs.onmi.core.designsystem.component.TopNavigationBar
 import khs.onmi.core.designsystem.icon.ArrowBackIcon
 import khs.onmi.core.designsystem.icon.PaperIcon
+import khs.onmi.core.designsystem.icon.RiceIcon
 import khs.onmi.core.designsystem.icon.RightArrowIcon
 import khs.onmi.core.designsystem.icon.SchoolIcon
-import khs.onmi.core.designsystem.modifier.onmiClickable
 import khs.onmi.core.designsystem.theme.ONMITheme
 import khs.onmi.core.designsystem.utils.WrappedIconButton
 import khs.onmi.setting.component.RoundedWhiteBox
 import khs.onmi.setting.component.SettingListComponent
+import khs.onmi.setting.component.ToggleItem
 import khs.onmi.setting.model.SettingItemsData
 import khs.onmi.setting.util.WebLink
 import khs.onmi.setting.viewmodel.container.SettingState
 
 @Composable
-fun MainScreen(
+fun SettingScreen(
     uiState: SettingState,
-    onEnterInformationClick: () -> Unit,
     onBackPressed: () -> Unit,
+    onEnterInformationClick: () -> Unit,
+    onSkipWeekendToggleValueChanged: (value: Boolean) -> Unit,
 ) {
     val uriHandler = LocalUriHandler.current
     val view = LocalView.current
@@ -65,7 +68,8 @@ fun MainScreen(
                     top = it.calculateTopPadding().value.dp,
                     start = 15.dp,
                     end = 15.dp
-                )
+                ),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 Spacer(modifier = Modifier.height(12.dp))
                 Text(
@@ -73,7 +77,7 @@ fun MainScreen(
                     style = typography.Headline1,
                     color = color.Black
                 )
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(4.dp))
                 RoundedWhiteBox(onClick = onEnterInformationClick) {
                     Column(modifier = Modifier.fillMaxWidth()) {
                         SchoolIcon(tint = color.Black)
@@ -91,7 +95,6 @@ fun MainScreen(
                         )
                     }
                 }
-                Spacer(modifier = Modifier.height(8.dp))
                 RoundedWhiteBox {
                     SettingListComponent(
                         items = listOf(
@@ -102,6 +105,14 @@ fun MainScreen(
                                 onClick = { uriHandler.openUri(WebLink.PolicyUrl) }
                             )
                         )
+                    )
+                }
+                RoundedWhiteBox {
+                    ToggleItem(
+                        icon = { RiceIcon(tint = color.Black) },
+                        title = "주말 건너뛰기",
+                        value = uiState.isSkipWeekend,
+                        onValueChange = onSkipWeekendToggleValueChanged
                     )
                 }
             }

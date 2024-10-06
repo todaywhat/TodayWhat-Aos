@@ -4,4 +4,5 @@ data class SettingState(
     val schoolName: String = "",
     val grade: Int = 0,
     val `class`: Int = 0,
+    val isSkipWeekend: Boolean = false,
 )

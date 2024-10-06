@@ -7,4 +7,6 @@ import kotlinx.serialization.Serializable
 data class GetTimeTableResponse(
     @SerialName("ITRT_CNTNT")
     val subject: String,
+    @SerialName("PERIO")
+    val period: String,
 )

@@ -15,4 +15,6 @@ data class UserEntity(
     var grade: Int = 0,
     var classroom: Int = 0,
     var department: String = "",
+    @ColumnInfo(name = "isSkipWeekend", defaultValue = "false")
+    var isSkipWeekend: Boolean = false
 )

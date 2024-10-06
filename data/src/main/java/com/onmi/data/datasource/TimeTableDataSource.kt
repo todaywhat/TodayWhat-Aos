@@ -53,10 +53,22 @@ class TimeTableDataSource @Inject constructor(
         }
 
         return when (schoolType) {
-            "els" -> response.body<GetElementarySchoolTimTableResponse>().timetable?.getOrNull(1)?.row?.map { it.subject }
-            "mis" -> response.body<GetMiddleSchoolTimeTableResponse>().timetable?.getOrNull(1)?.row?.map { it.subject }
-            "his" -> response.body<GetHighSchoolTimeTableResponse>().timetable?.getOrNull(1)?.row?.map { it.subject }
-            "sps" -> response.body<GetSpecialSchoolTimeTableResponse>().timetable?.getOrNull(1)?.row?.map { it.subject }
+            "els" -> response.body<GetElementarySchoolTimTableResponse>().timetable?.getOrNull(1)?.row
+                ?.distinctBy { it.period }
+                ?.map { it.subject }
+
+            "mis" -> response.body<GetMiddleSchoolTimeTableResponse>().timetable?.getOrNull(1)?.row
+                ?.distinctBy { it.period }
+                ?.map { it.subject }
+
+            "his" -> response.body<GetHighSchoolTimeTableResponse>().timetable?.getOrNull(1)?.row
+                ?.distinctBy { it.period }
+                ?.map { it.subject }
+
+            "sps" -> response.body<GetSpecialSchoolTimeTableResponse>().timetable?.getOrNull(1)?.row
+                ?.distinctBy { it.period }
+                ?.map { it.subject }
+
             else -> emptyList()
         }
     }

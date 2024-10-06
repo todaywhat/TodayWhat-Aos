@@ -1,17 +1,16 @@
 package com.onmi.database
 
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
-import androidx.room.Upsert
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface UserDao {
     @Query("SELECT * FROM user_table")
-    suspend fun getUserInfo(): UserEntity?
+    fun getUserInfo(): Flow<UserEntity?>
 
     @Transaction
     suspend fun replaceUserInfo(userEntity: UserEntity) {
@@ -24,4 +23,7 @@ interface UserDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertUserInfo(userEntity: UserEntity)
+
+    @Query("UPDATE user_table SET isSkipWeekend = :isSkipWeekend")
+    suspend fun setIsSkipWeekend(isSkipWeekend: Boolean)
 }
