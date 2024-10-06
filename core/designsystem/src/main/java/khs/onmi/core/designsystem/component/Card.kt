@@ -141,7 +141,6 @@ fun InfoCard(
                 },
             ) {
                 InfoCardTimeTableIcon(
-                    tint = color.UnselectedSecondary,
                     modifier = Modifier
                         .align(Alignment.CenterEnd)
                         .offset(x = (-11).dp, y = 22.dp)
