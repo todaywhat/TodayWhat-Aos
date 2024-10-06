@@ -32,19 +32,13 @@ object DateUtils {
             nextMonday.format(formatter)
         } else {
             val calendar = Calendar.getInstance()
-            val nextMonday = when (calendar.get(Calendar.DAY_OF_WEEK)) {
-                Calendar.SATURDAY -> {
-                    calendar.add(Calendar.DAY_OF_MONTH, 2)
-                    calendar
-                }
-
-                else -> {
-                    calendar.add(Calendar.DAY_OF_MONTH, 1)
-                    calendar
-                }
+            calendar.add(Calendar.DAY_OF_WEEK, when (calendar.get(Calendar.DAY_OF_WEEK)) {
+                Calendar.SATURDAY -> 2
+                Calendar.SUNDAY -> 1
+                else -> (Calendar.SATURDAY - calendar.get(Calendar.DAY_OF_WEEK) + 2) % 7
             }
             val formatter = SimpleDateFormat("yyyyMMdd", Locale.getDefault())
-            formatter.format(nextMonday.time)
+            formatter.format(calendar.time)
         }
     }
 }
