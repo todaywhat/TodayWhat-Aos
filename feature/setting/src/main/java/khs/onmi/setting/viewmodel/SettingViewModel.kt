@@ -5,6 +5,7 @@ import com.onmi.database.UserDao
 import dagger.hilt.android.lifecycle.HiltViewModel
 import khs.onmi.setting.viewmodel.container.SettingSideEffect
 import khs.onmi.setting.viewmodel.container.SettingState
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.syntax.simple.intent
@@ -27,10 +28,10 @@ class SettingViewModel @Inject constructor(
     }
 
     private fun getUserInfo() = intent {
-        kotlin.runCatching {
-            onmiDao.getUserInfo()
-        }.onSuccess {
-            it.collectLatest { userEntity ->
+        onmiDao.getUserInfo()
+            .catch {
+                postSideEffect(SettingSideEffect.ShowToast("사용자 정보를 가져오는데 실패했습니다."))
+            }.collectLatest { userEntity ->
                 if (userEntity != null) {
                     reduce {
                         state.copy(
@@ -44,9 +45,6 @@ class SettingViewModel @Inject constructor(
                     postSideEffect(SettingSideEffect.ShowToast("사용자 정보를 가져오는데 실패했습니다."))
                 }
             }
-        }.onFailure {
-            postSideEffect(SettingSideEffect.ShowToast("사용자 정보를 가져오는데 실패했습니다."))
-        }
     }
 
     fun onSkipWeekendToggleValueChanged(value: Boolean) = intent {
