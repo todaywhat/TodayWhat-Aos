@@ -47,8 +47,15 @@ class SettingViewModel @Inject constructor(
             }
     }
 
+    suspend fun setIsSkipWeekend(isSkipWeekend: Boolean) = intent {
+        runCatching {
+            onmiDao.setIsSkipWeekend(isSkipWeekend = isSkipWeekend)
+        }.onFailure {
+            postSideEffect(SettingSideEffect.ShowToast("주말 건너뛰기 여부를 설정하지 못하였습니다."))
+        }
+    }
+
     fun onSkipWeekendToggleValueChanged(value: Boolean) = intent {
-        onmiDao.setIsSkipWeekend(isSkipWeekend = value)
         reduce {
             state.copy(isSkipWeekend = value)
         }
