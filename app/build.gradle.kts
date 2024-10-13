@@ -8,7 +8,7 @@ android {
     namespace = "khs.onmi.aos"
 
     defaultConfig {
-        versionCode = 7
+        versionCode = 8
         versionName = "1.3.0"
     }
 
