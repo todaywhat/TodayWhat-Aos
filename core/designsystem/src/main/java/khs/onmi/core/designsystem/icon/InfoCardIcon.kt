@@ -1,5 +1,7 @@
 package khs.onmi.core.designsystem.icon
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
@@ -25,13 +27,11 @@ fun InfoCardMealIcon(
 
 @Composable
 fun InfoCardTimeTableIcon(
-    tint: Color,
     modifier: Modifier = Modifier,
 ) {
-    Icon(
-        painter = painterResource(id = R.drawable.ic_info_time_table),
+    Image(
+        painter = painterResource(id = if (isSystemInDarkTheme()) R.drawable.ic_info_time_table_dark else R.drawable.ic_info_timetable_white),
         contentDescription = "Info Card Time Table Icon",
-        tint = tint,
         modifier = modifier
     )
 }
@@ -42,7 +42,7 @@ fun InfoCardIconsPre() {
     ONMITheme { color, _ ->
         Column {
             InfoCardMealIcon(tint = color.UnselectedSecondary)
-            InfoCardTimeTableIcon(tint = color.UnselectedSecondary)
+            InfoCardTimeTableIcon()
         }
     }
 }

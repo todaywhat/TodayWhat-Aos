@@ -13,9 +13,10 @@ import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
-import io.ktor.http.ContentType
+import io.ktor.client.request.header
+import io.ktor.http.HttpHeaders
 import io.ktor.http.URLProtocol
-import io.ktor.serialization.kotlinx.KotlinxSerializationConverter
+import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import javax.inject.Singleton
 
@@ -37,14 +38,12 @@ object KtorClient {
             }
 
             install(ContentNegotiation) {
-                register(
-                    ContentType.Text.Html, KotlinxSerializationConverter(
-                        Json {
-                            prettyPrint = true
-                            isLenient = true
-                            ignoreUnknownKeys = true
-                        }
-                    )
+                json(
+                    Json {
+                        prettyPrint = true
+                        isLenient = true
+                        ignoreUnknownKeys = true
+                    }
                 )
             }
 
@@ -55,6 +54,7 @@ object KtorClient {
                     parameters["Type"] = "json"
                     parameters["KEY"] = "89dd382b78b3410cbe49dd8f448fef87"
                 }
+                header(HttpHeaders.Accept, "*/*")
             }
         }
         return client
