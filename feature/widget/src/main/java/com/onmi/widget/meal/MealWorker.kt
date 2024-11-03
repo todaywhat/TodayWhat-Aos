@@ -2,6 +2,7 @@ package com.onmi.widget.meal
 
 import android.content.Context
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.glance.appwidget.state.updateAppWidgetState
@@ -12,6 +13,7 @@ import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
+import com.onmi.domain.model.meal.response.GetMealsResponseModel
 import com.onmi.domain.usecase.meal.GetTodayMealsUseCase
 import com.onmi.widget.timetable.TimeTableWidget
 import com.onmi.widget.util.MealTime
@@ -20,7 +22,10 @@ import dagger.assisted.AssistedInject
 import khs.onmi.core.common.android.EventLogger
 import khs.onmi.core.common.android.WidgetFamily
 import khs.onmi.core.common.android.WidgetKind
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.time.Duration
+import java.time.LocalDate
 import java.time.LocalTime
 
 @HiltWorker
@@ -54,36 +59,14 @@ class MealWorker @AssistedInject constructor(
 
     @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun doWork(): Result {
-        return try {
-            setWidgetState(MealInfo.Loading)
-            val request = getTodayMealsUseCase()
-                .onSuccess {
-                    setWidgetState(
-                        when (getTimePeriod()) {
-                            MealTime.Morning -> MealInfo.Available(
-                                mealTime = "아침",
-                                mealList = it.breakfast.first
-                            )
+        setWidgetState(
+            fetchMealInfo(
+                getTodayMealsUseCase = getTodayMealsUseCase,
+                requestedMealTime = getTimePeriod()
+            )
+        )
 
-                            MealTime.Lunch -> MealInfo.Available(
-                                mealTime = "점심",
-                                mealList = it.lunch.first
-                            )
-
-                            MealTime.Dinner -> MealInfo.Available(
-                                mealTime = "저녁",
-                                mealList = it.dinner.first
-                            )
-                        }
-                    )
-                }.onFailure {
-                    setWidgetState(MealInfo.Unavailable)
-                }
-            if (request.isSuccess) Result.success() else Result.failure()
-        } catch (e: Exception) {
-            setWidgetState(MealInfo.Unavailable)
-            Result.failure()
-        }
+        return Result.success()
     }
 
     private suspend fun setWidgetState(newState: MealInfo) {
@@ -100,6 +83,66 @@ class MealWorker @AssistedInject constructor(
         TimeTableWidget().updateAll(context)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    private suspend fun fetchMealInfo(
+        getTodayMealsUseCase: GetTodayMealsUseCase,
+        requestedMealTime: MealTime,
+    ): MealInfo {
+        getTodayMealsUseCase()
+            .onSuccess { mealsInfo ->
+                val mealTimes = listOf(MealTime.Morning, MealTime.Lunch, MealTime.Dinner)
+                val startIndex = mealTimes.indexOf(requestedMealTime)
+
+                (startIndex..mealTimes.lastIndex).forEach { index ->
+                    val currentMealTime = mealTimes[index]
+                    val currentMeal = when (currentMealTime) {
+                        MealTime.Morning -> mealsInfo.breakfast
+                        MealTime.Lunch -> mealsInfo.lunch
+                        MealTime.Dinner -> mealsInfo.dinner
+                    }
+
+                    if (currentMeal.first.isNotEmpty()) {
+                        return MealInfo.Available(currentMeal.second, currentMeal.first)
+                    }
+                }
+            }.onFailure {
+                return MealInfo.Unavailable
+            }
+
+
+        val nextDay = LocalDate.now().plusDays(1)
+
+        getTodayMealsUseCase(targetDate = nextDay)
+            .onSuccess { nextMealsInfo ->
+                val mealTimes = listOf(MealTime.Morning, MealTime.Lunch, MealTime.Dinner)
+
+                (0..mealTimes.lastIndex).forEach { index ->
+                    val currentMealTime = mealTimes[index]
+                    val currentMeal = when (currentMealTime) {
+                        MealTime.Morning -> nextMealsInfo.breakfast
+                        MealTime.Lunch -> nextMealsInfo.lunch
+                        MealTime.Dinner -> nextMealsInfo.dinner
+                    }
+
+                    if (currentMeal.first.isNotEmpty()) {
+                        return MealInfo.Available(currentMeal.second, currentMeal.first)
+                    }
+                }
+            }
+            .onFailure {
+                return MealInfo.Unavailable
+            }
+
+        // 요청된 시간대부터 이후의 모든 시간대의 급식이 비어있는 경우
+        return MealInfo.Available(
+            mealTime = when (requestedMealTime) {
+                MealTime.Morning -> "아침"
+                MealTime.Lunch -> "점심"
+                MealTime.Dinner -> "저녁"
+            },
+            mealList = emptyList()
+        )
+    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun getTimePeriod(): MealTime {
