@@ -2,7 +2,6 @@ package com.onmi.widget.meal
 
 import android.content.Context
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.glance.appwidget.state.updateAppWidgetState
@@ -13,7 +12,6 @@ import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
-import com.onmi.domain.model.meal.response.GetMealsResponseModel
 import com.onmi.domain.usecase.meal.GetTodayMealsUseCase
 import com.onmi.widget.timetable.TimeTableWidget
 import com.onmi.widget.util.MealTime
@@ -22,8 +20,6 @@ import dagger.assisted.AssistedInject
 import khs.onmi.core.common.android.EventLogger
 import khs.onmi.core.common.android.WidgetFamily
 import khs.onmi.core.common.android.WidgetKind
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalTime
@@ -102,13 +98,13 @@ class MealWorker @AssistedInject constructor(
                     }
 
                     if (currentMeal.first.isNotEmpty()) {
-                        return MealInfo.Available(currentMeal.second, currentMeal.first)
+                        return MealInfo.Available(
+                            convertTimeToString(currentMealTime),
+                            currentMeal.first
+                        )
                     }
                 }
-            }.onFailure {
-                return MealInfo.Unavailable
             }
-
 
         val nextDay = LocalDate.now().plusDays(1)
 
@@ -125,21 +121,17 @@ class MealWorker @AssistedInject constructor(
                     }
 
                     if (currentMeal.first.isNotEmpty()) {
-                        return MealInfo.Available(currentMeal.second, currentMeal.first)
+                        return MealInfo.Available(
+                            convertTimeToString(currentMealTime),
+                            currentMeal.first
+                        )
                     }
                 }
-            }
-            .onFailure {
-                return MealInfo.Unavailable
             }
 
         // 요청된 시간대부터 이후의 모든 시간대의 급식이 비어있는 경우
         return MealInfo.Available(
-            mealTime = when (requestedMealTime) {
-                MealTime.Morning -> "아침"
-                MealTime.Lunch -> "점심"
-                MealTime.Dinner -> "저녁"
-            },
+            mealTime = convertTimeToString(requestedMealTime),
             mealList = emptyList()
         )
     }
@@ -154,6 +146,14 @@ class MealWorker @AssistedInject constructor(
             currentTime.isBefore(morningEnd) -> MealTime.Morning
             currentTime.isBefore(lunchEnd) -> MealTime.Lunch
             else -> MealTime.Dinner
+        }
+    }
+
+    private fun convertTimeToString(time: MealTime): String {
+        return when (time) {
+            MealTime.Morning -> "아침"
+            MealTime.Lunch -> "점심"
+            MealTime.Dinner -> "저녁"
         }
     }
 }

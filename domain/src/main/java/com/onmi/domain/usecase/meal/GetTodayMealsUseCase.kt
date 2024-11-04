@@ -23,16 +23,12 @@ class GetTodayMealsUseCase @Inject constructor(
         repository.getMeals(
             educationCode = userInfo.educationCode,
             schoolCode = userInfo.schoolCode,
-            date = if (targetDate != null) {
-                val formatter = SimpleDateFormat("yyyyMMdd", Locale.getDefault())
-                formatter.format(targetDate)
-            } else {
-                if (DateUtils.checkIsWeekend() && userInfo.isSkipWeekend) {
+            date = targetDate?.toString()?.replace("-", "")
+                ?: if (DateUtils.checkIsWeekend() && userInfo.isSkipWeekend) {
                     DateUtils.getNextMondayDate()
                 } else {
                     convertMillisToDateString(System.currentTimeMillis())
                 }
-            }
         )
     }
 
