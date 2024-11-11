@@ -15,6 +15,7 @@ import androidx.work.WorkerParameters
 import com.onmi.domain.usecase.meal.GetTodayMealsUseCase
 import com.onmi.domain.usecase.timetable.GetTodayTimeTableUseCase
 import com.onmi.widget.util.MealTime
+import com.onmi.widget.util.WidgetDataDisplayManager
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import khs.onmi.core.common.android.EventLogger
@@ -23,7 +24,6 @@ import khs.onmi.core.common.android.WidgetKind
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import java.time.Duration
-import java.time.LocalTime
 
 @HiltWorker
 class CombinedWorker @AssistedInject constructor(
@@ -71,16 +71,21 @@ class CombinedWorker @AssistedInject constructor(
             val todayTimeTable =
                 getTodayTimeTableResponse.getOrNull() ?: return@coroutineScope Result.failure()
 
+            WidgetDataDisplayManager.fetchMealInfo(
+                getTodayMealsUseCase = getTodayMealsUseCase,
+                requestedMealTime = WidgetDataDisplayManager.getCurrentMealTime()
+            )
+
             setWidgetState(
                 CombinedInfo.Available(
-                    mealTime = when (getTimePeriod()) {
+                    mealTime = when (WidgetDataDisplayManager.getCurrentMealTime()) {
                         MealTime.Morning -> "아침"
 
                         MealTime.Lunch -> "점심"
 
                         MealTime.Dinner -> "저녁"
                     },
-                    mealList = when (getTimePeriod()) {
+                    mealList = when (WidgetDataDisplayManager.getCurrentMealTime()) {
                         MealTime.Morning -> todayMeals.breakfast.first
 
                         MealTime.Lunch -> todayMeals.lunch.first
@@ -109,18 +114,5 @@ class CombinedWorker @AssistedInject constructor(
             )
         }
         CombinedWidget().updateAll(context)
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun getTimePeriod(): MealTime {
-        val currentTime = LocalTime.now()
-        val morningEnd = LocalTime.of(7, 35)
-        val lunchEnd = LocalTime.of(12, 35)
-
-        return when {
-            currentTime.isBefore(morningEnd) -> MealTime.Morning
-            currentTime.isBefore(lunchEnd) -> MealTime.Lunch
-            else -> MealTime.Dinner
-        }
     }
 }
