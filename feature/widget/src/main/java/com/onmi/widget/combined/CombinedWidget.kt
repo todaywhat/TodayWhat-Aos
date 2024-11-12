@@ -100,11 +100,20 @@ class CombinedWidget : GlanceAppWidget() {
                         ) + "..." else item
 
                         Column {
-                            SuitText(
-                                text = text,
-                                color = GlanceTheme.colors.tertiary.getColor(context),
-                                fontSize = 14.sp
-                            )
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                SuitText(
+                                    modifier = GlanceModifier.width(12.dp),
+                                    text = "${index + 1}",
+                                    color = GlanceTheme.colors.secondary.getColor(context),
+                                    fontSize = 14.sp,
+                                )
+                                Spacer(modifier = GlanceModifier.width(2.dp))
+                                SuitText(
+                                    text = text,
+                                    color = GlanceTheme.colors.tertiary.getColor(context),
+                                    fontSize = 14.sp,
+                                )
+                            }
                             if (mealList.lastIndex != index) {
                                 Spacer(modifier = GlanceModifier.height(1.37.dp))
                             }
