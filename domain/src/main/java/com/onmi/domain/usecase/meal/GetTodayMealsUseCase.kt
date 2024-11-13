@@ -23,12 +23,11 @@ class GetTodayMealsUseCase @Inject constructor(
         repository.getMeals(
             educationCode = userInfo.educationCode,
             schoolCode = userInfo.schoolCode,
-            date = targetDate?.toString()?.replace("-", "")
-                ?: if (DateUtils.checkIsWeekend() && userInfo.isSkipWeekend) {
-                    DateUtils.getNextMondayDate()
-                } else {
-                    convertMillisToDateString(System.currentTimeMillis())
-                }
+            date = when {
+                targetDate != null -> targetDate.toString().replace("-", "")
+                DateUtils.checkIsWeekend() && userInfo.isSkipWeekend -> DateUtils.getNextMondayDate()
+                else -> convertMillisToDateString(System.currentTimeMillis())
+            }
         )
     }
 
