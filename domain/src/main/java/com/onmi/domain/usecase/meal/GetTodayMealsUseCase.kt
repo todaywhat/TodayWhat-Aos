@@ -6,6 +6,7 @@ import com.onmi.domain.util.DateUtils
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import java.text.SimpleDateFormat
+import java.time.LocalDate
 import java.util.Date
 import java.util.Locale
 import javax.inject.Inject
@@ -14,7 +15,7 @@ class GetTodayMealsUseCase @Inject constructor(
     private val repository: MealRepository,
     private val userDao: UserDao,
 ) {
-    suspend operator fun invoke() = kotlin.runCatching {
+    suspend operator fun invoke(targetDate: LocalDate? = null) = kotlin.runCatching {
         val userInfo = runBlocking {
             userDao.getUserInfo().first()
         } ?: throw RuntimeException("fail to get user info")
@@ -22,8 +23,11 @@ class GetTodayMealsUseCase @Inject constructor(
         repository.getMeals(
             educationCode = userInfo.educationCode,
             schoolCode = userInfo.schoolCode,
-            date = if (DateUtils.checkIsWeekend() && userInfo.isSkipWeekend) DateUtils.getNextMondayDate()
-            else convertMillisToDateString(System.currentTimeMillis())
+            date = when {
+                targetDate != null -> targetDate.toString().replace("-", "")
+                DateUtils.checkIsWeekend() && userInfo.isSkipWeekend -> DateUtils.getNextMondayDate()
+                else -> convertMillisToDateString(System.currentTimeMillis())
+            }
         )
     }
 

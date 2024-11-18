@@ -14,14 +14,14 @@ import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import com.onmi.domain.usecase.meal.GetTodayMealsUseCase
 import com.onmi.widget.timetable.TimeTableWidget
-import com.onmi.widget.util.MealTime
+import com.onmi.widget.util.MealInfoState
+import com.onmi.widget.util.WidgetDataDisplayManager
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import khs.onmi.core.common.android.EventLogger
 import khs.onmi.core.common.android.WidgetFamily
 import khs.onmi.core.common.android.WidgetKind
 import java.time.Duration
-import java.time.LocalTime
 
 @HiltWorker
 class MealWorker @AssistedInject constructor(
@@ -54,36 +54,14 @@ class MealWorker @AssistedInject constructor(
 
     @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun doWork(): Result {
-        return try {
-            setWidgetState(MealInfo.Loading)
-            val request = getTodayMealsUseCase()
-                .onSuccess {
-                    setWidgetState(
-                        when (getTimePeriod()) {
-                            MealTime.Morning -> MealInfo.Available(
-                                mealTime = "아침",
-                                mealList = it.breakfast.first
-                            )
+        setWidgetState(
+            newState = WidgetDataDisplayManager.fetchMealInfo(
+                getTodayMealsUseCase = getTodayMealsUseCase,
+                requestedMealTime = WidgetDataDisplayManager.getCurrentMealTime()
+            ).toMealInfo()
+        )
 
-                            MealTime.Lunch -> MealInfo.Available(
-                                mealTime = "점심",
-                                mealList = it.lunch.first
-                            )
-
-                            MealTime.Dinner -> MealInfo.Available(
-                                mealTime = "저녁",
-                                mealList = it.dinner.first
-                            )
-                        }
-                    )
-                }.onFailure {
-                    setWidgetState(MealInfo.Unavailable)
-                }
-            if (request.isSuccess) Result.success() else Result.failure()
-        } catch (e: Exception) {
-            setWidgetState(MealInfo.Unavailable)
-            Result.failure()
-        }
+        return Result.success()
     }
 
     private suspend fun setWidgetState(newState: MealInfo) {
@@ -100,17 +78,9 @@ class MealWorker @AssistedInject constructor(
         TimeTableWidget().updateAll(context)
     }
 
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun getTimePeriod(): MealTime {
-        val currentTime = LocalTime.now()
-        val morningEnd = LocalTime.of(7, 35)
-        val lunchEnd = LocalTime.of(12, 35)
-
-        return when {
-            currentTime.isBefore(morningEnd) -> MealTime.Morning
-            currentTime.isBefore(lunchEnd) -> MealTime.Lunch
-            else -> MealTime.Dinner
-        }
+    private fun MealInfoState.toMealInfo(): MealInfo = when (this) {
+        is MealInfoState.Available -> MealInfo.Available(mealTime, mealList)
+        is MealInfoState.Unavailable -> MealInfo.Unavailable
+        is MealInfoState.Loading -> MealInfo.Loading
     }
 }
