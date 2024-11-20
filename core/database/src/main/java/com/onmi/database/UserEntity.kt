@@ -16,5 +16,7 @@ data class UserEntity(
     var classroom: Int = 0,
     var department: String = "",
     @ColumnInfo(name = "isSkipWeekend", defaultValue = "false")
-    var isSkipWeekend: Boolean = false
+    var isSkipWeekend: Boolean = false,
+    @ColumnInfo(name = "isShowNextDayInfoAfterDinner", defaultValue = "false")
+    var isShowNextDayInfoAfterDinner: Boolean = false
 )

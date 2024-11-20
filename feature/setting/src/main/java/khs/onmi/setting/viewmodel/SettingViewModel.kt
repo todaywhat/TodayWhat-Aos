@@ -55,6 +55,14 @@ class SettingViewModel @Inject constructor(
         }
     }
 
+    suspend fun setIsShowNextDayInfoAfterDinner(isShowNextDayInfoAfterDinner: Boolean) = intent {
+        runCatching {
+            onmiDao.setIsShowNextDayInfoAfterDinner(isShowNextDayInfoAfterDinner = isShowNextDayInfoAfterDinner)
+        }.onFailure {
+            postSideEffect(SettingSideEffect.ShowToast("저녁 후 내일 급식 표시 여부를 설정하지 못하였습니다."))
+        }
+    }
+
     fun onSkipWeekendToggleValueChanged(value: Boolean) = intent {
         reduce {
             state.copy(isSkipWeekend = value)

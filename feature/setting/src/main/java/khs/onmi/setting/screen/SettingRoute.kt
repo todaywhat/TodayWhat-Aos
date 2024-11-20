@@ -42,6 +42,11 @@ fun SettingRoute(
         viewModel.setIsSkipWeekend(uiState.isSkipWeekend)
     }
 
+    LaunchedEffect(key1 = uiState.isShowNextDayInfoAfterDinner) {
+        delay(300)
+        viewModel.setIsShowNextDayInfoAfterDinner(uiState.isShowNextDayInfoAfterDinner)
+    }
+
     SettingScreen(
         uiState = uiState,
         onBackPressed = { navController.popBackStack() },
