@@ -60,4 +60,10 @@ class SettingViewModel @Inject constructor(
             state.copy(isSkipWeekend = value)
         }
     }
+
+    fun onShowNextDayInfoAfterDinnerValueChanged(value: Boolean) = intent {
+        reduce {
+            state.copy(isShowNextDayInfoAfterDinner = value)
+        }
+    }
 }

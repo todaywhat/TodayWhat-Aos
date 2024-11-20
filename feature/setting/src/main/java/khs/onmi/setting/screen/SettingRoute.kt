@@ -46,6 +46,7 @@ fun SettingRoute(
         uiState = uiState,
         onBackPressed = { navController.popBackStack() },
         onEnterInformationClick = { navController.navigate(ONMINavRoutes.EnterInformation.MAIN) },
-        onSkipWeekendToggleValueChanged = viewModel::onSkipWeekendToggleValueChanged
+        onSkipWeekendToggleValueChanged = viewModel::onSkipWeekendToggleValueChanged,
+        onShowNextDayInfoAfterDinnerValueChanged = viewModel::onShowNextDayInfoAfterDinnerValueChanged,
     )
 }
