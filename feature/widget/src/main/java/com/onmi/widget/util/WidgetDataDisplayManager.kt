@@ -2,7 +2,7 @@ package com.onmi.widget.util
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import com.onmi.domain.usecase.meal.GetTodayMealsUseCase
+import com.onmi.domain.usecase.meal.GetMealsUseCase
 import java.time.LocalDate
 import java.time.LocalTime
 
@@ -31,10 +31,10 @@ object WidgetDataDisplayManager {
 
     @RequiresApi(Build.VERSION_CODES.O)
     internal suspend fun fetchMealInfo(
-        getTodayMealsUseCase: GetTodayMealsUseCase,
+        getMealsUseCase: GetMealsUseCase,
         requestedMealTime: MealTime,
     ): MealInfoState {
-        getTodayMealsUseCase()
+        getMealsUseCase()
             .onSuccess { mealsInfo ->
                 val mealTimes = listOf(MealTime.Morning, MealTime.Lunch, MealTime.Dinner)
                 val startIndex = mealTimes.indexOf(requestedMealTime)
@@ -58,7 +58,7 @@ object WidgetDataDisplayManager {
 
         val nextDay = LocalDate.now().plusDays(1)
 
-        getTodayMealsUseCase(targetDate = nextDay)
+        getMealsUseCase(targetDate = nextDay)
             .onSuccess { nextMealsInfo ->
                 val mealTimes = listOf(MealTime.Morning, MealTime.Lunch, MealTime.Dinner)
 

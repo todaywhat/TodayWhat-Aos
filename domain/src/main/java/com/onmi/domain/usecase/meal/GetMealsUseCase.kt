@@ -11,7 +11,7 @@ import java.util.Date
 import java.util.Locale
 import javax.inject.Inject
 
-class GetTodayMealsUseCase @Inject constructor(
+class GetMealsUseCase @Inject constructor(
     private val repository: MealRepository,
     private val userDao: UserDao,
 ) {

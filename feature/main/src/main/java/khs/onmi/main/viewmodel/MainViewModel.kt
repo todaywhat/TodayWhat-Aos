@@ -2,7 +2,7 @@ package khs.onmi.main.viewmodel
 
 import androidx.lifecycle.ViewModel
 import com.onmi.database.UserDao
-import com.onmi.domain.usecase.meal.GetTodayMealsUseCase
+import com.onmi.domain.usecase.meal.GetMealsUseCase
 import com.onmi.domain.usecase.timetable.GetTodayTimeTableUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import khs.onmi.main.viewmodel.container.MainSideEffect
@@ -18,7 +18,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val getTodayTimeTableUseCase: GetTodayTimeTableUseCase,
-    private val getTodayMealsUseCase: GetTodayMealsUseCase,
+    private val getMealsUseCase: GetMealsUseCase,
     private val onmiDao: UserDao,
 ) : ContainerHost<MainState, MainSideEffect>, ViewModel() {
     override val container = container<MainState, MainSideEffect>(
@@ -69,7 +69,7 @@ class MainViewModel @Inject constructor(
     }
 
     private fun getTodayMeals() = intent {
-        getTodayMealsUseCase()
+        getMealsUseCase()
             .onSuccess { response ->
                 reduce {
                     state.copy(
