@@ -11,6 +11,8 @@ import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
 import androidx.glance.GlanceTheme
 import androidx.glance.LocalContext
+import androidx.glance.action.actionStartActivity
+import androidx.glance.action.clickable
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.GlanceAppWidgetReceiver
 import androidx.glance.appwidget.lazy.LazyColumn
@@ -19,6 +21,7 @@ import androidx.glance.appwidget.provideContent
 import androidx.glance.background
 import androidx.glance.currentState
 import androidx.glance.layout.Alignment
+import androidx.glance.layout.Box
 import androidx.glance.layout.Column
 import androidx.glance.layout.Spacer
 import androidx.glance.layout.fillMaxSize
@@ -26,6 +29,7 @@ import androidx.glance.layout.height
 import androidx.glance.layout.padding
 import com.onmi.widget.theme.ONMIWidgetColorScheme
 import com.onmi.widget.util.SuitText
+import khs.onmi.root.MainActivity
 
 class MealWidget : GlanceAppWidget() {
     override val stateDefinition = MealInfoStateDefinition
@@ -94,6 +98,13 @@ class MealWidget : GlanceAppWidget() {
                 }
             }
         }
+
+        Box(
+            modifier = GlanceModifier
+                .fillMaxSize()
+                .clickable(actionStartActivity<MainActivity>()),
+            content = {}
+        )
     }
 
     @Composable
@@ -103,7 +114,8 @@ class MealWidget : GlanceAppWidget() {
         Column(
             modifier = GlanceModifier
                 .fillMaxSize()
-                .background(GlanceTheme.colors.onPrimary),
+                .background(GlanceTheme.colors.onPrimary)
+                .clickable(actionStartActivity<MainActivity>()),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -122,7 +134,8 @@ class MealWidget : GlanceAppWidget() {
         Column(
             modifier = GlanceModifier
                 .fillMaxSize()
-                .background(GlanceTheme.colors.onPrimary),
+                .background(GlanceTheme.colors.onPrimary)
+                .clickable(actionStartActivity<MainActivity>()),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalAlignment = Alignment.CenterVertically
         ) {
