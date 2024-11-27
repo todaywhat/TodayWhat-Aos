@@ -72,7 +72,7 @@ compose-foundation-pager = { group = "androidx.compose.foundation", name = "foun
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidXJunit" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso" }
-io-kotest-runner-junit5 = { group = "io.kotest", name = "kotest-runner-junit5", version = "5.9" }
+io-kotest-runner-junit5 = { group = "io.kotest", name = "kotest-runner-junit5", version = "5.9.0" }
 io-mockk-android = { group = "io.mockk", name = "mockk-android", version = "1.13.13" }
 
 # orbit-mvi
