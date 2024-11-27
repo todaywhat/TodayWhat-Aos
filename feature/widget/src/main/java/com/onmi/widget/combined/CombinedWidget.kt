@@ -31,6 +31,7 @@ import androidx.glance.layout.fillMaxSize
 import androidx.glance.layout.height
 import androidx.glance.layout.padding
 import androidx.glance.layout.width
+import com.onmi.widget.components.MessageBox
 import com.onmi.widget.theme.ONMIWidgetColorScheme
 import com.onmi.widget.util.SuitText
 import khs.onmi.root.MainActivity
@@ -48,7 +49,7 @@ class CombinedWidget : GlanceAppWidget() {
             GlanceTheme(colors = ONMIWidgetColorScheme.colors) {
                 when (val state = currentState<CombinedInfo>()) {
                     is CombinedInfo.Available -> {
-                        SuccessContent(
+                        CombinedWidgetContent(
                             mealTime = state.mealTime,
                             mealList = state.mealList,
                             timeTable = state.subjectList,
@@ -56,11 +57,11 @@ class CombinedWidget : GlanceAppWidget() {
                     }
 
                     is CombinedInfo.Loading -> {
-                        LoadingContent()
+                        MessageBox(message = "급식, 시간표 정보 불러오는중..")
                     }
 
                     is CombinedInfo.Unavailable -> {
-                        UnavailableContent()
+                        MessageBox(message = "급식, 시간표 정보를 불러올 수 없습니다.")
                     }
                 }
             }
@@ -68,7 +69,7 @@ class CombinedWidget : GlanceAppWidget() {
     }
 
     @Composable
-    private fun SuccessContent(
+    private fun CombinedWidgetContent(
         mealTime: String,
         mealList: List<String>,
         timeTable: List<String>,
@@ -165,46 +166,6 @@ class CombinedWidget : GlanceAppWidget() {
                 .clickable(actionStartActivity<MainActivity>()),
             content = {}
         )
-    }
-
-    @Composable
-    fun LoadingContent() {
-        val context = LocalContext.current
-
-        Column(
-            modifier = GlanceModifier
-                .fillMaxSize()
-                .background(GlanceTheme.colors.onPrimary)
-                .clickable(actionStartActivity<MainActivity>()),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            SuitText(
-                text = "급식, 시간표 정보를 불러올 수 없습니다.",
-                color = GlanceTheme.colors.tertiary.getColor(context),
-                fontSize = 14.sp,
-            )
-        }
-    }
-
-    @Composable
-    fun UnavailableContent() {
-        val context = LocalContext.current
-
-        Column(
-            modifier = GlanceModifier
-                .fillMaxSize()
-                .background(GlanceTheme.colors.onPrimary)
-                .clickable(actionStartActivity<MainActivity>()),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            SuitText(
-                text = "급식, 시간표 정보 불러오는중..",
-                color = GlanceTheme.colors.tertiary.getColor(context),
-                fontSize = 14.sp,
-            )
-        }
     }
 }
 
