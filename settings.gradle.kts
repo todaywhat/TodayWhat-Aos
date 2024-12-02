@@ -15,8 +15,6 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "OnmiAndroid"
-gradle.startParameter.excludedTaskNames.addAll(listOf(":build-logic:convention:testClasses"))
-
 include(":app")
 include(":navigation")
 include(":feature:enterinformation")
