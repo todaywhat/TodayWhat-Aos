@@ -26,6 +26,7 @@ class GetTodayMealsUseCase @Inject constructor(
             date = when {
                 targetDate != null -> targetDate.toString().replace("-", "")
                 DateUtils.checkIsWeekend() && userInfo.isSkipWeekend -> DateUtils.getNextMondayDate()
+                DateUtils.checkIsAfterDinner() && userInfo.isShowNextDayInfoAfterDinner -> DateUtils.getNextDayDate()
                 else -> convertMillisToDateString(System.currentTimeMillis())
             }
         )
