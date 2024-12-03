@@ -38,7 +38,8 @@ class SettingViewModel @Inject constructor(
                             schoolName = userEntity.schoolName,
                             grade = userEntity.grade,
                             `class` = userEntity.classroom,
-                            isSkipWeekend = userEntity.isSkipWeekend
+                            isSkipWeekend = userEntity.isSkipWeekend,
+                            isShowNextDayInfoAfterDinner = userEntity.isShowNextDayInfoAfterDinner
                         )
                     }
                 } else {
@@ -47,7 +48,7 @@ class SettingViewModel @Inject constructor(
             }
     }
 
-    suspend fun setIsSkipWeekend(isSkipWeekend: Boolean) = intent {
+    fun setIsSkipWeekend(isSkipWeekend: Boolean) = intent {
         runCatching {
             onmiDao.setIsSkipWeekend(isSkipWeekend = isSkipWeekend)
         }.onFailure {
@@ -55,7 +56,7 @@ class SettingViewModel @Inject constructor(
         }
     }
 
-    suspend fun setIsShowNextDayInfoAfterDinner(isShowNextDayInfoAfterDinner: Boolean) = intent {
+    fun setIsShowNextDayInfoAfterDinner(isShowNextDayInfoAfterDinner: Boolean) = intent {
         runCatching {
             onmiDao.setIsShowNextDayInfoAfterDinner(isShowNextDayInfoAfterDinner = isShowNextDayInfoAfterDinner)
         }.onFailure {
