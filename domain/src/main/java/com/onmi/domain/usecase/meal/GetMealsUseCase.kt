@@ -11,7 +11,7 @@ import java.util.Date
 import java.util.Locale
 import javax.inject.Inject
 
-class GetTodayMealsUseCase @Inject constructor(
+class GetMealsUseCase @Inject constructor(
     private val repository: MealRepository,
     private val userDao: UserDao,
 ) {
@@ -26,6 +26,7 @@ class GetTodayMealsUseCase @Inject constructor(
             date = when {
                 targetDate != null -> targetDate.toString().replace("-", "")
                 DateUtils.checkIsWeekend() && userInfo.isSkipWeekend -> DateUtils.getNextMondayDate()
+                DateUtils.checkIsAfterDinner() && userInfo.isShowNextDayInfoAfterDinner -> DateUtils.getNextDayDate()
                 else -> convertMillisToDateString(System.currentTimeMillis())
             }
         )

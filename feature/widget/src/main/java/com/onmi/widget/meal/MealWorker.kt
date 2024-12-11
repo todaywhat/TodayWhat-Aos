@@ -12,7 +12,7 @@ import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
-import com.onmi.domain.usecase.meal.GetTodayMealsUseCase
+import com.onmi.domain.usecase.meal.GetMealsUseCase
 import com.onmi.widget.timetable.TimeTableWidget
 import com.onmi.widget.util.MealInfoState
 import com.onmi.widget.util.WidgetDataDisplayManager
@@ -27,7 +27,7 @@ import java.time.Duration
 class MealWorker @AssistedInject constructor(
     @Assisted private val context: Context,
     @Assisted workParams: WorkerParameters,
-    private var getTodayMealsUseCase: GetTodayMealsUseCase,
+    private var getMealsUseCase: GetMealsUseCase,
 ) : CoroutineWorker(context, workParams) {
 
     init {
@@ -56,7 +56,7 @@ class MealWorker @AssistedInject constructor(
     override suspend fun doWork(): Result {
         setWidgetState(
             newState = WidgetDataDisplayManager.fetchMealInfo(
-                getTodayMealsUseCase = getTodayMealsUseCase,
+                getMealsUseCase = getMealsUseCase,
                 requestedMealTime = WidgetDataDisplayManager.getCurrentMealTime()
             ).toMealInfo()
         )

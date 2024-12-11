@@ -26,8 +26,11 @@ class GetTodayTimeTableUseCase @Inject constructor(
             grade = userInfo.grade,
             `class` = userInfo.classroom,
             department = userInfo.department,
-            date = if (DateUtils.checkIsWeekend() && userInfo.isSkipWeekend) DateUtils.getNextMondayDate()
-            else convertMillisToDateString(System.currentTimeMillis()),
+            date = when {
+                DateUtils.checkIsWeekend() && userInfo.isSkipWeekend -> DateUtils.getNextMondayDate()
+                DateUtils.checkIsAfterDinner() && userInfo.isShowNextDayInfoAfterDinner -> DateUtils.getNextDayDate()
+                else -> convertMillisToDateString(System.currentTimeMillis())
+            }
         )
     }
 

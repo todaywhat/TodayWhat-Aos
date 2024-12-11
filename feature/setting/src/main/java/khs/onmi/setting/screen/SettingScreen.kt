@@ -19,6 +19,7 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.dp
 import khs.onmi.core.designsystem.component.TopNavigationBar
 import khs.onmi.core.designsystem.icon.ArrowBackIcon
+import khs.onmi.core.designsystem.icon.CalendarIcon
 import khs.onmi.core.designsystem.icon.PaperIcon
 import khs.onmi.core.designsystem.icon.RiceIcon
 import khs.onmi.core.designsystem.icon.RightArrowIcon
@@ -38,6 +39,7 @@ fun SettingScreen(
     onBackPressed: () -> Unit,
     onEnterInformationClick: () -> Unit,
     onSkipWeekendToggleValueChanged: (value: Boolean) -> Unit,
+    onShowNextDayInfoAfterDinnerValueChanged: (value: Boolean) -> Unit,
 ) {
     val uriHandler = LocalUriHandler.current
     val view = LocalView.current
@@ -108,12 +110,20 @@ fun SettingScreen(
                     )
                 }
                 RoundedWhiteBox {
-                    ToggleItem(
-                        icon = { RiceIcon(tint = color.Black) },
-                        title = "주말 건너뛰기",
-                        value = uiState.isSkipWeekend,
-                        onValueChange = onSkipWeekendToggleValueChanged
-                    )
+                    Column(verticalArrangement = Arrangement.spacedBy(24.dp)) {
+                        ToggleItem(
+                            icon = { RiceIcon(tint = color.Black) },
+                            title = "저녁 후 내일 급식 표시",
+                            value = uiState.isShowNextDayInfoAfterDinner,
+                            onValueChange = onShowNextDayInfoAfterDinnerValueChanged
+                        )
+                        ToggleItem(
+                            icon = { CalendarIcon(tint = color.Black) },
+                            title = "주말 건너뛰기",
+                            value = uiState.isSkipWeekend,
+                            onValueChange = onSkipWeekendToggleValueChanged
+                        )
+                    }
                 }
             }
         }

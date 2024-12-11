@@ -9,7 +9,6 @@ import khs.onmi.main.screen.MainRoute
 import khs.onmi.navigation.ONMINavRoutes
 
 fun NavGraphBuilder.mainNavGraph(
-    activity: Activity,
     navController: NavController,
 ) {
     navigation(
@@ -19,10 +18,7 @@ fun NavGraphBuilder.mainNavGraph(
         composable(
             route = ONMINavRoutes.Main.MAIN
         ) {
-            MainRoute(
-                activity = activity,
-                navController = navController
-            )
+            MainRoute(navController = navController)
         }
     }
 }
