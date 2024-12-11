@@ -1,13 +1,13 @@
 [versions]
 # Defalut
-androidGradlePlugin = "8.2.2"
+androidGradlePlugin = "8.7.2"
 kotlin = "1.9.0"
 
 # AndroidX
 androidXCore = "1.9.0"
 androidXLifeCycle = "2.6.1"
 androidXAppcompat = "1.6.1"
-androidXGlanceAppWidget = "1.0.0"
+androidXGlanceAppWidget = "1.1.1"
 
 # Google
 accompanistSystemuicontroller = "0.27.0"
