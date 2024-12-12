@@ -38,6 +38,6 @@ fun MainRoute(
 
     MainScreen(
         uiState = uiState,
-        navigate = { navController.navigate(it) }
+        navigate = navController::navigate
     )
 }

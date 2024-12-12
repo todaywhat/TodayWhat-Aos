@@ -42,9 +42,9 @@ object WidgetDataDisplayManager {
                 (startIndex..mealTimes.lastIndex).forEach { index ->
                     val currentMealTime = mealTimes[index]
                     val currentMeal = when (currentMealTime) {
-                        MealTime.Morning -> mealsInfo.breakfast
-                        MealTime.Lunch -> mealsInfo.lunch
-                        MealTime.Dinner -> mealsInfo.dinner
+                        MealTime.Morning -> mealsInfo.second.breakfast
+                        MealTime.Lunch -> mealsInfo.second.lunch
+                        MealTime.Dinner -> mealsInfo.second.dinner
                     }
 
                     if (currentMeal.first.isNotEmpty()) {
@@ -58,16 +58,16 @@ object WidgetDataDisplayManager {
 
         val nextDay = LocalDate.now().plusDays(1)
 
-        getMealsUseCase(targetDate = nextDay)
+        getMealsUseCase(date = nextDay)
             .onSuccess { nextMealsInfo ->
                 val mealTimes = listOf(MealTime.Morning, MealTime.Lunch, MealTime.Dinner)
 
                 (0..mealTimes.lastIndex).forEach { index ->
                     val currentMealTime = mealTimes[index]
                     val currentMeal = when (currentMealTime) {
-                        MealTime.Morning -> nextMealsInfo.breakfast
-                        MealTime.Lunch -> nextMealsInfo.lunch
-                        MealTime.Dinner -> nextMealsInfo.dinner
+                        MealTime.Morning -> nextMealsInfo.second.breakfast
+                        MealTime.Lunch -> nextMealsInfo.second.lunch
+                        MealTime.Dinner -> nextMealsInfo.second.dinner
                     }
 
                     if (currentMeal.first.isNotEmpty()) {

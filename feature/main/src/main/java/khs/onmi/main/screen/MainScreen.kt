@@ -88,7 +88,8 @@ fun MainScreen(
                         isMeal = pagerState.currentPage == 0,
                         school = uiState.schoolName,
                         grade = uiState.grade,
-                        `class` = uiState.`class`
+                        `class` = uiState.`class`,
+                        date = uiState.targetDate
                     )
                     Spacer(modifier = Modifier.height(25.dp))
                     MainTabRow(
