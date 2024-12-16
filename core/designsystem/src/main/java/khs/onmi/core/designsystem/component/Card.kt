@@ -106,6 +106,7 @@ fun InfoCard(
     school: String,
     grade: Int,
     `class`: Int,
+    date: String,
 ) {
     ONMITheme { color, typography ->
         Box(
@@ -158,7 +159,7 @@ fun InfoCard(
                 )
                 ColumnSpacer(dp = 8.dp)
                 Text(
-                    text = "${grade}학년 ${`class`}반",
+                    text = "${grade}학년 ${`class`}반 • $date",
                     style = typography.Body2,
                     color = color.UnselectedPrimary
                 )
@@ -205,7 +206,8 @@ fun InfoCardPre() {
             isMeal = isMeal,
             school = "광주소프트웨어마이스터고등학교",
             grade = 2,
-            `class` = 1
+            `class` = 1,
+            date = "11월 10일"
         )
 
         Button(onClick = { isMeal = !isMeal }) {

@@ -16,8 +16,7 @@ class GetTodayTimeTableUseCase @Inject constructor(
 ) {
     suspend operator fun invoke() = kotlin.runCatching {
         val userInfo =
-            runBlocking { userDao.getUserInfo().first() }
-                ?: throw RuntimeException("fail to get user info")
+            userDao.getUserInfo().first() ?: throw RuntimeException("fail to get user info")
 
         repository.getTimeTable(
             schoolCode = userInfo.schoolCode,

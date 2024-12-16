@@ -23,9 +23,7 @@ class MainViewModel @Inject constructor(
     private val getMealsUseCase: GetMealsUseCase,
     private val onmiDao: UserDao,
 ) : ContainerHost<MainState, MainSideEffect>, ViewModel() {
-    override val container = container<MainState, MainSideEffect>(
-        MainState()
-    )
+    override val container = container<MainState, MainSideEffect>(MainState())
 
     init {
         getUserInfo()
@@ -78,9 +76,10 @@ class MainViewModel @Inject constructor(
                 .onSuccess { response ->
                     reduce {
                         state.copy(
-                            breakfast = response.breakfast,
-                            lunch = response.lunch,
-                            dinner = response.dinner
+                            targetDate = response.first,
+                            breakfast = response.second.breakfast,
+                            lunch = response.second.lunch,
+                            dinner = response.second.dinner
                         )
                     }
                 }.onFailure {
