@@ -1,6 +1,7 @@
 package com.onmi.domain.util
 
 import android.os.Build
+import androidx.annotation.RequiresApi
 import java.text.SimpleDateFormat
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -68,5 +69,27 @@ object DateUtils {
             val formatter = SimpleDateFormat("yyyyMMdd", Locale.getDefault())
             formatter.format(calendar.time)
         }
+    }
+
+    fun convertToMonthDay(dateString: String): String {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            convertWithDateTimeFormatter(dateString)
+        } else {
+            convertWithSimpleDateFormat(dateString)
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun convertWithDateTimeFormatter(dateString: String): String {
+        val inputFormatter = DateTimeFormatter.ofPattern("yyyyMMdd")
+        val outputFormatter = DateTimeFormatter.ofPattern("MM월 dd일 E요일")
+        return LocalDate.parse(dateString, inputFormatter).format(outputFormatter)
+    }
+
+    private fun convertWithSimpleDateFormat(dateString: String): String {
+        val inputFormatter = SimpleDateFormat("yyyyMMdd", Locale.getDefault())
+        val outputFormatter = SimpleDateFormat("MM월 dd일 E요일", Locale.getDefault())
+        return inputFormatter.parse(dateString)?.let { outputFormatter.format(it) }
+            ?: throw IllegalArgumentException("잘못된 날짜 형식입니다")
     }
 }
