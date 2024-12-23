@@ -33,10 +33,7 @@ class MainActivity : ComponentActivity() {
                     ) {
                         enterInformationNavGraph(navController = navController)
 
-                        mainNavGraph(
-                            activity = this@MainActivity,
-                            navController = navController
-                        )
+                        mainNavGraph(navController = navController)
 
                         settingNavGraph(navController = navController)
                     }

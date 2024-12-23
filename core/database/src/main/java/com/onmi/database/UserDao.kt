@@ -26,4 +26,7 @@ interface UserDao {
 
     @Query("UPDATE user_table SET isSkipWeekend = :isSkipWeekend")
     suspend fun setIsSkipWeekend(isSkipWeekend: Boolean)
+
+    @Query("UPDATE user_table SET isShowNextDayInfoAfterDinner = :isShowNextDayInfoAfterDinner")
+    suspend fun setIsShowNextDayInfoAfterDinner(isShowNextDayInfoAfterDinner: Boolean)
 }

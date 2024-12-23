@@ -11,6 +11,8 @@ import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
 import androidx.glance.GlanceTheme
 import androidx.glance.LocalContext
+import androidx.glance.action.actionStartActivity
+import androidx.glance.action.clickable
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.GlanceAppWidgetReceiver
 import androidx.glance.appwidget.lazy.LazyColumn
@@ -18,14 +20,16 @@ import androidx.glance.appwidget.lazy.itemsIndexed
 import androidx.glance.appwidget.provideContent
 import androidx.glance.background
 import androidx.glance.currentState
-import androidx.glance.layout.Alignment
+import androidx.glance.layout.Box
 import androidx.glance.layout.Column
 import androidx.glance.layout.Spacer
 import androidx.glance.layout.fillMaxSize
 import androidx.glance.layout.height
 import androidx.glance.layout.padding
+import com.onmi.widget.components.MessageBox
 import com.onmi.widget.theme.ONMIWidgetColorScheme
 import com.onmi.widget.util.SuitText
+import khs.onmi.root.MainActivity
 
 class MealWidget : GlanceAppWidget() {
     override val stateDefinition = MealInfoStateDefinition
@@ -40,18 +44,18 @@ class MealWidget : GlanceAppWidget() {
             GlanceTheme(colors = ONMIWidgetColorScheme.colors) {
                 when (val state = currentState<MealInfo>()) {
                     is MealInfo.Available -> {
-                        SuccessContent(
+                        MealWidgetContent(
                             mealTime = state.mealTime,
                             mealList = state.mealList
                         )
                     }
 
                     is MealInfo.Loading -> {
-                        LoadingContent()
+                        MessageBox(message = "급식 정보 불러오는중..")
                     }
 
                     is MealInfo.Unavailable -> {
-                        UnavailableContent()
+                        MessageBox(message = "급식 정보를 불러올 수 없습니다.")
                     }
                 }
             }
@@ -59,7 +63,7 @@ class MealWidget : GlanceAppWidget() {
     }
 
     @Composable
-    private fun SuccessContent(
+    private fun MealWidgetContent(
         mealTime: String,
         mealList: List<String>,
     ) {
@@ -94,44 +98,13 @@ class MealWidget : GlanceAppWidget() {
                 }
             }
         }
-    }
 
-    @Composable
-    fun LoadingContent() {
-        val context = LocalContext.current
-
-        Column(
+        Box(
             modifier = GlanceModifier
                 .fillMaxSize()
-                .background(GlanceTheme.colors.onPrimary),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            SuitText(
-                text = "급식 정보를 불러올 수 없습니다.",
-                color = GlanceTheme.colors.tertiary.getColor(context),
-                fontSize = 14.sp,
-            )
-        }
-    }
-
-    @Composable
-    fun UnavailableContent() {
-        val context = LocalContext.current
-
-        Column(
-            modifier = GlanceModifier
-                .fillMaxSize()
-                .background(GlanceTheme.colors.onPrimary),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            SuitText(
-                text = "급식 정보 불러오는중..",
-                color = GlanceTheme.colors.tertiary.getColor(context),
-                fontSize = 14.sp,
-            )
-        }
+                .clickable(actionStartActivity<MainActivity>()),
+            content = {}
+        )
     }
 }
 

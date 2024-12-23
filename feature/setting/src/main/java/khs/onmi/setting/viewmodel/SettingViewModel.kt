@@ -38,7 +38,8 @@ class SettingViewModel @Inject constructor(
                             schoolName = userEntity.schoolName,
                             grade = userEntity.grade,
                             `class` = userEntity.classroom,
-                            isSkipWeekend = userEntity.isSkipWeekend
+                            isSkipWeekend = userEntity.isSkipWeekend,
+                            isShowNextDayInfoAfterDinner = userEntity.isShowNextDayInfoAfterDinner
                         )
                     }
                 } else {
@@ -47,7 +48,7 @@ class SettingViewModel @Inject constructor(
             }
     }
 
-    suspend fun setIsSkipWeekend(isSkipWeekend: Boolean) = intent {
+    fun setIsSkipWeekend(isSkipWeekend: Boolean) = intent {
         runCatching {
             onmiDao.setIsSkipWeekend(isSkipWeekend = isSkipWeekend)
         }.onFailure {
@@ -55,9 +56,23 @@ class SettingViewModel @Inject constructor(
         }
     }
 
+    fun setIsShowNextDayInfoAfterDinner(isShowNextDayInfoAfterDinner: Boolean) = intent {
+        runCatching {
+            onmiDao.setIsShowNextDayInfoAfterDinner(isShowNextDayInfoAfterDinner = isShowNextDayInfoAfterDinner)
+        }.onFailure {
+            postSideEffect(SettingSideEffect.ShowToast("저녁 후 내일 급식 표시 여부를 설정하지 못하였습니다."))
+        }
+    }
+
     fun onSkipWeekendToggleValueChanged(value: Boolean) = intent {
         reduce {
             state.copy(isSkipWeekend = value)
+        }
+    }
+
+    fun onShowNextDayInfoAfterDinnerValueChanged(value: Boolean) = intent {
+        reduce {
+            state.copy(isShowNextDayInfoAfterDinner = value)
         }
     }
 }

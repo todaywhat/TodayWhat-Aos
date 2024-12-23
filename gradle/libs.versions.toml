@@ -1,13 +1,13 @@
 [versions]
 # Defalut
-androidGradlePlugin = "8.2.2"
+androidGradlePlugin = "8.7.2"
 kotlin = "1.9.0"
 
 # AndroidX
 androidXCore = "1.9.0"
 androidXLifeCycle = "2.6.1"
 androidXAppcompat = "1.6.1"
-androidXGlanceAppWidget = "1.0.0"
+androidXGlanceAppWidget = "1.1.1"
 
 # Google
 accompanistSystemuicontroller = "0.27.0"
@@ -72,6 +72,8 @@ compose-foundation-pager = { group = "androidx.compose.foundation", name = "foun
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidXJunit" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso" }
+io-kotest-runner-junit5 = { group = "io.kotest", name = "kotest-runner-junit5", version = "5.9.0" }
+io-mockk-android = { group = "io.mockk", name = "mockk-android", version = "1.13.13" }
 
 # orbit-mvi
 orbit-core = { group = "org.orbit-mvi", name = "orbit-core", version.ref = "orbit" }

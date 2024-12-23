@@ -5,4 +5,5 @@ data class SettingState(
     val grade: Int = 0,
     val `class`: Int = 0,
     val isSkipWeekend: Boolean = false,
+    val isShowNextDayInfoAfterDinner: Boolean = false,
 )
