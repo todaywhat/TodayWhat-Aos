@@ -6,6 +6,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import khs.onmi.navigation.ONMINavRoutes
 import khs.onmi.setting.screen.SettingRoute
+import khs.onmi.setting.screen.addwidget.AddWidgetRoute
 
 fun NavGraphBuilder.settingNavGraph(
     navController: NavController,
@@ -18,6 +19,14 @@ fun NavGraphBuilder.settingNavGraph(
             route = ONMINavRoutes.Setting.MAIN
         ) {
             SettingRoute(
+                navController = navController
+            )
+        }
+
+        composable(
+            route = ONMINavRoutes.Setting.ADD_WIDGET
+        ) {
+            AddWidgetRoute(
                 navController = navController
             )
         }

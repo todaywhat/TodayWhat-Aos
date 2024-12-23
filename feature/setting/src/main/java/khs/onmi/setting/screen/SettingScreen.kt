@@ -39,6 +39,7 @@ fun SettingScreen(
     uiState: SettingState,
     onBackPressed: () -> Unit,
     onEnterInformationClick: () -> Unit,
+    onAddWidgetClick: () -> Unit,
     onSkipWeekendToggleValueChanged: (value: Boolean) -> Unit,
     onShowNextDayInfoAfterDinnerValueChanged: (value: Boolean) -> Unit,
 ) {
@@ -105,7 +106,7 @@ fun SettingScreen(
                                 trailing = { RightArrowIcon(tint = color.UnselectedPrimary) },
                                 text = "위젯 추가",
                                 leading = { WidgetAddIcon(tint = color.Black) },
-                                onClick = {  }
+                                onClick = onAddWidgetClick
                             ),
                             SettingItemsData(
                                 trailing = { RightArrowIcon(tint = color.UnselectedPrimary) },
