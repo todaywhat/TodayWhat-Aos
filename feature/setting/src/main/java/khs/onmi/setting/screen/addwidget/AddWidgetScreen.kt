@@ -1,5 +1,6 @@
 package khs.onmi.setting.screen.addwidget
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -53,6 +54,7 @@ fun AddWidgetScreen(
                         widgetName = item.second,
                         widgetSize = item.third,
                     ) {
+                        Log.d("logtag", "click!")
                         // todo: Click 이벤트 구현
                     }
                 }
