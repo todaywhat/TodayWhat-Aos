@@ -11,6 +11,7 @@ android {
 dependencies {
     implementation(project(":navigation"))
     implementation(project(":core:designsystem"))
+    implementation(project(":core:ui"))
     implementation(project(":core:common-android"))
     implementation(project(":core:database"))
 
