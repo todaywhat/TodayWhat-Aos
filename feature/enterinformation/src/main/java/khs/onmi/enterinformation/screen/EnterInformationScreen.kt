@@ -15,7 +15,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
@@ -35,13 +34,16 @@ import khs.onmi.enterinformation.component.GreetingComponent
 import khs.onmi.enterinformation.component.SchoolSelector
 import khs.onmi.enterinformation.model.CurrentState
 import khs.onmi.enterinformation.viewmodel.container.EnterInformationState
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EnterInformationScreen(
     uiState: EnterInformationState,
+    school: String,
+    department: String,
+    grade: String,
+    `class`: String,
     setSchoolSelectorVisible: (visible: Boolean) -> Unit,
     setDepartmentSelectorVisible: (visible: Boolean) -> Unit,
     setCurrentState: (state: CurrentState) -> Unit,
@@ -50,18 +52,12 @@ fun EnterInformationScreen(
     onClassValueChange: (`class`: String) -> Unit,
     onDepartmentValueChange: (department: String) -> Unit,
     onSchoolItemClick: (educationCode: String, schoolCode: String) -> Unit,
-    sendSchoolSearchRequest: () -> Unit,
     onBackButtonClick: () -> Unit,
     onFinishButtonClick: () -> Unit,
 ) {
     val focusManager = LocalFocusManager.current
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
-
-    LaunchedEffect(key1 = uiState.school) {
-        delay(500)
-        sendSchoolSearchRequest()
-    }
 
     ONMITheme { color, _ ->
         Scaffold(
@@ -123,7 +119,7 @@ fun EnterInformationScreen(
                         modifier = Modifier
                             .fillMaxWidth(),
                         label = "학과",
-                        value = uiState.department,
+                        value = department,
                         placeHolderText = "학과를 선택해주세요.",
                         isReadOnly = true,
                         onClick = {
@@ -145,7 +141,7 @@ fun EnterInformationScreen(
                     LabelTextFiled(
                         modifier = Modifier.fillMaxWidth(),
                         label = "반",
-                        value = uiState.`class`,
+                        value = `class`,
                         onValueChange = onClassValueChange,
                         placeHolderText = "반을 입력해주세요.",
                         onTrailingIconClick = {
@@ -165,7 +161,7 @@ fun EnterInformationScreen(
                     LabelTextFiled(
                         modifier = Modifier.fillMaxWidth(),
                         label = "학년",
-                        value = uiState.grade,
+                        value = grade,
                         onValueChange = onGradeValueChange,
                         placeHolderText = "학년을 입력해주세요.",
                         onTrailingIconClick = {
@@ -181,7 +177,7 @@ fun EnterInformationScreen(
                 LabelTextFiled(
                     modifier = Modifier.fillMaxWidth(),
                     label = "학교이름",
-                    value = uiState.school,
+                    value = school,
                     placeHolderText = "학교이름을 입력해주세요.",
                     onValueChange = onSchoolValueChange,
                     onClick = {
@@ -222,7 +218,7 @@ fun EnterInformationScreen(
                 DepartmentSelectorBottomSheet(
                     departments = uiState.departmentList,
                     sheetState = sheetState,
-                    selectedItemIdx = uiState.departmentList.indexOf(uiState.department),
+                    selectedItemIdx = uiState.departmentList.indexOf(department),
                     onItemClick = { idx ->
                         onDepartmentValueChange(uiState.departmentList[idx])
                         scope.launch { sheetState.hide() }.invokeOnCompletion {
