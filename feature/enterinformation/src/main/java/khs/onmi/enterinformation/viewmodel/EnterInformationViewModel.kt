@@ -1,5 +1,8 @@
 package khs.onmi.enterinformation.viewmodel
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.ViewModel
 import com.onmi.database.UserDao
@@ -26,17 +29,25 @@ class EnterInformationViewModel @Inject constructor(
     private val getSchoolDepartmentsUseCase: GetSchoolDepartmentsUseCase,
     private val userDao: UserDao,
 ) : ContainerHost<EnterInformationState, EnterInformationSideEffect>, ViewModel() {
-    override val container = container<EnterInformationState, EnterInformationSideEffect>(
-        EnterInformationState()
-    )
+    override val container =
+        container<EnterInformationState, EnterInformationSideEffect>(EnterInformationState())
+
+    var school by mutableStateOf("")
+        private set
+    var grade by mutableStateOf("")
+        private set
+    var `class` by mutableStateOf("")
+        private set
+    var department by mutableStateOf("")
+        private set
 
     init {
         searchSchoolByName()
     }
 
-    fun searchSchoolByName() = intent {
+    fun searchSchoolByName(school: String = "") = intent {
         searchSchoolByNameUseCase(
-            searchKeyword = state.school
+            searchKeyword = school
         ).onSuccess {
             reduce {
                 state.copy(schoolList = it.map { school ->
@@ -120,32 +131,24 @@ class EnterInformationViewModel @Inject constructor(
         }
     }
 
-    fun onSchoolValueChange(school: String) = intent {
-        reduce {
-            state.copy(school = school)
-        }
+    fun onSchoolValueChange(school: String) {
+        this.school = school
     }
 
-    fun onGradeValueChange(grade: String) = intent {
+    fun onGradeValueChange(grade: String) {
         if (grade.isDigitsOnly()) {
-            reduce {
-                state.copy(grade = grade)
-            }
+            this.grade = grade
         }
     }
 
-    fun onClassValueChange(`class`: String) = intent {
+    fun onClassValueChange(`class`: String) {
         if (`class`.isDigitsOnly()) {
-            reduce {
-                state.copy(`class` = `class`)
-            }
+            this.`class` = `class`
         }
     }
 
-    fun onDepartmentValueChange(department: String) = intent {
-        reduce {
-            state.copy(department = department)
-        }
+    fun onDepartmentValueChange(department: String) {
+        this.department = department
     }
 
     fun onGreetingValueChange(greetings: Pair<String, String>) = intent {
