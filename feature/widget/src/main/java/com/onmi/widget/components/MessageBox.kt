@@ -12,7 +12,6 @@ import androidx.glance.layout.Alignment
 import androidx.glance.layout.Column
 import androidx.glance.layout.fillMaxSize
 import com.onmi.widget.util.SuitText
-import khs.onmi.root.MainActivity
 
 @Composable
 fun MessageBox(message: String) {
@@ -21,8 +20,8 @@ fun MessageBox(message: String) {
     Column(
         modifier = GlanceModifier
             .fillMaxSize()
-            .background(GlanceTheme.colors.onPrimary)
-            .clickable(actionStartActivity<MainActivity>()),
+            .background(GlanceTheme.colors.onPrimary),
+//            .clickable(actionStartActivity<MainActivity>()),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalAlignment = Alignment.CenterVertically
     ) {

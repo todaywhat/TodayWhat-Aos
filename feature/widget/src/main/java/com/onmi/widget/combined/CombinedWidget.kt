@@ -34,7 +34,6 @@ import androidx.glance.layout.width
 import com.onmi.widget.components.MessageBox
 import com.onmi.widget.theme.ONMIWidgetColorScheme
 import com.onmi.widget.util.SuitText
-import khs.onmi.root.MainActivity
 
 class CombinedWidget : GlanceAppWidget() {
     override val stateDefinition = CombinedStateDefinition
@@ -163,7 +162,8 @@ class CombinedWidget : GlanceAppWidget() {
         Box(
             modifier = GlanceModifier
                 .fillMaxSize()
-                .clickable(actionStartActivity<MainActivity>()),
+//                .clickable(actionStartActivity<MainActivity>()),
+                    ,
             content = {}
         )
     }
