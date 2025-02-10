@@ -1,7 +1,11 @@
 package com.onmi.widget.combined
 
+import android.content.ActivityNotFoundException
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Build
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -11,7 +15,6 @@ import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
 import androidx.glance.GlanceTheme
 import androidx.glance.LocalContext
-import androidx.glance.action.actionStartActivity
 import androidx.glance.action.clickable
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.GlanceAppWidgetReceiver
@@ -34,6 +37,7 @@ import androidx.glance.layout.width
 import com.onmi.widget.components.MessageBox
 import com.onmi.widget.theme.ONMIWidgetColorScheme
 import com.onmi.widget.util.SuitText
+import com.onmi.widget.util.launchApp
 
 class CombinedWidget : GlanceAppWidget() {
     override val stateDefinition = CombinedStateDefinition
@@ -41,6 +45,8 @@ class CombinedWidget : GlanceAppWidget() {
     @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun provideGlance(context: Context, id: GlanceId) {
         provideContent {
+            val context = LocalContext.current
+
             LaunchedEffect(key1 = Unit) {
                 CombinedWorker.enqueue(context)
             }
@@ -132,7 +138,7 @@ class CombinedWidget : GlanceAppWidget() {
                     .defaultWeight()
                     .fillMaxHeight()
                     .cornerRadius(8.dp)
-                    .padding(8.dp)
+                    .padding(8.dp),
             ) {
                 item {
                     Column {
@@ -162,8 +168,7 @@ class CombinedWidget : GlanceAppWidget() {
         Box(
             modifier = GlanceModifier
                 .fillMaxSize()
-//                .clickable(actionStartActivity<MainActivity>()),
-                    ,
+                .clickable { context.launchApp() },
             content = {}
         )
     }
