@@ -1,5 +1,10 @@
 package khs.onmi.setting.screen.addwidget
 
+import android.app.PendingIntent
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.util.Log
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
@@ -17,6 +22,8 @@ import androidx.glance.appwidget.GlanceAppWidgetManager
 import com.onmi.widget.combined.CombinedWidgetReceiver
 import com.onmi.widget.meal.MealWidgetReceiver
 import com.onmi.widget.timetable.TimeTableWidgetReceiver
+import khs.onmi.core.common.android.EventLogger
+import khs.onmi.core.common.android.WidgetFamily
 import khs.onmi.core.designsystem.component.TopNavigationBar
 import khs.onmi.core.designsystem.icon.ArrowBackIcon
 import khs.onmi.core.designsystem.theme.ONMITheme
@@ -85,15 +92,48 @@ fun AddWidgetScreen(
                                 context = context,
                             ).requestPinGlanceAppWidget(
                                 receiver = when (item) {
-                                    Widget.COMBINED -> CombinedWidgetReceiver::class.java
-                                    Widget.SMALL_MEAL -> MealWidgetReceiver::class.java
-                                    Widget.SMALL_TIME_TABLE -> TimeTableWidgetReceiver::class.java
-                                }
+                                    Widget.COMBINED -> {
+                                        EventLogger.clickAddToWidgetType(WidgetFamily.MEAL_AND_TIMETABLE_MEDIUM)
+                                        CombinedWidgetReceiver::class.java
+                                    }
+
+                                    Widget.SMALL_MEAL -> {
+                                        EventLogger.clickAddToWidgetType(WidgetFamily.MEAL_SMALL)
+                                        MealWidgetReceiver::class.java
+                                    }
+
+                                    Widget.SMALL_TIME_TABLE -> {
+                                        EventLogger.clickAddToWidgetType(WidgetFamily.TIMETABLE_SMALL)
+                                        TimeTableWidgetReceiver::class.java
+                                    }
+                                },
+                                successCallback = PendingIntent.getBroadcast(
+                                    context,
+                                    0,
+                                    Intent(context, SuccessLoggerReceiver::class.java).apply {
+                                        putExtra(
+                                            "widget", when (item) {
+                                                Widget.COMBINED -> WidgetFamily.MEAL_AND_TIMETABLE_MEDIUM.value
+                                                Widget.SMALL_MEAL -> WidgetFamily.MEAL_SMALL.value
+                                                Widget.SMALL_TIME_TABLE -> WidgetFamily.TIMETABLE_SMALL.value
+                                            }
+                                        )
+                                    },
+                                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                                )
                             )
                         }
                     }
                 }
             }
         }
+    }
+}
+
+class SuccessLoggerReceiver : BroadcastReceiver() {
+    override fun onReceive(context: Context?, intent: Intent?) {
+        val widget = intent?.getStringExtra("widget") ?: return
+
+        Log.d("WidgetLogger", "위젯 추가 성공! $widget")
     }
 }
