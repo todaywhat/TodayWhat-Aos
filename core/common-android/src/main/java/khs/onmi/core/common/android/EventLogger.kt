@@ -184,8 +184,10 @@ object EventLogger {
     /**
      * 인앱 위젯 추가 화면에서 위젯 하나 클릭 후, ‘홈 화면에 추가’ 버튼을 클릭
      */
-    fun completeAddToWidget() {
-        firebaseAnalytics.logEvent("complete_add_to_widget", null)
+    fun completeAddToWidget(widgetFamily: String) {
+        firebaseAnalytics.logEvent("complete_add_to_widget") {
+            param("widget", widgetFamily)
+        }
     }
 
     /**

@@ -1,10 +1,7 @@
 package khs.onmi.setting.screen.addwidget
 
 import android.app.PendingIntent
-import android.content.BroadcastReceiver
-import android.content.Context
 import android.content.Intent
-import android.util.Log
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
@@ -29,6 +26,7 @@ import khs.onmi.core.designsystem.icon.ArrowBackIcon
 import khs.onmi.core.designsystem.theme.ONMITheme
 import khs.onmi.core.designsystem.utils.WrappedIconButton
 import khs.onmi.setting.component.addwidget.AddWidgetItem
+import khs.onmi.setting.util.WidgetSuccessReceiver
 import kotlinx.coroutines.launch
 import khs.onmi.core.designsystem.R as DR
 
@@ -82,39 +80,42 @@ fun AddWidgetScreen(
                 contentPadding = PaddingValues(vertical = 24.dp)
             ) {
                 itemsIndexed(Widget.entries) { _, item ->
+                    val widgetFamily = when (item) {
+                        Widget.COMBINED -> WidgetFamily.MEAL_AND_TIMETABLE_MEDIUM
+
+                        Widget.SMALL_MEAL -> WidgetFamily.MEAL_SMALL
+
+                        Widget.SMALL_TIME_TABLE -> WidgetFamily.TIMETABLE_SMALL
+                    }
+
                     AddWidgetItem(
                         previewImage = item.previewImage,
                         widgetName = item.widgetName,
                         widgetSize = item.widgetSize,
                     ) {
+                        EventLogger.clickAddToWidgetType(widgetFamily)
                         coroutineScope.launch {
                             GlanceAppWidgetManager(
                                 context = context,
                             ).requestPinGlanceAppWidget(
                                 receiver = when (item) {
-                                    Widget.COMBINED -> {
-                                        EventLogger.clickAddToWidgetType(WidgetFamily.MEAL_AND_TIMETABLE_MEDIUM)
-                                        CombinedWidgetReceiver::class.java
-                                    }
+                                    Widget.COMBINED -> CombinedWidgetReceiver::class.java
 
-                                    Widget.SMALL_MEAL -> {
-                                        EventLogger.clickAddToWidgetType(WidgetFamily.MEAL_SMALL)
-                                        MealWidgetReceiver::class.java
-                                    }
+                                    Widget.SMALL_MEAL -> MealWidgetReceiver::class.java
 
-                                    Widget.SMALL_TIME_TABLE -> {
-                                        EventLogger.clickAddToWidgetType(WidgetFamily.TIMETABLE_SMALL)
-                                        TimeTableWidgetReceiver::class.java
-                                    }
+                                    Widget.SMALL_TIME_TABLE -> TimeTableWidgetReceiver::class.java
                                 },
                                 successCallback = PendingIntent.getBroadcast(
                                     context,
                                     0,
-                                    Intent(context, SuccessLoggerReceiver::class.java).apply {
+                                    Intent(context, WidgetSuccessReceiver::class.java).apply {
                                         putExtra(
-                                            "widget", when (item) {
+                                            "widgetFamily",
+                                            when (item) {
                                                 Widget.COMBINED -> WidgetFamily.MEAL_AND_TIMETABLE_MEDIUM.value
+
                                                 Widget.SMALL_MEAL -> WidgetFamily.MEAL_SMALL.value
+
                                                 Widget.SMALL_TIME_TABLE -> WidgetFamily.TIMETABLE_SMALL.value
                                             }
                                         )
@@ -127,13 +128,5 @@ fun AddWidgetScreen(
                 }
             }
         }
-    }
-}
-
-class SuccessLoggerReceiver : BroadcastReceiver() {
-    override fun onReceive(context: Context?, intent: Intent?) {
-        val widget = intent?.getStringExtra("widget") ?: return
-
-        Log.d("WidgetLogger", "위젯 추가 성공! $widget")
     }
 }

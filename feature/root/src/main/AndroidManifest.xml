@@ -24,6 +24,8 @@
                     android:scheme="onmi" />
             </intent-filter>
         </activity>
+
+        <receiver android:name="khs.onmi.setting.util.WidgetSuccessReceiver" />
     </application>
 
 </manifest>
