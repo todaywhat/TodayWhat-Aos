@@ -20,7 +20,7 @@ import com.onmi.widget.combined.CombinedWidgetReceiver
 import com.onmi.widget.meal.MealWidgetReceiver
 import com.onmi.widget.timetable.TimeTableWidgetReceiver
 import khs.onmi.core.common.android.EventLogger
-import khs.onmi.core.common.android.WidgetFamily
+import khs.onmi.core.common.android.WidgetType
 import khs.onmi.core.designsystem.component.TopNavigationBar
 import khs.onmi.core.designsystem.icon.ArrowBackIcon
 import khs.onmi.core.designsystem.theme.ONMITheme
@@ -80,12 +80,12 @@ fun AddWidgetScreen(
                 contentPadding = PaddingValues(vertical = 24.dp)
             ) {
                 itemsIndexed(Widget.entries) { _, item ->
-                    val widgetFamily = when (item) {
-                        Widget.COMBINED -> WidgetFamily.MEAL_AND_TIMETABLE_MEDIUM
+                    val widgetType = when (item) {
+                        Widget.COMBINED -> WidgetType.MEAL_AND_TIMETABLE_MEDIUM
 
-                        Widget.SMALL_MEAL -> WidgetFamily.MEAL_SMALL
+                        Widget.SMALL_MEAL -> WidgetType.MEAL_SMALL
 
-                        Widget.SMALL_TIME_TABLE -> WidgetFamily.TIMETABLE_SMALL
+                        Widget.SMALL_TIME_TABLE -> WidgetType.TIMETABLE_SMALL
                     }
 
                     AddWidgetItem(
@@ -93,7 +93,7 @@ fun AddWidgetScreen(
                         widgetName = item.widgetName,
                         widgetSize = item.widgetSize,
                     ) {
-                        EventLogger.clickAddToWidgetType(widgetFamily)
+                        EventLogger.clickAddToWidgetType(widgetType)
                         coroutineScope.launch {
                             GlanceAppWidgetManager(
                                 context = context,
@@ -110,13 +110,13 @@ fun AddWidgetScreen(
                                     0,
                                     Intent(context, WidgetSuccessReceiver::class.java).apply {
                                         putExtra(
-                                            "widgetFamily",
+                                            "widgetType",
                                             when (item) {
-                                                Widget.COMBINED -> WidgetFamily.MEAL_AND_TIMETABLE_MEDIUM.value
+                                                Widget.COMBINED -> WidgetType.MEAL_AND_TIMETABLE_MEDIUM.value
 
-                                                Widget.SMALL_MEAL -> WidgetFamily.MEAL_SMALL.value
+                                                Widget.SMALL_MEAL -> WidgetType.MEAL_SMALL.value
 
-                                                Widget.SMALL_TIME_TABLE -> WidgetFamily.TIMETABLE_SMALL.value
+                                                Widget.SMALL_TIME_TABLE -> WidgetType.TIMETABLE_SMALL.value
                                             }
                                         )
                                     },

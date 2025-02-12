@@ -7,8 +7,8 @@ import khs.onmi.core.common.android.EventLogger
 
 class WidgetSuccessReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
-        val widgetFamily = intent?.getStringExtra("widgetFamily") ?: return
+        val widgetType = intent?.getStringExtra("widgetType") ?: return
 
-        EventLogger.completeAddToWidget(widgetFamily)
+        EventLogger.completeAddToWidget(widgetType)
     }
 }

@@ -63,7 +63,7 @@ enum class Allergy(val value: String) {
     SHELLFISH("조개류");
 }
 
-enum class WidgetFamily(val value: String) {
+enum class WidgetType(val value: String) {
     MEAL_SMALL("meal_small"),
     MEAL_MEDIUM("meal_medium"),
     MEAL_LARGE("meal_large"),
@@ -71,12 +71,6 @@ enum class WidgetFamily(val value: String) {
     TIMETABLE_MEDIUM("timetable_medium"),
     TIMETABLE_LARGE("timetable_large"),
     MEAL_AND_TIMETABLE_MEDIUM("meal_and_timetable_medium"),
-}
-
-enum class WidgetKind(val value: String) {
-    MEAL("TodayWhatMealWidget"),
-    TIMETABLE("TodayWhatTimeWidget"),
-    MEAL_TIMETABLE("TodayWhatMealTimetableWidget"),
 }
 
 object EventLogger {
@@ -184,16 +178,16 @@ object EventLogger {
     /**
      * 인앱 위젯 추가 화면에서 위젯 하나 클릭 후, ‘홈 화면에 추가’ 버튼을 클릭
      */
-    fun completeAddToWidget(widgetFamily: String) {
+    fun completeAddToWidget(widgetType: String) {
         firebaseAnalytics.logEvent("complete_add_to_widget") {
-            param("widget", widgetFamily)
+            param("widget", widgetType)
         }
     }
 
     /**
      * 인앱 위젯 추가 화면에서 위젯 하나를 눌렀을 때
      */
-    fun clickAddToWidgetType(widget: WidgetFamily) {
+    fun clickAddToWidgetType(widget: WidgetType) {
         firebaseAnalytics.logEvent("click_add_to_widget_type") {
             param("widget", widget.value)
         }
