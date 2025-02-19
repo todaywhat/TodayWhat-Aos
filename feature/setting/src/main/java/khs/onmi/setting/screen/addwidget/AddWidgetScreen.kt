@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.glance.appwidget.GlanceAppWidgetManager
+import androidx.glance.appwidget.GlanceAppWidgetReceiver
 import com.onmi.widget.combined.CombinedWidgetReceiver
 import com.onmi.widget.meal.MealWidgetReceiver
 import com.onmi.widget.timetable.TimeTableWidgetReceiver
@@ -34,21 +35,29 @@ enum class Widget(
     @DrawableRes val previewImage: Int,
     val widgetName: String,
     val widgetSize: String,
+    val widgetType: WidgetType,
+    val widgetReceiverClass: Class<out GlanceAppWidgetReceiver>,
 ) {
     COMBINED(
         previewImage = DR.drawable.combined_widget_preview,
         widgetName = "급식&시간표",
         widgetSize = "4 x 2",
+        widgetType = WidgetType.MEAL_AND_TIMETABLE_MEDIUM,
+        widgetReceiverClass = CombinedWidgetReceiver::class.java
     ),
     SMALL_MEAL(
         previewImage = DR.drawable.small_meal_widget_preview,
         widgetName = "급식",
         widgetSize = "2 x 2",
+        widgetType = WidgetType.MEAL_SMALL,
+        widgetReceiverClass = MealWidgetReceiver::class.java
     ),
     SMALL_TIME_TABLE(
         previewImage = DR.drawable.small_time_table_widget_preview,
         widgetName = "시간표",
         widgetSize = "2 x 2",
+        widgetType = WidgetType.TIMETABLE_SMALL,
+        widgetReceiverClass = TimeTableWidgetReceiver::class.java
     ),
 }
 
@@ -80,45 +89,22 @@ fun AddWidgetScreen(
                 contentPadding = PaddingValues(vertical = 24.dp)
             ) {
                 itemsIndexed(Widget.entries) { _, item ->
-                    val widgetType = when (item) {
-                        Widget.COMBINED -> WidgetType.MEAL_AND_TIMETABLE_MEDIUM
-
-                        Widget.SMALL_MEAL -> WidgetType.MEAL_SMALL
-
-                        Widget.SMALL_TIME_TABLE -> WidgetType.TIMETABLE_SMALL
-                    }
-
                     AddWidgetItem(
                         previewImage = item.previewImage,
                         widgetName = item.widgetName,
                         widgetSize = item.widgetSize,
                     ) {
-                        EventLogger.clickAddToWidgetType(widgetType)
+                        EventLogger.clickAddToWidgetType(item.widgetType)
                         coroutineScope.launch {
                             GlanceAppWidgetManager(
                                 context = context,
                             ).requestPinGlanceAppWidget(
-                                receiver = when (item) {
-                                    Widget.COMBINED -> CombinedWidgetReceiver::class.java
-
-                                    Widget.SMALL_MEAL -> MealWidgetReceiver::class.java
-
-                                    Widget.SMALL_TIME_TABLE -> TimeTableWidgetReceiver::class.java
-                                },
+                                receiver = item.widgetReceiverClass,
                                 successCallback = PendingIntent.getBroadcast(
                                     context,
                                     0,
                                     Intent(context, WidgetSuccessReceiver::class.java).apply {
-                                        putExtra(
-                                            "widgetType",
-                                            when (item) {
-                                                Widget.COMBINED -> WidgetType.MEAL_AND_TIMETABLE_MEDIUM.value
-
-                                                Widget.SMALL_MEAL -> WidgetType.MEAL_SMALL.value
-
-                                                Widget.SMALL_TIME_TABLE -> WidgetType.TIMETABLE_SMALL.value
-                                            }
-                                        )
+                                        putExtra("widgetType", item.widgetType.value)
                                     },
                                     PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
                                 )
