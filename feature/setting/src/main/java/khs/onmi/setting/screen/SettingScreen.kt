@@ -102,12 +102,12 @@ fun SettingScreen(
                 RoundedWhiteBox {
                     SettingListComponent(
                         items = listOf(
-                            SettingItemsData(
-                                trailing = { RightArrowIcon(tint = color.UnselectedPrimary) },
-                                text = "위젯 추가",
-                                leading = { WidgetAddIcon(tint = color.Black) },
-                                onClick = onAddWidgetClick
-                            ),
+//                            SettingItemsData(
+//                                trailing = { RightArrowIcon(tint = color.UnselectedPrimary) },
+//                                text = "위젯 추가",
+//                                leading = { WidgetAddIcon(tint = color.Black) },
+//                                onClick = onAddWidgetClick
+//                            ),
                             SettingItemsData(
                                 trailing = { RightArrowIcon(tint = color.UnselectedPrimary) },
                                 text = "이용 약관",
