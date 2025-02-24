@@ -24,6 +24,7 @@ import khs.onmi.core.designsystem.icon.PaperIcon
 import khs.onmi.core.designsystem.icon.RiceIcon
 import khs.onmi.core.designsystem.icon.RightArrowIcon
 import khs.onmi.core.designsystem.icon.SchoolIcon
+import khs.onmi.core.designsystem.icon.WidgetAddIcon
 import khs.onmi.core.designsystem.theme.ONMITheme
 import khs.onmi.core.designsystem.utils.WrappedIconButton
 import khs.onmi.setting.component.RoundedWhiteBox
@@ -38,6 +39,7 @@ fun SettingScreen(
     uiState: SettingState,
     onBackPressed: () -> Unit,
     onEnterInformationClick: () -> Unit,
+    onAddWidgetClick: () -> Unit,
     onSkipWeekendToggleValueChanged: (value: Boolean) -> Unit,
     onShowNextDayInfoAfterDinnerValueChanged: (value: Boolean) -> Unit,
 ) {
@@ -100,6 +102,12 @@ fun SettingScreen(
                 RoundedWhiteBox {
                     SettingListComponent(
                         items = listOf(
+//                            SettingItemsData(
+//                                trailing = { RightArrowIcon(tint = color.UnselectedPrimary) },
+//                                text = "위젯 추가",
+//                                leading = { WidgetAddIcon(tint = color.Black) },
+//                                onClick = onAddWidgetClick
+//                            ),
                             SettingItemsData(
                                 trailing = { RightArrowIcon(tint = color.UnselectedPrimary) },
                                 text = "이용 약관",

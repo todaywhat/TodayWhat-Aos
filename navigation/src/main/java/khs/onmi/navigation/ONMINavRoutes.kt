@@ -14,5 +14,6 @@ object ONMINavRoutes {
     const val SETTING = "setting"
     object Setting {
         const val MAIN = "setting-main"
+        const val ADD_WIDGET = "setting-add-widget"
     }
 }

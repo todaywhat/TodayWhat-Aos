@@ -193,6 +193,19 @@ fun PaperIcon(
     )
 }
 
+@Composable
+fun WidgetAddIcon(
+    tint: Color,
+    modifier: Modifier = Modifier,
+) {
+    Icon(
+        painter = painterResource(id = R.drawable.ic_widget_add),
+        contentDescription = "Widget Add Icon",
+        tint = tint,
+        modifier = modifier
+    )
+}
+
 @Preview
 @Composable
 fun IconsPre() {
@@ -212,6 +225,7 @@ fun IconsPre() {
             XMarkCircleFillIcon(tint = color.TextPrimary)
             ArrowBackIcon(tint = color.TextPrimary)
             PaperIcon(tint = color.TextPrimary)
+            WidgetAddIcon(tint = color.TextPrimary)
         }
     }
 }
