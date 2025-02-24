@@ -63,19 +63,14 @@ enum class Allergy(val value: String) {
     SHELLFISH("조개류");
 }
 
-enum class WidgetFamily(val value: String) {
-    SYSTEM_SMALL("systemSmall"),
-    SYSTEM_MEDIUM("systemMedium"),
-    SYSTEM_LARGE("systemLarge"),
-    SYSTEM_EXTRA_LARGE("systemExtraLarge"),
-    ACCESSORY_CIRCULAR("accessoryCircular"),
-    ACCESSORY_RECTANGULAR("accessoryRectangular"),
-}
-
-enum class WidgetKind(val value: String) {
-    MEAL("TodayWhatMealWidget"),
-    TIMETABLE("TodayWhatTimeWidget"),
-    MEAL_TIMETABLE("TodayWhatMealTimetableWidget"),
+enum class WidgetType(val value: String) {
+    MEAL_SMALL("meal_small"),
+    MEAL_MEDIUM("meal_medium"),
+    MEAL_LARGE("meal_large"),
+    TIMETABLE_SMALL("timetable_small"),
+    TIMETABLE_MEDIUM("timetable_medium"),
+    TIMETABLE_LARGE("timetable_large"),
+    MEAL_AND_TIMETABLE_MEDIUM("meal_and_timetable_medium"),
 }
 
 object EventLogger {
@@ -105,13 +100,6 @@ object EventLogger {
     fun clickIsSkipWeekendToggle(isSkipWeekend: Boolean) {
         firebaseAnalytics.logEvent("click_is_skip_weekend_toggle") {
             param("is_skip_weekend", isSkipWeekend.toString())
-        }
-    }
-
-    fun widgetConfiguration(family: WidgetFamily, kind: WidgetKind) {
-        firebaseAnalytics.logEvent("widget_configuration") {
-            param("family", family.value)
-            param("kind", kind.value)
         }
     }
 
@@ -185,5 +173,30 @@ object EventLogger {
         firebaseAnalytics.logEvent("complete_setting_allergy") {
             param("allergies", allergies.joinToString { it.value })
         }
+    }
+
+    /**
+     * 인앱 위젯 추가 화면에서 위젯 하나 클릭 후, ‘홈 화면에 추가’ 버튼을 클릭
+     */
+    fun completeAddToWidget(widgetType: String) {
+        firebaseAnalytics.logEvent("complete_add_to_widget") {
+            param("widget", widgetType)
+        }
+    }
+
+    /**
+     * 인앱 위젯 추가 화면에서 위젯 하나를 눌렀을 때
+     */
+    fun clickAddToWidgetType(widget: WidgetType) {
+        firebaseAnalytics.logEvent("click_add_to_widget_type") {
+            param("widget", widget.value)
+        }
+    }
+
+    /**
+     * 설정화면에서 위젯 추가 버튼을 클릭함
+     */
+    fun clickAddToWidget() {
+        firebaseAnalytics.logEvent("click_add_to_widget", null)
     }
 }
