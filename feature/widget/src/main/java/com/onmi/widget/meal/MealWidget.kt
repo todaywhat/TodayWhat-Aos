@@ -29,7 +29,7 @@ import androidx.glance.layout.padding
 import com.onmi.widget.components.MessageBox
 import com.onmi.widget.theme.ONMIWidgetColorScheme
 import com.onmi.widget.util.SuitText
-import khs.onmi.root.MainActivity
+import com.onmi.widget.util.launchApp
 
 class MealWidget : GlanceAppWidget() {
     override val stateDefinition = MealInfoStateDefinition
@@ -102,7 +102,7 @@ class MealWidget : GlanceAppWidget() {
         Box(
             modifier = GlanceModifier
                 .fillMaxSize()
-                .clickable(actionStartActivity<MainActivity>()),
+                .clickable { context.launchApp() },
             content = {}
         )
     }

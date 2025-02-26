@@ -17,7 +17,6 @@ android {
 }
 
 dependencies {
-    implementation(project(":feature:root"))
     implementation(project(":core:designsystem"))
     implementation(project(":core:common-android"))
     implementation(project(":domain"))
