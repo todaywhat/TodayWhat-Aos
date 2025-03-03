@@ -117,6 +117,7 @@ fun MainScreen(
                     )
 
                     1 -> TimeTableSection(
+                        state = TimeTableSection.Success,
                         timeTableList = uiState.timetable
                     )
                 }

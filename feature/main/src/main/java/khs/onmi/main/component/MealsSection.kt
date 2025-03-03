@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
@@ -107,6 +106,33 @@ fun MealsSectionItem(
 }
 
 @Composable
+fun MealsSectionEmptyItem(onClick: () -> Unit) {
+    ONMITheme { color, typography ->
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "급식 정보가 없습니다.",
+                style = typography.Body1,
+                color = color.TextSecondary,
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            ONMIButton(
+                isEnabled = true,
+                text = "문의하기",
+                colors = ButtonDefaults.buttonColors(
+                    contentColor = color.Black,
+                    containerColor = color.White,
+                ),
+                onClick = onClick
+            )
+        }
+    }
+}
+
+@Composable
 fun MealsSectionErrorItem(onClick: () -> Unit) {
     ONMITheme { color, typography ->
         Column(
@@ -142,34 +168,6 @@ fun MealsSectionErrorItem(onClick: () -> Unit) {
         }
     }
 }
-
-@Composable
-fun MealsSectionEmptyItem(onClick: () -> Unit) {
-    ONMITheme { color, typography ->
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(
-                text = "급식 정보가 없습니다.",
-                style = typography.Body1,
-                color = color.TextSecondary,
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            ONMIButton(
-                isEnabled = true,
-                text = "문의하기",
-                colors = ButtonDefaults.buttonColors(
-                    contentColor = color.Black,
-                    containerColor = color.White,
-                ),
-                onClick = onClick
-            )
-        }
-    }
-}
-
 
 @Preview
 @Composable
