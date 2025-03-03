@@ -12,7 +12,7 @@ import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
-import com.onmi.domain.usecase.timetable.GetTodayTimeTableUseCase
+import com.onmi.domain.usecase.timetable.GetTimeTableUseCase
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import java.time.Duration
@@ -21,7 +21,7 @@ import java.time.Duration
 class TimeTableWorker @AssistedInject constructor(
     @Assisted private val context: Context,
     @Assisted workParams: WorkerParameters,
-    private var getTimeTableUseCase: GetTodayTimeTableUseCase,
+    private var getTimeTableUseCase: GetTimeTableUseCase,
 ) : CoroutineWorker(context, workParams) {
     companion object {
         private val uniqueWorkName = TimeTableWorker::class.java.simpleName

@@ -4,13 +4,12 @@ import com.onmi.database.UserDao
 import com.onmi.domain.repository.TimeTableRepository
 import com.onmi.domain.util.DateUtils
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import javax.inject.Inject
 
-class GetTodayTimeTableUseCase @Inject constructor(
+class GetTimeTableUseCase @Inject constructor(
     private val repository: TimeTableRepository,
     private val userDao: UserDao,
 ) {

@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.onmi.database.UserDao
 import com.onmi.domain.usecase.meal.GetMealsUseCase
-import com.onmi.domain.usecase.timetable.GetTodayTimeTableUseCase
+import com.onmi.domain.usecase.timetable.GetTimeTableUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import khs.onmi.main.viewmodel.container.MainSideEffect
 import khs.onmi.main.viewmodel.container.MainState
@@ -19,7 +19,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val getTodayTimeTableUseCase: GetTodayTimeTableUseCase,
+    private val getTimeTableUseCase: GetTimeTableUseCase,
     private val getMealsUseCase: GetMealsUseCase,
     private val onmiDao: UserDao,
 ) : ContainerHost<MainState, MainSideEffect>, ViewModel() {
@@ -55,7 +55,7 @@ class MainViewModel @Inject constructor(
 
     private fun getTodayTimeTable() = intent {
         viewModelScope.launch {
-            getTodayTimeTableUseCase()
+            getTimeTableUseCase()
                 .onSuccess { response ->
                     reduce {
                         state.copy(timetable = response)
