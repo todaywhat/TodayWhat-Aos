@@ -1,14 +1,17 @@
-package khs.onmi.aos.modules
+package com.onmi.data.network
 
 import android.content.ContentValues
 import android.util.Log
+import com.onmi.data.dto.CommonErrorResponse
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import io.ktor.client.HttpClient
+import io.ktor.client.call.body
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.DefaultRequest
+import io.ktor.client.plugins.HttpResponseValidator
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
@@ -55,6 +58,14 @@ object KtorClient {
                     parameters["KEY"] = "89dd382b78b3410cbe49dd8f448fef87"
                 }
                 header(HttpHeaders.Accept, "*/*")
+            }
+
+            HttpResponseValidator {
+                validateResponse { response ->
+                    if (response.status.value !in 200..299) {
+                        throw response.body<CommonErrorResponse>()
+                    }
+                }
             }
         }
         return client
