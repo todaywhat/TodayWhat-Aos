@@ -2,8 +2,6 @@ package com.onmi.data.network
 
 import android.content.ContentValues
 import android.util.Log
-import com.onmi.domain.exception.NeisException
-import com.onmi.domain.exception.NeisResult
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -11,19 +9,15 @@ import dagger.hilt.components.SingletonComponent
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.DefaultRequest
-import io.ktor.client.plugins.HttpResponseValidator
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.request.header
-import io.ktor.client.statement.bodyAsText
 import io.ktor.http.HttpHeaders
 import io.ktor.http.URLProtocol
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.jsonObject
-import kotlinx.serialization.json.jsonPrimitive
 import javax.inject.Singleton
 
 @Module
@@ -49,6 +43,7 @@ object KtorClient {
                         prettyPrint = true
                         isLenient = true
                         ignoreUnknownKeys = true
+                        encodeDefaults = true
                     }
                 )
             }
@@ -61,21 +56,6 @@ object KtorClient {
                     parameters["KEY"] = "89dd382b78b3410cbe49dd8f448fef87"
                 }
                 header(HttpHeaders.Accept, "*/*")
-            }
-
-            HttpResponseValidator {
-                validateResponse { response ->
-                    runCatching {
-                        val bodyText = response.bodyAsText()
-                        val jsonElement = Json.parseToJsonElement(bodyText)
-                        jsonElement.jsonObject["RESULT"]
-                    }.onSuccess { resultElement ->
-                        if (resultElement != null) {
-                            val code = resultElement.jsonObject["CODE"]?.jsonPrimitive?.content ?: ""
-                            throw NeisException(NeisResult.find(code))
-                        }
-                    }
-                }
             }
         }
         return client
