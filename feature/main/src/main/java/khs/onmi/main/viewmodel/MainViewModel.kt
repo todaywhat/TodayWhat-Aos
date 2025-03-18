@@ -1,9 +1,14 @@
 package khs.onmi.main.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.onmi.database.UserDao
+import com.onmi.domain.exception.NeisException
+import com.onmi.domain.exception.NeisResult
 import com.onmi.domain.usecase.meal.GetMealsUseCase
+import com.onmi.domain.usecase.timetable.GetTimeTableException
+import com.onmi.domain.usecase.timetable.GetTimeTableState
 import com.onmi.domain.usecase.timetable.GetTimeTableUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import khs.onmi.main.viewmodel.container.MainSideEffect
@@ -55,18 +60,24 @@ class MainViewModel @Inject constructor(
 
     private fun getTodayTimeTable() = intent {
         viewModelScope.launch {
-            getTimeTableUseCase()
-                .onSuccess { response ->
+            when (val response = getTimeTableUseCase()) {
+                is GetTimeTableState.Success -> {
                     reduce {
-                        state.copy(timetable = response)
-                    }
-                }.onFailure {
-                    postSideEffect(
-                        MainSideEffect.ShowToast(
-                            message = it.message ?: "알 수 없는 에러가 발생했습니다."
+                        state.copy(
+                            timetable = response.response
                         )
-                    )
+                    }
                 }
+
+                is GetTimeTableState.Failure -> {
+                    when(response.exception) {
+                        GetTimeTableException.DataEmpty -> TODO()
+                        GetTimeTableException.InternetDisconnected -> TODO()
+                        GetTimeTableException.TemporaryTimeTable -> TODO()
+                        is GetTimeTableException.Unknown -> TODO()
+                    }
+                }
+            }
         }
     }
 
@@ -82,12 +93,8 @@ class MainViewModel @Inject constructor(
                             dinner = response.second.dinner
                         )
                     }
-                }.onFailure {
-                    postSideEffect(
-                        MainSideEffect.ShowToast(
-                            message = it.message ?: "알 수 없는 에러가 발생했습니다."
-                        )
-                    )
+                }.onFailure { exception ->
+
                 }
         }
     }

@@ -57,8 +57,7 @@ class GetTimeTableUseCase @Inject constructor(
                 val error = when (exception) {
                     is NeisException -> when (exception.result) {
                         NeisResult.DATA_NOT_FOUND -> {
-                            // TODO: 3월임을 구분하는 로직 추가
-                            if (true) GetTimeTableException.TemporaryTimeTable
+                            if (DateUtils.isMarch()) GetTimeTableException.TemporaryTimeTable
                             else GetTimeTableException.DataEmpty
                         }
 

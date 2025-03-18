@@ -13,6 +13,7 @@ import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import com.onmi.domain.usecase.meal.GetMealsUseCase
+import com.onmi.domain.usecase.timetable.GetTimeTableState
 import com.onmi.domain.usecase.timetable.GetTimeTableUseCase
 import com.onmi.widget.util.MealInfoState
 import com.onmi.widget.util.WidgetDataDisplayManager
@@ -47,7 +48,9 @@ class CombinedWorker @AssistedInject constructor(
 
     @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun doWork(): Result {
-        val todayTimeTable = getTimeTableUseCase().getOrElse {
+        val todayTimeTable = getTimeTableUseCase()
+
+        if (todayTimeTable is GetTimeTableState.Failure) {
             setWidgetState(CombinedInfo.Unavailable)
             return Result.success()
         }
@@ -63,7 +66,7 @@ class CombinedWorker @AssistedInject constructor(
                 CombinedInfo.Available(
                     mealTime = mealsInfo.mealTime,
                     mealList = mealsInfo.mealList,
-                    subjectList = todayTimeTable
+                    subjectList = (todayTimeTable as GetTimeTableState.Success).response
                 )
             } else CombinedInfo.Unavailable
         )

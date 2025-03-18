@@ -12,6 +12,7 @@ import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
+import com.onmi.domain.usecase.timetable.GetTimeTableState
 import com.onmi.domain.usecase.timetable.GetTimeTableUseCase
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
@@ -45,12 +46,13 @@ class TimeTableWorker @AssistedInject constructor(
         return try {
             setWidgetState(TimeTableInfo.Loading)
             val request = getTimeTableUseCase()
-                .onSuccess {
-                    setWidgetState(TimeTableInfo.Available(it))
-                }.onFailure {
-                    setWidgetState(TimeTableInfo.Unavailable)
-                }
-            if (request.isSuccess) Result.success() else Result.failure()
+
+            when (request) {
+                is GetTimeTableState.Failure -> setWidgetState(TimeTableInfo.Unavailable)
+                is GetTimeTableState.Success -> setWidgetState(TimeTableInfo.Available(request.response))
+            }
+
+            if (request is GetTimeTableState.Success) Result.success() else Result.failure()
         } catch (e: Exception) {
             setWidgetState(TimeTableInfo.Unavailable)
             Result.failure()
