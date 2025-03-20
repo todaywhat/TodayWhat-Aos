@@ -17,31 +17,31 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.onmi.domain.usecase.timetable.GetTimeTableException
+import com.onmi.domain.usecase.timetable.TimeTableState
 import khs.onmi.core.designsystem.component.ONMIButton
 import khs.onmi.core.designsystem.component.TimeTableItem
 import khs.onmi.core.designsystem.theme.ONMITheme
 
-// todo State 수정 필요
-sealed interface TimeTableSection {
-    data object Success : TimeTableSection
-    data object Failure : TimeTableSection
-    data object Empty : TimeTableSection
-}
-
 @Composable
 fun TimeTableSection(
-    state: TimeTableSection,
-    timeTableList: List<String>
+    timeTableState: TimeTableState,
+    onReloadClick: () -> Unit,
 ) {
-    when(state) {
-        TimeTableSection.Success -> {
-            TimeTableSectionItem(timeTableList = timeTableList)
+    when (timeTableState) {
+        is TimeTableState.Success -> {
+            TimeTableSectionItem(timeTableList = timeTableState.response)
         }
-        TimeTableSection.Empty -> {
-            TimeTableSectionEmptyItem {  }
+
+        is TimeTableState.Failure -> {
+            TimeTableSectionErrorItem(
+                timeTableException = timeTableState.exception,
+                onReloadClick = onReloadClick
+            )
         }
-        TimeTableSection.Failure -> {
-            TimeTableSectionErrorItem {  }
+
+        TimeTableState.Loading -> {
+            // TODO("로딩바 추가")
         }
     }
 }
@@ -68,71 +68,71 @@ fun TimeTableSectionItem(timeTableList: List<String>) {
 }
 
 @Composable
-fun TimeTableSectionEmptyItem(onClick: () -> Unit) {
+fun TimeTableSectionErrorItem(
+    timeTableException: GetTimeTableException,
+    onReloadClick: () -> Unit,
+) {
     ONMITheme { color, typography ->
         Column(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(
-                text = "시간표 정보가 없습니다.",
-                style = typography.Body1,
-                color = color.TextSecondary,
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            ONMIButton(
-                isEnabled = true,
-                text = "문의하기",
-                colors = ButtonDefaults.buttonColors(
-                    contentColor = color.Black,
-                    containerColor = color.White,
-                ),
-                onClick = onClick
-            )
-        }
-    }
-}
+            when (timeTableException) {
+                GetTimeTableException.DataEmpty -> {
+                    Text(
+                        text = "시간표 정보가 없습니다.",
+                        style = typography.Body1,
+                        color = color.TextSecondary,
+                    )
+                    /*TODO("문의하기 기능 추가 후 버튼 활성화")
+                    Spacer(modifier = Modifier.height(16.dp))
+                    ONMIButton(
+                        isEnabled = true,
+                        text = "문의하기",
+                        colors = ButtonDefaults.buttonColors(
+                            contentColor = color.Black,
+                            containerColor = color.White,
+                        ),
+                        onClick = onReloadClick
+                    )*/
+                }
 
-@Composable
-fun TimeTableSectionErrorItem(onClick: () -> Unit) {
-    ONMITheme { color, typography ->
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            // todo 에러 정의 후 수정 필요
-            if (false) {
-                Text(
-                    text = "인터넷이 연결되지 않았습니다.\n와이파이 혹은 데이터를 연결 해주세요.",
-                    style = typography.Body1,
-                    color = color.TextSecondary,
-                    textAlign = TextAlign.Center
-                )
-// todo 별도 에러케이스로 분리
-//                Text(
-//                    text = "3월에는 학교의 임시 시간표 사용으로\n정보가 표시되지 않을 수 있습니다.",
-//                    style = typography.Body1,
-//                    color = color.TextSecondary,
-//                    textAlign = TextAlign.Center
-//                )
-            } else {
-                Text(
-                    text = "시간표 정보를 불러오지 못했습니다.",
-                    style = typography.Body1,
-                    color = color.TextSecondary,
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-                ONMIButton(
-                    isEnabled = true,
-                    text = "다시 불러오기",
-                    colors = ButtonDefaults.buttonColors(
-                        contentColor = color.Black,
-                        containerColor = color.White,
-                    ),
-                    onClick = onClick
-                )
+                GetTimeTableException.InternetDisconnected -> {
+                    Text(
+                        text = "인터넷이 연결되지 않았습니다.\n와이파이 혹은 데이터를 연결 해주세요.",
+                        style = typography.Body1,
+                        color = color.TextSecondary,
+                        textAlign = TextAlign.Center
+                    )
+                }
+
+                GetTimeTableException.TemporaryTimeTable -> {
+                    Text(
+                        text = "3월에는 학교의 임시 시간표 사용으로\n정보가 표시되지 않을 수 있습니다.",
+                        style = typography.Body1,
+                        color = color.TextSecondary,
+                        textAlign = TextAlign.Center
+                    )
+                }
+
+                is GetTimeTableException.Unknown -> {
+                    Text(
+                        text = "시간표 정보를 불러오지 못했습니다.",
+                        style = typography.Body1,
+                        color = color.TextSecondary,
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                    ONMIButton(
+                        isEnabled = true,
+                        text = "다시 불러오기",
+                        colors = ButtonDefaults.buttonColors(
+                            contentColor = color.White,
+                            containerColor = color.Black,
+                        ),
+                        onClick = onReloadClick
+                    )
+                }
             }
         }
     }
@@ -143,7 +143,9 @@ fun TimeTableSectionErrorItem(onClick: () -> Unit) {
 fun TimeTableSectionPre() {
     val timeTableList = listOf("국어", "영어", "수학", "사회", "과학", "기술가정", "역사", "한문")
     TimeTableSection(
-        state = TimeTableSection.Success,
-        timeTableList = timeTableList
+        timeTableState = TimeTableState.Success(
+            response = timeTableList
+        ),
+        onReloadClick = {}
     )
 }

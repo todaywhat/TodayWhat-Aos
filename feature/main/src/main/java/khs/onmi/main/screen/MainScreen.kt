@@ -39,6 +39,7 @@ import khs.onmi.navigation.ONMINavRoutes
 fun MainScreen(
     uiState: MainState,
     navigate: (route: String) -> Unit,
+    reloadTimeTable: () -> Unit,
 ) {
     val pagerState = rememberPagerState()
     var dragStartPage by remember { mutableStateOf(pagerState.currentPage) }
@@ -117,8 +118,8 @@ fun MainScreen(
                     )
 
                     1 -> TimeTableSection(
-                        state = TimeTableSection.Success,
-                        timeTableList = uiState.timetable
+                        timeTableState = uiState.timeTableState,
+                        onReloadClick = reloadTimeTable
                     )
                 }
             }

@@ -1,15 +1,11 @@
 package khs.onmi.main.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.onmi.database.UserDao
-import com.onmi.domain.exception.NeisException
-import com.onmi.domain.exception.NeisResult
 import com.onmi.domain.usecase.meal.GetMealsUseCase
-import com.onmi.domain.usecase.timetable.GetTimeTableException
-import com.onmi.domain.usecase.timetable.GetTimeTableState
 import com.onmi.domain.usecase.timetable.GetTimeTableUseCase
+import com.onmi.domain.usecase.timetable.TimeTableState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import khs.onmi.main.viewmodel.container.MainSideEffect
 import khs.onmi.main.viewmodel.container.MainState
@@ -58,25 +54,16 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    private fun getTodayTimeTable() = intent {
-        viewModelScope.launch {
-            when (val response = getTimeTableUseCase()) {
-                is GetTimeTableState.Success -> {
-                    reduce {
-                        state.copy(
-                            timetable = response.response
-                        )
-                    }
-                }
+    fun getTodayTimeTable() = intent {
+        reduce {
+            state.copy(timeTableState = TimeTableState.Loading)
+        }
 
-                is GetTimeTableState.Failure -> {
-                    when(response.exception) {
-                        GetTimeTableException.DataEmpty -> TODO()
-                        GetTimeTableException.InternetDisconnected -> TODO()
-                        GetTimeTableException.TemporaryTimeTable -> TODO()
-                        is GetTimeTableException.Unknown -> TODO()
-                    }
-                }
+        viewModelScope.launch {
+            val response = getTimeTableUseCase()
+
+            reduce {
+                state.copy(timeTableState = response)
             }
         }
     }
