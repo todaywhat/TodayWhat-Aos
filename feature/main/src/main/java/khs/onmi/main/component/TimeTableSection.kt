@@ -17,7 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.onmi.domain.usecase.timetable.GetTimeTableException
+import com.onmi.domain.usecase.timetable.TimeTableException
 import com.onmi.domain.usecase.timetable.TimeTableState
 import khs.onmi.core.designsystem.component.ONMIButton
 import khs.onmi.core.designsystem.component.TimeTableItem
@@ -69,7 +69,7 @@ fun TimeTableSectionItem(timeTableList: List<String>) {
 
 @Composable
 fun TimeTableSectionErrorItem(
-    timeTableException: GetTimeTableException,
+    timeTableException: TimeTableException,
     onReloadClick: () -> Unit,
 ) {
     ONMITheme { color, typography ->
@@ -79,7 +79,7 @@ fun TimeTableSectionErrorItem(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             when (timeTableException) {
-                GetTimeTableException.DataEmpty -> {
+                TimeTableException.DataEmpty -> {
                     Text(
                         text = "시간표 정보가 없습니다.",
                         style = typography.Body1,
@@ -98,7 +98,7 @@ fun TimeTableSectionErrorItem(
                     )*/
                 }
 
-                GetTimeTableException.InternetDisconnected -> {
+                TimeTableException.InternetDisconnected -> {
                     Text(
                         text = "인터넷이 연결되지 않았습니다.\n와이파이 혹은 데이터를 연결 해주세요.",
                         style = typography.Body1,
@@ -107,7 +107,7 @@ fun TimeTableSectionErrorItem(
                     )
                 }
 
-                GetTimeTableException.TemporaryTimeTable -> {
+                TimeTableException.TemporaryTimeTable -> {
                     Text(
                         text = "3월에는 학교의 임시 시간표 사용으로\n정보가 표시되지 않을 수 있습니다.",
                         style = typography.Body1,
@@ -116,7 +116,7 @@ fun TimeTableSectionErrorItem(
                     )
                 }
 
-                is GetTimeTableException.Unknown -> {
+                is TimeTableException.Unknown -> {
                     Text(
                         text = "시간표 정보를 불러오지 못했습니다.",
                         style = typography.Body1,

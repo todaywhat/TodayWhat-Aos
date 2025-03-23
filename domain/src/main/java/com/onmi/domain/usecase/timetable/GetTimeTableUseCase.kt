@@ -13,11 +13,22 @@ import java.util.Date
 import java.util.Locale
 import javax.inject.Inject
 
-sealed interface GetTimeTableException {
-    data object DataEmpty : GetTimeTableException
-    data object TemporaryTimeTable : GetTimeTableException
-    data object InternetDisconnected : GetTimeTableException
-    data class Unknown(val errorCode: String) : GetTimeTableException
+sealed interface TimeTableException {
+    /** 시간표 정보가 없음 */
+    data object DataEmpty : TimeTableException
+
+    /**  임시 시간표 */
+    data object TemporaryTimeTable : TimeTableException
+
+    /** 인터넷 연결 X */
+    data object InternetDisconnected : TimeTableException
+
+    /**
+     *  알 수 없는 에러 with errorCode
+     *  - 사용자가 알 필요가 없는 remote error
+     *  - 코드상 문제로 인한 exception
+     *  */
+    data class Unknown(val errorCode: String) : TimeTableException
 }
 
 sealed interface TimeTableState {
@@ -25,7 +36,7 @@ sealed interface TimeTableState {
 
     data class Success(val response: List<String>) : TimeTableState
 
-    data class Failure(val exception: GetTimeTableException) : TimeTableState
+    data class Failure(val exception: TimeTableException) : TimeTableState
 }
 
 class GetTimeTableUseCase @Inject constructor(
@@ -34,7 +45,7 @@ class GetTimeTableUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(): TimeTableState {
         val userInfo = userDao.getUserInfo().first()
-            ?: return TimeTableState.Failure(GetTimeTableException.Unknown(NeisResult.UNKNOWN_ERROR.code))
+            ?: return TimeTableState.Failure(TimeTableException.Unknown(NeisResult.UNKNOWN_ERROR.code))
 
         val date = when {
             DateUtils.checkIsWeekend() && userInfo.isSkipWeekend -> DateUtils.getNextMondayDate()
@@ -60,17 +71,17 @@ class GetTimeTableUseCase @Inject constructor(
                 val error = when (exception) {
                     is NeisException -> {
                         when {
-                            exception.result == NeisResult.DATA_NOT_FOUND && DateUtils.isMarch() -> GetTimeTableException.TemporaryTimeTable
+                            exception.result == NeisResult.DATA_NOT_FOUND && DateUtils.isMarch() -> TimeTableException.TemporaryTimeTable
 
-                            exception.result == NeisResult.DATA_NOT_FOUND -> GetTimeTableException.DataEmpty
+                            exception.result == NeisResult.DATA_NOT_FOUND -> TimeTableException.DataEmpty
 
-                            else -> GetTimeTableException.Unknown(exception.result.code)
+                            else -> TimeTableException.Unknown(exception.result.code)
                         }
                     }
 
-                    is UnresolvedAddressException, is UnknownHostException -> GetTimeTableException.InternetDisconnected
+                    is UnresolvedAddressException, is UnknownHostException -> TimeTableException.InternetDisconnected
 
-                    else -> GetTimeTableException.Unknown(NeisResult.UNKNOWN_ERROR.code)
+                    else -> TimeTableException.Unknown(NeisResult.UNKNOWN_ERROR.code)
                 }
                 TimeTableState.Failure(error)
             }
