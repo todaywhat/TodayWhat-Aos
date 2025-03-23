@@ -11,5 +11,5 @@ data class GetTodayMealsListResponse(
     @SerialName("RESULT")
     override val result: ErrorResult? = null,
     @SerialName("mealServiceDietInfo")
-    val meals: List<CommonResponse<SchoolMealInfo>>,
+    val meals: List<CommonResponse<SchoolMealInfo>>? = null,
 ) : BaseResponse

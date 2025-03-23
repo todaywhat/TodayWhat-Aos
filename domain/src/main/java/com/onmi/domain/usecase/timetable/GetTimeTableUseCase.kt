@@ -43,7 +43,7 @@ class GetTimeTableUseCase @Inject constructor(
     private val repository: TimeTableRepository,
     private val userDao: UserDao,
 ) {
-    suspend operator fun invoke(): TimeTableState {
+    suspend operator fun invoke() = runCatching {
         val userInfo = userDao.getUserInfo().first()
             ?: return TimeTableState.Failure(TimeTableException.Unknown(NeisResult.UNKNOWN_ERROR.code))
 
@@ -53,40 +53,39 @@ class GetTimeTableUseCase @Inject constructor(
             else -> convertMillisToDateString(System.currentTimeMillis())
         }
 
-        return runCatching {
-            repository.getTimeTable(
-                schoolCode = userInfo.schoolCode,
-                schoolType = convertSchoolTypeToKey(userInfo.schoolType),
-                educationCode = userInfo.educationCode,
-                grade = userInfo.grade,
-                `class` = userInfo.classroom,
-                department = userInfo.department,
-                date = date
-            )
-        }.fold(
-            onSuccess = { result ->
-                TimeTableState.Success(result)
-            },
-            onFailure = { exception ->
-                val error = when (exception) {
-                    is NeisException -> {
-                        when {
-                            exception.result == NeisResult.DATA_NOT_FOUND && DateUtils.isMarch() -> TimeTableException.TemporaryTimeTable
-
-                            exception.result == NeisResult.DATA_NOT_FOUND -> TimeTableException.DataEmpty
-
-                            else -> TimeTableException.Unknown(exception.result.code)
-                        }
-                    }
-
-                    is UnresolvedAddressException, is UnknownHostException -> TimeTableException.InternetDisconnected
-
-                    else -> TimeTableException.Unknown(NeisResult.UNKNOWN_ERROR.code)
-                }
-                TimeTableState.Failure(error)
-            }
+        repository.getTimeTable(
+            schoolCode = userInfo.schoolCode,
+            schoolType = convertSchoolTypeToKey(userInfo.schoolType),
+            educationCode = userInfo.educationCode,
+            grade = userInfo.grade,
+            `class` = userInfo.classroom,
+            department = userInfo.department,
+            date = date
         )
-    }
+    }.fold(
+        onSuccess = { result ->
+            TimeTableState.Success(result)
+        },
+        onFailure = { exception ->
+            val error = when (exception) {
+                is NeisException -> {
+                    when {
+                        exception.result == NeisResult.DATA_NOT_FOUND && DateUtils.isMarch() -> TimeTableException.TemporaryTimeTable
+
+                        exception.result == NeisResult.DATA_NOT_FOUND -> TimeTableException.DataEmpty
+
+                        else -> TimeTableException.Unknown(exception.result.code)
+                    }
+                }
+
+                is UnresolvedAddressException, is UnknownHostException -> TimeTableException.InternetDisconnected
+
+                else -> TimeTableException.Unknown(NeisResult.UNKNOWN_ERROR.code)
+            }
+
+            TimeTableState.Failure(error)
+        }
+    )
 
     private fun convertMillisToDateString(millis: Long): String {
         val formatter = SimpleDateFormat("yyyyMMdd", Locale.getDefault())

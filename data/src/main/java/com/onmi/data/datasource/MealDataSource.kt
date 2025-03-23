@@ -25,7 +25,7 @@ class MealDataSource @Inject constructor(
             parameter("ATPT_OFCDC_SC_CODE", educationCode)
             parameter("SD_SCHUL_CODE", schoolCode)
             parameter("MLSV_YMD", date)
-        }.bodyOrThrow<GetTodayMealsListResponse>().meals[1].row
+        }.bodyOrThrow<GetTodayMealsListResponse>().meals!![1].row
 
         return GetTodayMealsResponse(
             breakfast = response.findMealInfo("조식"),

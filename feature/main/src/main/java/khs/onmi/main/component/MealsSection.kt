@@ -16,37 +16,36 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.onmi.domain.model.meal.response.GetMealsResponseModel
+import com.onmi.domain.usecase.meal.MealException
+import com.onmi.domain.usecase.meal.MealState
 import khs.onmi.core.designsystem.component.ONMIButton
 import khs.onmi.core.designsystem.theme.ONMITheme
 
-// todo State 수정 필요
-sealed interface MealsSectionState {
-    data object Success : MealsSectionState
-    data object Failure : MealsSectionState
-    data object Empty : MealsSectionState
-}
-
 @Composable
 fun MealsSection(
-    state: MealsSectionState,
-    breakfast: Pair<List<String>, String>,
-    lunch: Pair<List<String>, String>,
-    dinner: Pair<List<String>, String>,
+    state: MealState,
+    onReloadClick: () -> Unit,
 ) {
-    when(state) {
-        is MealsSectionState.Success -> {
-            MealsSectionItem(
-                breakfast = breakfast,
-                lunch = lunch,
-                dinner = dinner
+    when (state) {
+        is MealState.Success -> {
+            with(state.response) {
+                MealsSectionItem(
+                    breakfast = breakfast,
+                    lunch = lunch,
+                    dinner = dinner
+                )
+            }
+        }
+
+        is MealState.Failure -> {
+            MealsSectionErrorItem(
+                mealException = state.exception,
+                onReloadClick = onReloadClick
             )
         }
-        is MealsSectionState.Failure -> {
-            MealsSectionErrorItem {  }
-        }
-        is MealsSectionState.Empty -> {
-            MealsSectionEmptyItem {  }
-        }
+
+        is MealState.Loading -> {}
     }
 }
 
@@ -106,64 +105,51 @@ fun MealsSectionItem(
 }
 
 @Composable
-fun MealsSectionEmptyItem(onClick: () -> Unit) {
+fun MealsSectionErrorItem(
+    mealException: MealException,
+    onReloadClick: () -> Unit,
+) {
     ONMITheme { color, typography ->
         Column(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(
-                text = "급식 정보가 없습니다.",
-                style = typography.Body1,
-                color = color.TextSecondary,
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            ONMIButton(
-                isEnabled = true,
-                text = "문의하기",
-                colors = ButtonDefaults.buttonColors(
-                    contentColor = color.Black,
-                    containerColor = color.White,
-                ),
-                onClick = onClick
-            )
-        }
-    }
-}
+            when (mealException) {
+                MealException.DataEmpty -> {
+                    Text(
+                        text = "급식 정보가 없습니다.",
+                        style = typography.Body1,
+                        color = color.TextSecondary,
+                    )
+                }
 
-@Composable
-fun MealsSectionErrorItem(onClick: () -> Unit) {
-    ONMITheme { color, typography ->
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            // todo 에러 정의 후 수정 필요
-            if (false) {
-                Text(
-                    text = "인터넷이 연결되지 않았습니다.\n와이파이 혹은 데이터를 연결 해주세요.",
-                    style = typography.Body1,
-                    color = color.TextSecondary,
-                    textAlign = TextAlign.Center
-                )
-            } else {
-                Text(
-                    text = "급식 정보를 불러오지 못했습니다.",
-                    style = typography.Body1,
-                    color = color.TextSecondary,
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-                ONMIButton(
-                    isEnabled = true,
-                    text = "다시 불러오기",
-                    colors = ButtonDefaults.buttonColors(
-                        contentColor = color.Black,
-                        containerColor = color.White,
-                    ),
-                    onClick = onClick
-                )
+                MealException.InternetDisconnected -> {
+                    Text(
+                        text = "인터넷이 연결되지 않았습니다.\n와이파이 혹은 데이터를 연결 해주세요.",
+                        style = typography.Body1,
+                        color = color.TextSecondary,
+                        textAlign = TextAlign.Center
+                    )
+                }
+
+                is MealException.Unknown -> {
+                    Text(
+                        text = "급식 정보를 불러오지 못했습니다.",
+                        style = typography.Body1,
+                        color = color.TextSecondary,
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                    ONMIButton(
+                        isEnabled = true,
+                        text = "다시 불러오기",
+                        colors = ButtonDefaults.buttonColors(
+                            contentColor = color.White,
+                            containerColor = color.Black,
+                        ),
+                        onClick = onReloadClick
+                    )
+                }
             }
         }
     }
@@ -175,9 +161,13 @@ fun MealsSectionPre() {
     val mealsDummy = listOf("쌀밥", "쇠고기미역국", "소불고기", "배추김치", "무생채", "유기농요구르트")
 
     MealsSection(
-        state = MealsSectionState.Success,
-        breakfast = Pair(mealsDummy, "123.4 Kcal"),
-        lunch = Pair(mealsDummy, "123.4 Kcal"),
-        dinner = Pair(mealsDummy, "123.4 Kcal")
+        state = MealState.Success(
+            response = GetMealsResponseModel(
+                breakfast = Pair(mealsDummy, "123.4 Kcal"),
+                lunch = Pair(mealsDummy, "123.4 Kcal"),
+                dinner = Pair(mealsDummy, "123.4 Kcal")
+            )
+        ),
+        onReloadClick = {}
     )
 }

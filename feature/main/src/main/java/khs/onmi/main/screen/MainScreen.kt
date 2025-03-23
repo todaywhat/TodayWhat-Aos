@@ -29,7 +29,6 @@ import khs.onmi.core.designsystem.theme.ONMITheme
 import khs.onmi.core.designsystem.utils.WrappedIconButton
 import khs.onmi.main.component.MainTabRow
 import khs.onmi.main.component.MealsSection
-import khs.onmi.main.component.MealsSectionState
 import khs.onmi.main.component.TimeTableSection
 import khs.onmi.main.viewmodel.container.MainState
 import khs.onmi.navigation.ONMINavRoutes
@@ -40,6 +39,7 @@ fun MainScreen(
     uiState: MainState,
     navigate: (route: String) -> Unit,
     reloadTimeTable: () -> Unit,
+    reloadMeal: () -> Unit,
 ) {
     val pagerState = rememberPagerState()
     var dragStartPage by remember { mutableStateOf(pagerState.currentPage) }
@@ -111,10 +111,8 @@ fun MainScreen(
             ) { index ->
                 when (index) {
                     0 -> MealsSection(
-                        state = MealsSectionState.Success,
-                        breakfast = uiState.breakfast,
-                        lunch = uiState.lunch,
-                        dinner = uiState.dinner
+                        state = uiState.mealState,
+                        onReloadClick = reloadMeal
                     )
 
                     1 -> TimeTableSection(

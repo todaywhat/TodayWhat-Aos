@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.onmi.database.UserDao
 import com.onmi.domain.usecase.meal.GetMealsUseCase
+import com.onmi.domain.usecase.meal.MealState
 import com.onmi.domain.usecase.timetable.GetTimeTableUseCase
 import com.onmi.domain.usecase.timetable.TimeTableState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -68,21 +69,17 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    private fun getTodayMeals() = intent {
-        viewModelScope.launch {
-            getMealsUseCase()
-                .onSuccess { response ->
-                    reduce {
-                        state.copy(
-                            targetDate = response.first,
-                            breakfast = response.second.breakfast,
-                            lunch = response.second.lunch,
-                            dinner = response.second.dinner
-                        )
-                    }
-                }.onFailure { exception ->
+    fun getTodayMeals() = intent {
+        reduce {
+            state.copy(mealState = MealState.Loading)
+        }
 
-                }
+        viewModelScope.launch {
+            val response = getMealsUseCase()
+
+            reduce {
+                state.copy(mealState = response)
+            }
         }
     }
 }
