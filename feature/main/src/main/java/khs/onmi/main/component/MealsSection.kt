@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import com.onmi.domain.model.meal.response.GetMealsResponseModel
 import com.onmi.domain.usecase.meal.MealException
 import com.onmi.domain.usecase.meal.MealState
+import khs.onmi.core.designsystem.component.LoadingLottie
 import khs.onmi.core.designsystem.component.ONMIButton
 import khs.onmi.core.designsystem.theme.ONMITheme
 
@@ -45,7 +46,15 @@ fun MealsSection(
             )
         }
 
-        is MealState.Loading -> {}
+        is MealState.Loading -> {
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                LoadingLottie()
+            }
+        }
     }
 }
 

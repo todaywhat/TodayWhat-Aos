@@ -19,6 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.onmi.domain.usecase.timetable.TimeTableException
 import com.onmi.domain.usecase.timetable.TimeTableState
+import khs.onmi.core.designsystem.component.LoadingLottie
 import khs.onmi.core.designsystem.component.ONMIButton
 import khs.onmi.core.designsystem.component.TimeTableItem
 import khs.onmi.core.designsystem.theme.ONMITheme
@@ -41,7 +42,13 @@ fun TimeTableSection(
         }
 
         TimeTableState.Loading -> {
-            // TODO("로딩바 추가")
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                LoadingLottie()
+            }
         }
     }
 }
