@@ -5,18 +5,9 @@ import com.onmi.domain.exception.NeisException
 import com.onmi.domain.exception.NeisResult
 import com.onmi.domain.model.meal.response.GetMealsResponseModel
 import com.onmi.domain.repository.MealRepository
-import com.onmi.domain.usecase.timetable.TimeTableException
-import com.onmi.domain.usecase.timetable.TimeTableState
-import com.onmi.domain.util.DateUtils
-import com.onmi.domain.util.DateUtils.convertToMonthDay
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
 import java.net.UnknownHostException
 import java.nio.channels.UnresolvedAddressException
-import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.util.Date
-import java.util.Locale
 import javax.inject.Inject
 
 sealed interface MealException {
@@ -46,17 +37,10 @@ class GetMealsUseCase @Inject constructor(
     private val repository: MealRepository,
     private val userDao: UserDao,
 ) {
-    suspend operator fun invoke(date: LocalDate? = null) = runCatching {
+    suspend operator fun invoke(targetDate: String) = runCatching {
         val userInfo = userDao.getUserInfo().first() ?: return MealState.Failure(
             MealException.Unknown(NeisResult.UNKNOWN_ERROR.code)
         )
-
-        val targetDate = when {
-            date != null -> date.toString().replace("-", "")
-            DateUtils.checkIsWeekend() && userInfo.isSkipWeekend -> DateUtils.getNextMondayDate()
-            DateUtils.checkIsAfterDinner() && userInfo.isShowNextDayInfoAfterDinner -> DateUtils.getNextDayDate()
-            else -> convertMillisToDateString(System.currentTimeMillis())
-        }
 
         repository.getMeals(
             educationCode = userInfo.educationCode,
@@ -85,10 +69,4 @@ class GetMealsUseCase @Inject constructor(
             MealState.Failure(error)
         }
     )
-
-    private fun convertMillisToDateString(millis: Long): String {
-        val formatter = SimpleDateFormat("yyyyMMdd", Locale.getDefault())
-        val date = Date(millis)
-        return formatter.format(date)
-    }
 }

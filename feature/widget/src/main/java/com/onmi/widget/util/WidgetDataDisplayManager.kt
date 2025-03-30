@@ -4,6 +4,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import com.onmi.domain.usecase.meal.GetMealsUseCase
 import com.onmi.domain.usecase.meal.MealState
+import com.onmi.domain.util.DateUtils
 import java.time.LocalDate
 import java.time.LocalTime
 
@@ -35,7 +36,8 @@ object WidgetDataDisplayManager {
         getMealsUseCase: GetMealsUseCase,
         requestedMealTime: MealTime,
     ): MealInfoState {
-        val response = getMealsUseCase()
+        val targetDate = DateUtils.convertMillisToDateString(System.currentTimeMillis())
+        val response = getMealsUseCase(targetDate)
 
         if (response is MealState.Success) {
             val mealTimes = listOf(MealTime.Morning, MealTime.Lunch, MealTime.Dinner)
@@ -61,8 +63,8 @@ object WidgetDataDisplayManager {
         }
 
 
-        val nextDay = LocalDate.now().plusDays(1)
-        val getNextDayMealResponse = getMealsUseCase(date = nextDay)
+        val nextDay = DateUtils.getNextDayDate()
+        val getNextDayMealResponse = getMealsUseCase(targetDate = nextDay)
 
         if (getNextDayMealResponse is MealState.Success) {
             val mealTimes = listOf(MealTime.Morning, MealTime.Lunch, MealTime.Dinner)

@@ -8,9 +8,6 @@ import com.onmi.domain.util.DateUtils
 import kotlinx.coroutines.flow.first
 import java.net.UnknownHostException
 import java.nio.channels.UnresolvedAddressException
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 import javax.inject.Inject
 
 sealed interface TimeTableException {
@@ -43,15 +40,9 @@ class GetTimeTableUseCase @Inject constructor(
     private val repository: TimeTableRepository,
     private val userDao: UserDao,
 ) {
-    suspend operator fun invoke() = runCatching {
+    suspend operator fun invoke(targetDate: String) = runCatching {
         val userInfo = userDao.getUserInfo().first()
             ?: return TimeTableState.Failure(TimeTableException.Unknown(NeisResult.UNKNOWN_ERROR.code))
-
-        val date = when {
-            DateUtils.checkIsWeekend() && userInfo.isSkipWeekend -> DateUtils.getNextMondayDate()
-            DateUtils.checkIsAfterDinner() && userInfo.isShowNextDayInfoAfterDinner -> DateUtils.getNextDayDate()
-            else -> convertMillisToDateString(System.currentTimeMillis())
-        }
 
         repository.getTimeTable(
             schoolCode = userInfo.schoolCode,
@@ -60,7 +51,7 @@ class GetTimeTableUseCase @Inject constructor(
             grade = userInfo.grade,
             `class` = userInfo.classroom,
             department = userInfo.department,
-            date = date
+            date = targetDate
         )
     }.fold(
         onSuccess = { result ->
@@ -86,12 +77,6 @@ class GetTimeTableUseCase @Inject constructor(
             TimeTableState.Failure(error)
         }
     )
-
-    private fun convertMillisToDateString(millis: Long): String {
-        val formatter = SimpleDateFormat("yyyyMMdd", Locale.getDefault())
-        val date = Date(millis)
-        return formatter.format(date)
-    }
 
     private fun convertSchoolTypeToKey(type: String): String {
         return when (type) {

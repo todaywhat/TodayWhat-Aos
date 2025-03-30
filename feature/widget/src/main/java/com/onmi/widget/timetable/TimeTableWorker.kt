@@ -14,6 +14,7 @@ import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import com.onmi.domain.usecase.timetable.TimeTableState
 import com.onmi.domain.usecase.timetable.GetTimeTableUseCase
+import com.onmi.domain.util.DateUtils
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import java.time.Duration
@@ -45,7 +46,8 @@ class TimeTableWorker @AssistedInject constructor(
     override suspend fun doWork(): Result {
         return try {
             setWidgetState(TimeTableInfo.Loading)
-            val request = getTimeTableUseCase()
+            val targetDate = DateUtils.convertMillisToDateString(System.currentTimeMillis())
+            val request = getTimeTableUseCase(targetDate)
 
             when (request) {
                 is TimeTableState.Failure -> setWidgetState(TimeTableInfo.Unavailable)

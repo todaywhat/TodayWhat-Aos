@@ -9,9 +9,16 @@ import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
+import java.util.Date
 import java.util.Locale
 
 object DateUtils {
+    fun convertMillisToDateString(millis: Long): String {
+        val formatter = SimpleDateFormat("yyyyMMdd", Locale.getDefault())
+        val date = Date(millis)
+        return formatter.format(date)
+    }
+
     fun checkIsWeekend(): Boolean {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             when (LocalDate.now().dayOfWeek) {

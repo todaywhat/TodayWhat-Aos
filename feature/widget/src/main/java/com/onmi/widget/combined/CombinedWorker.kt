@@ -15,6 +15,7 @@ import androidx.work.WorkerParameters
 import com.onmi.domain.usecase.meal.GetMealsUseCase
 import com.onmi.domain.usecase.timetable.TimeTableState
 import com.onmi.domain.usecase.timetable.GetTimeTableUseCase
+import com.onmi.domain.util.DateUtils
 import com.onmi.widget.util.MealInfoState
 import com.onmi.widget.util.WidgetDataDisplayManager
 import dagger.assisted.Assisted
@@ -48,7 +49,8 @@ class CombinedWorker @AssistedInject constructor(
 
     @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun doWork(): Result {
-        val todayTimeTable = getTimeTableUseCase()
+        val targetDate = DateUtils.convertMillisToDateString(System.currentTimeMillis())
+        val todayTimeTable = getTimeTableUseCase(targetDate)
 
         if (todayTimeTable is TimeTableState.Failure) {
             setWidgetState(CombinedInfo.Unavailable)
