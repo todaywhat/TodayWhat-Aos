@@ -36,6 +36,13 @@ class MainViewModel @Inject constructor(
         getTargetDate()
     }
 
+    private fun settingMainScreen() {
+        if (targetDate.isNotEmpty()) {
+            getTodayMeals()
+            getTodayTimeTable()
+        }
+    }
+
     private fun getTargetDate() = intent {
         calculateTargetDateUseCase()
             .onSuccess { targetDate ->
@@ -44,8 +51,7 @@ class MainViewModel @Inject constructor(
                     state.copy(targetDate = DateUtils.convertToMonthDay(targetDate))
                 }
 
-                getTodayMeals()
-                getTodayTimeTable()
+                settingMainScreen()
             }.onFailure {
                 postSideEffect(MainSideEffect.ShowToast("메인화면 정보를 가져오는데 문제가 발생했습니다."))
             }
@@ -57,6 +63,7 @@ class MainViewModel @Inject constructor(
         }.onSuccess {
             it.collectLatest { userEntity ->
                 if (userEntity != null) {
+                    getTargetDate()
                     reduce {
                         state.copy(
                             schoolName = userEntity.schoolName,
