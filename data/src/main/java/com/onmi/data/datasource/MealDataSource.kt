@@ -4,8 +4,8 @@ import com.onmi.data.dto.meal.response.GetTodayMealsListResponse
 import com.onmi.data.dto.meal.response.GetTodayMealsResponse
 import com.onmi.data.dto.meal.response.SchoolMealInfo
 import com.onmi.data.service.MealService
+import com.onmi.data.utils.bodyOrThrow
 import io.ktor.client.HttpClient
-import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
 import io.ktor.client.request.url
@@ -25,7 +25,7 @@ class MealDataSource @Inject constructor(
             parameter("ATPT_OFCDC_SC_CODE", educationCode)
             parameter("SD_SCHUL_CODE", schoolCode)
             parameter("MLSV_YMD", date)
-        }.body<GetTodayMealsListResponse>().meals[1].row
+        }.bodyOrThrow<GetTodayMealsListResponse>().meals!![1].row
 
         return GetTodayMealsResponse(
             breakfast = response.findMealInfo("조식"),

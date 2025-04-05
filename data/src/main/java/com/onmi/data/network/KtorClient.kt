@@ -1,4 +1,4 @@
-package khs.onmi.aos.modules
+package com.onmi.data.network
 
 import android.content.ContentValues
 import android.util.Log
@@ -43,6 +43,7 @@ object KtorClient {
                         prettyPrint = true
                         isLenient = true
                         ignoreUnknownKeys = true
+                        encodeDefaults = true
                     }
                 )
             }
