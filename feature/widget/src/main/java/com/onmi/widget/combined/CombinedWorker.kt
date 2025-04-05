@@ -13,7 +13,9 @@ import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import com.onmi.domain.usecase.meal.GetMealsUseCase
-import com.onmi.domain.usecase.timetable.GetTodayTimeTableUseCase
+import com.onmi.domain.usecase.timetable.TimeTableState
+import com.onmi.domain.usecase.timetable.GetTimeTableUseCase
+import com.onmi.domain.util.DateUtils
 import com.onmi.widget.util.MealInfoState
 import com.onmi.widget.util.WidgetDataDisplayManager
 import dagger.assisted.Assisted
@@ -25,7 +27,7 @@ class CombinedWorker @AssistedInject constructor(
     @Assisted private val context: Context,
     @Assisted workParams: WorkerParameters,
     private var getMealsUseCase: GetMealsUseCase,
-    private var getTodayTimeTableUseCase: GetTodayTimeTableUseCase,
+    private var getTimeTableUseCase: GetTimeTableUseCase,
 ) : CoroutineWorker(context, workParams) {
     companion object {
         private val uniqueWorkName = CombinedWorker::class.java.simpleName
@@ -47,7 +49,10 @@ class CombinedWorker @AssistedInject constructor(
 
     @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun doWork(): Result {
-        val todayTimeTable = getTodayTimeTableUseCase().getOrElse {
+        val targetDate = DateUtils.convertMillisToDateString(System.currentTimeMillis())
+        val todayTimeTable = getTimeTableUseCase(targetDate)
+
+        if (todayTimeTable is TimeTableState.Failure) {
             setWidgetState(CombinedInfo.Unavailable)
             return Result.success()
         }
@@ -63,7 +68,7 @@ class CombinedWorker @AssistedInject constructor(
                 CombinedInfo.Available(
                     mealTime = mealsInfo.mealTime,
                     mealList = mealsInfo.mealList,
-                    subjectList = todayTimeTable
+                    subjectList = (todayTimeTable as TimeTableState.Success).response
                 )
             } else CombinedInfo.Unavailable
         )

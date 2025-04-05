@@ -3,8 +3,12 @@ package khs.onmi.main.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.onmi.database.UserDao
+import com.onmi.domain.usecase.common.CalculateTargetDateUseCase
 import com.onmi.domain.usecase.meal.GetMealsUseCase
-import com.onmi.domain.usecase.timetable.GetTodayTimeTableUseCase
+import com.onmi.domain.usecase.meal.MealState
+import com.onmi.domain.usecase.timetable.GetTimeTableUseCase
+import com.onmi.domain.usecase.timetable.TimeTableState
+import com.onmi.domain.util.DateUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import khs.onmi.main.viewmodel.container.MainSideEffect
 import khs.onmi.main.viewmodel.container.MainState
@@ -19,14 +23,38 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val getTodayTimeTableUseCase: GetTodayTimeTableUseCase,
+    private val calculateTargetDateUseCase: CalculateTargetDateUseCase,
+    private val getTimeTableUseCase: GetTimeTableUseCase,
     private val getMealsUseCase: GetMealsUseCase,
     private val onmiDao: UserDao,
 ) : ContainerHost<MainState, MainSideEffect>, ViewModel() {
     override val container = container<MainState, MainSideEffect>(MainState())
+    private var targetDate = ""
 
     init {
         getUserInfo()
+        getTargetDate()
+    }
+
+    private fun settingMainScreen() {
+        if (targetDate.isNotEmpty()) {
+            getTodayMeals()
+            getTodayTimeTable()
+        }
+    }
+
+    private fun getTargetDate() = intent {
+        calculateTargetDateUseCase()
+            .onSuccess { targetDate ->
+                this@MainViewModel.targetDate = targetDate
+                reduce {
+                    state.copy(targetDate = DateUtils.convertToMonthDay(targetDate))
+                }
+
+                settingMainScreen()
+            }.onFailure {
+                postSideEffect(MainSideEffect.ShowToast("메인화면 정보를 가져오는데 문제가 발생했습니다."))
+            }
     }
 
     private fun getUserInfo() = intent {
@@ -35,8 +63,7 @@ class MainViewModel @Inject constructor(
         }.onSuccess {
             it.collectLatest { userEntity ->
                 if (userEntity != null) {
-                    getTodayTimeTable()
-                    getTodayMeals()
+                    getTargetDate()
                     reduce {
                         state.copy(
                             schoolName = userEntity.schoolName,
@@ -53,42 +80,31 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    private fun getTodayTimeTable() = intent {
+    fun getTodayTimeTable() = intent {
+        reduce {
+            state.copy(timeTableState = TimeTableState.Loading)
+        }
+
         viewModelScope.launch {
-            getTodayTimeTableUseCase()
-                .onSuccess { response ->
-                    reduce {
-                        state.copy(timetable = response)
-                    }
-                }.onFailure {
-                    postSideEffect(
-                        MainSideEffect.ShowToast(
-                            message = it.message ?: "알 수 없는 에러가 발생했습니다."
-                        )
-                    )
-                }
+            val response = getTimeTableUseCase(targetDate = targetDate)
+
+            reduce {
+                state.copy(timeTableState = response)
+            }
         }
     }
 
-    private fun getTodayMeals() = intent {
+    fun getTodayMeals() = intent {
+        reduce {
+            state.copy(mealState = MealState.Loading)
+        }
+
         viewModelScope.launch {
-            getMealsUseCase()
-                .onSuccess { response ->
-                    reduce {
-                        state.copy(
-                            targetDate = response.first,
-                            breakfast = response.second.breakfast,
-                            lunch = response.second.lunch,
-                            dinner = response.second.dinner
-                        )
-                    }
-                }.onFailure {
-                    postSideEffect(
-                        MainSideEffect.ShowToast(
-                            message = it.message ?: "알 수 없는 에러가 발생했습니다."
-                        )
-                    )
-                }
+            val response = getMealsUseCase(targetDate = targetDate)
+
+            reduce {
+                state.copy(mealState = response)
+            }
         }
     }
 }

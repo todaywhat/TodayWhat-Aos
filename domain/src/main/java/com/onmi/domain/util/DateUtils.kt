@@ -3,14 +3,22 @@ package com.onmi.domain.util
 import android.os.Build
 import androidx.annotation.RequiresApi
 import java.text.SimpleDateFormat
+import java.time.Clock
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
+import java.util.Date
 import java.util.Locale
 
 object DateUtils {
+    fun convertMillisToDateString(millis: Long): String {
+        val formatter = SimpleDateFormat("yyyyMMdd", Locale.getDefault())
+        val date = Date(millis)
+        return formatter.format(date)
+    }
+
     fun checkIsWeekend(): Boolean {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             when (LocalDate.now().dayOfWeek) {
@@ -91,5 +99,16 @@ object DateUtils {
         val outputFormatter = SimpleDateFormat("MM월 dd일 E요일", Locale.getDefault())
         return inputFormatter.parse(dateString)?.let { outputFormatter.format(it) }
             ?: throw IllegalArgumentException("잘못된 날짜 형식입니다")
+    }
+
+    /* 현재 월이 3월인지 여부를 판별합니다. */
+    fun isMarch(): Boolean {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            LocalDate.now(Clock.systemUTC()).monthValue == 3
+        } else {
+            val calendar = Calendar.getInstance()
+            val month = calendar.get(Calendar.MONTH) + 1
+            month == 3
+        }
     }
 }

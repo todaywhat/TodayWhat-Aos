@@ -5,8 +5,8 @@ import com.onmi.data.dto.timetable.response.GetHighSchoolTimeTableResponse
 import com.onmi.data.dto.timetable.response.GetMiddleSchoolTimeTableResponse
 import com.onmi.data.dto.timetable.response.GetSpecialSchoolTimeTableResponse
 import com.onmi.data.service.TimeTableService
+import com.onmi.data.utils.bodyOrThrow
 import io.ktor.client.HttpClient
-import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
 import io.ktor.client.request.url
@@ -53,19 +53,19 @@ class TimeTableDataSource @Inject constructor(
         }
 
         return when (schoolType) {
-            "els" -> response.body<GetElementarySchoolTimTableResponse>().timetable?.getOrNull(1)?.row
+            "els" -> response.bodyOrThrow<GetElementarySchoolTimTableResponse>().timetable?.getOrNull(1)?.row
                 ?.distinctBy { it.period }
                 ?.map { it.subject }
 
-            "mis" -> response.body<GetMiddleSchoolTimeTableResponse>().timetable?.getOrNull(1)?.row
+            "mis" -> response.bodyOrThrow<GetMiddleSchoolTimeTableResponse>().timetable?.getOrNull(1)?.row
                 ?.distinctBy { it.period }
                 ?.map { it.subject }
 
-            "his" -> response.body<GetHighSchoolTimeTableResponse>().timetable?.getOrNull(1)?.row
+            "his" -> response.bodyOrThrow<GetHighSchoolTimeTableResponse>().timetable?.getOrNull(1)?.row
                 ?.distinctBy { it.period }
                 ?.map { it.subject }
 
-            "sps" -> response.body<GetSpecialSchoolTimeTableResponse>().timetable?.getOrNull(1)?.row
+            "sps" -> response.bodyOrThrow<GetSpecialSchoolTimeTableResponse>().timetable?.getOrNull(1)?.row
                 ?.distinctBy { it.period }
                 ?.map { it.subject }
 

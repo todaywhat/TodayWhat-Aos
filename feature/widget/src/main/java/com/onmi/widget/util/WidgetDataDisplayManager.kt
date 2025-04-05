@@ -3,6 +3,8 @@ package com.onmi.widget.util
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.onmi.domain.usecase.meal.GetMealsUseCase
+import com.onmi.domain.usecase.meal.MealState
+import com.onmi.domain.util.DateUtils
 import java.time.LocalDate
 import java.time.LocalTime
 
@@ -34,17 +36,20 @@ object WidgetDataDisplayManager {
         getMealsUseCase: GetMealsUseCase,
         requestedMealTime: MealTime,
     ): MealInfoState {
-        getMealsUseCase()
-            .onSuccess { mealsInfo ->
-                val mealTimes = listOf(MealTime.Morning, MealTime.Lunch, MealTime.Dinner)
-                val startIndex = mealTimes.indexOf(requestedMealTime)
+        val targetDate = DateUtils.convertMillisToDateString(System.currentTimeMillis())
+        val response = getMealsUseCase(targetDate)
 
-                (startIndex..mealTimes.lastIndex).forEach { index ->
+        if (response is MealState.Success) {
+            val mealTimes = listOf(MealTime.Morning, MealTime.Lunch, MealTime.Dinner)
+            val startIndex = mealTimes.indexOf(requestedMealTime)
+
+            (startIndex..mealTimes.lastIndex).forEach { index ->
+                with(response.response) {
                     val currentMealTime = mealTimes[index]
                     val currentMeal = when (currentMealTime) {
-                        MealTime.Morning -> mealsInfo.second.breakfast
-                        MealTime.Lunch -> mealsInfo.second.lunch
-                        MealTime.Dinner -> mealsInfo.second.dinner
+                        MealTime.Morning -> breakfast
+                        MealTime.Lunch -> lunch
+                        MealTime.Dinner -> dinner
                     }
 
                     if (currentMeal.first.isNotEmpty()) {
@@ -55,19 +60,22 @@ object WidgetDataDisplayManager {
                     }
                 }
             }
+        }
 
-        val nextDay = LocalDate.now().plusDays(1)
 
-        getMealsUseCase(date = nextDay)
-            .onSuccess { nextMealsInfo ->
-                val mealTimes = listOf(MealTime.Morning, MealTime.Lunch, MealTime.Dinner)
+        val nextDay = DateUtils.getNextDayDate()
+        val getNextDayMealResponse = getMealsUseCase(targetDate = nextDay)
 
-                (0..mealTimes.lastIndex).forEach { index ->
+        if (getNextDayMealResponse is MealState.Success) {
+            val mealTimes = listOf(MealTime.Morning, MealTime.Lunch, MealTime.Dinner)
+
+            (0..mealTimes.lastIndex).forEach { index ->
+                with(getNextDayMealResponse.response) {
                     val currentMealTime = mealTimes[index]
                     val currentMeal = when (currentMealTime) {
-                        MealTime.Morning -> nextMealsInfo.second.breakfast
-                        MealTime.Lunch -> nextMealsInfo.second.lunch
-                        MealTime.Dinner -> nextMealsInfo.second.dinner
+                        MealTime.Morning -> breakfast
+                        MealTime.Lunch -> lunch
+                        MealTime.Dinner -> dinner
                     }
 
                     if (currentMeal.first.isNotEmpty()) {
@@ -78,6 +86,7 @@ object WidgetDataDisplayManager {
                     }
                 }
             }
+        }
 
         // 요청된 시간대부터 이후의 모든 시간대의 급식이 비어있는 경우
         return MealInfoState.Available(

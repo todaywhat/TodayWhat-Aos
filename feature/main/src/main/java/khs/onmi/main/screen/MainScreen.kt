@@ -38,6 +38,8 @@ import khs.onmi.navigation.ONMINavRoutes
 fun MainScreen(
     uiState: MainState,
     navigate: (route: String) -> Unit,
+    reloadTimeTable: () -> Unit,
+    reloadMeal: () -> Unit,
 ) {
     val pagerState = rememberPagerState()
     var dragStartPage by remember { mutableStateOf(pagerState.currentPage) }
@@ -109,13 +111,13 @@ fun MainScreen(
             ) { index ->
                 when (index) {
                     0 -> MealsSection(
-                        breakfast = uiState.breakfast,
-                        lunch = uiState.lunch,
-                        dinner = uiState.dinner
+                        state = uiState.mealState,
+                        onReloadClick = reloadMeal
                     )
 
                     1 -> TimeTableSection(
-                        timeTableList = uiState.timetable
+                        timeTableState = uiState.timeTableState,
+                        onReloadClick = reloadTimeTable
                     )
                 }
             }

@@ -38,6 +38,8 @@ fun MainRoute(
 
     MainScreen(
         uiState = uiState,
-        navigate = navController::navigate
+        navigate = navController::navigate,
+        reloadTimeTable = viewModel::getTodayTimeTable,
+        reloadMeal = viewModel::getTodayMeals
     )
 }

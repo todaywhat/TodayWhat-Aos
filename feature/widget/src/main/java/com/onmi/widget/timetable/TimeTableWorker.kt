@@ -12,7 +12,9 @@ import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
-import com.onmi.domain.usecase.timetable.GetTodayTimeTableUseCase
+import com.onmi.domain.usecase.timetable.TimeTableState
+import com.onmi.domain.usecase.timetable.GetTimeTableUseCase
+import com.onmi.domain.util.DateUtils
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import java.time.Duration
@@ -21,7 +23,7 @@ import java.time.Duration
 class TimeTableWorker @AssistedInject constructor(
     @Assisted private val context: Context,
     @Assisted workParams: WorkerParameters,
-    private var getTimeTableUseCase: GetTodayTimeTableUseCase,
+    private var getTimeTableUseCase: GetTimeTableUseCase,
 ) : CoroutineWorker(context, workParams) {
     companion object {
         private val uniqueWorkName = TimeTableWorker::class.java.simpleName
@@ -44,13 +46,16 @@ class TimeTableWorker @AssistedInject constructor(
     override suspend fun doWork(): Result {
         return try {
             setWidgetState(TimeTableInfo.Loading)
-            val request = getTimeTableUseCase()
-                .onSuccess {
-                    setWidgetState(TimeTableInfo.Available(it))
-                }.onFailure {
-                    setWidgetState(TimeTableInfo.Unavailable)
-                }
-            if (request.isSuccess) Result.success() else Result.failure()
+            val targetDate = DateUtils.convertMillisToDateString(System.currentTimeMillis())
+            val request = getTimeTableUseCase(targetDate)
+
+            when (request) {
+                is TimeTableState.Failure -> setWidgetState(TimeTableInfo.Unavailable)
+                is TimeTableState.Success -> setWidgetState(TimeTableInfo.Available(request.response))
+                TimeTableState.Loading -> {}
+            }
+
+            if (request is TimeTableState.Success) Result.success() else Result.failure()
         } catch (e: Exception) {
             setWidgetState(TimeTableInfo.Unavailable)
             Result.failure()
