@@ -125,9 +125,10 @@ fun TimeTableSectionErrorItem(
 
                 is TimeTableException.Unknown -> {
                     Text(
-                        text = "시간표 정보를 불러오지 못했습니다.",
+                        text = "시간표 정보를 불러오지 못했습니다.\n에러코드: ${timeTableException.errorCode}",
                         style = typography.Body1,
                         color = color.TextSecondary,
+                        textAlign = TextAlign.Center
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                     ONMIButton(

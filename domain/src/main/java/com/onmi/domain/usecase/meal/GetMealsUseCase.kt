@@ -48,8 +48,8 @@ class GetMealsUseCase @Inject constructor(
             date = targetDate
         )
     }.fold(
-        onSuccess = {
-            MealState.Success(it)
+        onSuccess = { result ->
+            MealState.Success(result)
         },
         onFailure = { exception ->
             val error = when (exception) {

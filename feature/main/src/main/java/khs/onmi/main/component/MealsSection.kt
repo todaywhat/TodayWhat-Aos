@@ -144,9 +144,10 @@ fun MealsSectionErrorItem(
 
                 is MealException.Unknown -> {
                     Text(
-                        text = "급식 정보를 불러오지 못했습니다.",
+                        text = "급식 정보를 불러오지 못했습니다.\n 에러코드: ${mealException.errorCode}",
                         style = typography.Body1,
                         color = color.TextSecondary,
+                        textAlign = TextAlign.Center
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                     ONMIButton(
