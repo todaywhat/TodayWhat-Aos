@@ -9,9 +9,8 @@ import io.ktor.client.statement.HttpResponse
 suspend inline fun <reified T : BaseResponse> HttpResponse.bodyOrThrow(): T {
     val responseBody = this.body<T>()
 
-    if (responseBody.result != null) {
-        val code = responseBody.result!!.code
-        throw NeisException(NeisResult.find(code))
+    responseBody.result?.let { errorResult ->
+        throw NeisException(NeisResult.find(errorResult.code))
     }
 
     return responseBody
