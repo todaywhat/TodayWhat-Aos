@@ -5,8 +5,8 @@ import com.onmi.data.dto.school.response.GetSchoolDepartmentResponseListDto
 import com.onmi.data.dto.school.response.SearchSchoolByNameResponseDto
 import com.onmi.data.dto.school.response.SearchSchoolByNameResponseListDto
 import com.onmi.data.service.SchoolService
+import com.onmi.data.utils.bodyOrThrow
 import io.ktor.client.HttpClient
-import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
 import io.ktor.client.request.url
@@ -20,7 +20,7 @@ class SchoolDataSource @Inject constructor(
         return httpClient.get {
             url("/hub/schoolInfo")
             parameter("SCHUL_NM", searchKeyword)
-        }.body<SearchSchoolByNameResponseListDto>().schoolInfo[1].row.map { response ->
+        }.bodyOrThrow<SearchSchoolByNameResponseListDto>().schoolInfo[1].row.map { response ->
             SearchSchoolByNameResponseDto(
                 educationCode = response.educationCode,
                 schoolCode = response.schoolCode,
@@ -39,7 +39,7 @@ class SchoolDataSource @Inject constructor(
             url("/hub/schoolMajorinfo")
             parameter("ATPT_OFCDC_SC_CODE", educationCode)
             parameter("SD_SCHUL_CODE", schoolCode)
-        }.body<GetSchoolDepartmentResponseListDto>().schoolMajorInfo[1].row.map { response ->
+        }.bodyOrThrow<GetSchoolDepartmentResponseListDto>().schoolMajorInfo[1].row.map { response ->
             GetSchoolDepartmentResponseDto(
                 department = response.department
             )

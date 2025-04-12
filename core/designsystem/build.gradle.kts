@@ -8,5 +8,5 @@ android {
 }
 
 dependencies {
-
+    implementation(libs.airbnb.android.lottie)
 }
