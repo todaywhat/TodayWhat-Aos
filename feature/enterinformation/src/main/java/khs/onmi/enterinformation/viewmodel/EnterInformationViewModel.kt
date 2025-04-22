@@ -5,8 +5,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.ViewModel
-import com.onmi.database.UserDao
-import com.onmi.database.UserEntity
+import com.onmi.database.user.UserDao
+import com.onmi.database.user.UserEntity
 import com.onmi.domain.usecase.school.GetSchoolDepartmentsUseCase
 import com.onmi.domain.usecase.school.SearchSchoolByNameUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel

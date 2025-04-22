@@ -1,4 +1,4 @@
-package com.onmi.database
+package com.onmi.database.user
 
 import androidx.room.Dao
 import androidx.room.Insert
@@ -23,10 +23,4 @@ interface UserDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertUserInfo(userEntity: UserEntity)
-
-    @Query("UPDATE user_table SET isSkipWeekend = :isSkipWeekend")
-    suspend fun setIsSkipWeekend(isSkipWeekend: Boolean)
-
-    @Query("UPDATE user_table SET isShowNextDayInfoAfterDinner = :isShowNextDayInfoAfterDinner")
-    suspend fun setIsShowNextDayInfoAfterDinner(isShowNextDayInfoAfterDinner: Boolean)
 }

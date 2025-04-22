@@ -3,7 +3,7 @@ package khs.onmi.root
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.onmi.database.UserDao
+import com.onmi.database.user.UserDao
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch

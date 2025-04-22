@@ -1,6 +1,5 @@
-package com.onmi.database
+package com.onmi.database.user
 
-import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
@@ -14,6 +13,4 @@ data class UserEntity(
     var grade: Int = 0,
     var classroom: Int = 0,
     var department: String = "",
-    var isSkipWeekend: Boolean = false,
-    var isShowNextDayInfoAfterDinner: Boolean = false,
 )
