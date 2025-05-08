@@ -2,7 +2,7 @@ package khs.onmi.main.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.onmi.database.UserDao
+import com.onmi.database.user.UserDao
 import com.onmi.domain.usecase.common.CalculateTargetDateUseCase
 import com.onmi.domain.usecase.meal.GetMealsUseCase
 import com.onmi.domain.usecase.meal.MealState

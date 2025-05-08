@@ -1,6 +1,6 @@
 package com.onmi.domain.usecase.meal
 
-import com.onmi.database.UserDao
+import com.onmi.database.user.UserDao
 import com.onmi.domain.exception.NeisException
 import com.onmi.domain.exception.NeisResult
 import com.onmi.domain.model.meal.response.GetMealsResponseModel

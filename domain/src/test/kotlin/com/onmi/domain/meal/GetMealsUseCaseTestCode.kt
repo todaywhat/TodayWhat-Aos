@@ -1,6 +1,6 @@
 package com.onmi.domain.meal
 
-import com.onmi.database.UserDao
+import com.onmi.database.user.UserDao
 import com.onmi.domain.repository.MealRepository
 import com.onmi.domain.usecase.meal.GetMealsUseCase
 import io.kotest.core.spec.style.BehaviorSpec
