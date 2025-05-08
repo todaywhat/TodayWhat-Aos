@@ -1,7 +1,5 @@
 package com.onmi.database.migration
 
-import androidx.room.DeleteColumn
-import androidx.room.migration.AutoMigrationSpec
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 
