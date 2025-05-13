@@ -1,11 +1,11 @@
 package com.onmi.data.repository
 
-import com.onmi.data.service.TimeTableService
+import com.onmi.data.datasource.TimeTableDataSource
 import com.onmi.domain.repository.TimeTableRepository
 import javax.inject.Inject
 
 class TimeTableRepositoryImpl @Inject constructor(
-    private val service: TimeTableService,
+    private val service: TimeTableDataSource,
 ) : TimeTableRepository {
 
     override suspend fun getTimeTable(

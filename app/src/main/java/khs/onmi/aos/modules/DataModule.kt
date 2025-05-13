@@ -1,11 +1,11 @@
 package khs.onmi.aos.modules
 
+import com.onmi.data.datasourceimpl.MealDataSourceImpl
+import com.onmi.data.datasourceimpl.SchoolDataSourceImpl
+import com.onmi.data.datasourceimpl.TimeTableDataSourceImpl
 import com.onmi.data.datasource.MealDataSource
 import com.onmi.data.datasource.SchoolDataSource
 import com.onmi.data.datasource.TimeTableDataSource
-import com.onmi.data.service.MealService
-import com.onmi.data.service.SchoolService
-import com.onmi.data.service.TimeTableService
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -19,18 +19,18 @@ internal interface DataModule {
     @Singleton
     @Binds
     fun bindMealDataSource(
-        impl: MealDataSource,
-    ): MealService
+        impl: MealDataSourceImpl,
+    ): MealDataSource
 
     @Singleton
     @Binds
     fun bindSchoolDataSource(
-        impl: SchoolDataSource,
-    ): SchoolService
+        impl: SchoolDataSourceImpl,
+    ): SchoolDataSource
 
     @Singleton
     @Binds
     fun bindTimeTableDataSource(
-        impl: TimeTableDataSource,
-    ): TimeTableService
+        impl: TimeTableDataSourceImpl,
+    ): TimeTableDataSource
 }
