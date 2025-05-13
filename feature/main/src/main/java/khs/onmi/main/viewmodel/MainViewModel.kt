@@ -2,17 +2,17 @@ package khs.onmi.main.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.onmi.database.user.UserDao
 import com.onmi.domain.usecase.common.CalculateTargetDateUseCase
 import com.onmi.domain.usecase.meal.GetMealsUseCase
 import com.onmi.domain.usecase.meal.MealState
 import com.onmi.domain.usecase.timetable.GetTimeTableUseCase
 import com.onmi.domain.usecase.timetable.TimeTableState
+import com.onmi.domain.usecase.user.GetUserInfoFlowUseCase
 import com.onmi.domain.util.DateUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import khs.onmi.main.viewmodel.container.MainSideEffect
 import khs.onmi.main.viewmodel.container.MainState
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.syntax.simple.intent
@@ -26,7 +26,7 @@ class MainViewModel @Inject constructor(
     private val calculateTargetDateUseCase: CalculateTargetDateUseCase,
     private val getTimeTableUseCase: GetTimeTableUseCase,
     private val getMealsUseCase: GetMealsUseCase,
-    private val onmiDao: UserDao,
+    private val getUserInfoFlowUseCase: GetUserInfoFlowUseCase,
 ) : ContainerHost<MainState, MainSideEffect>, ViewModel() {
     override val container = container<MainState, MainSideEffect>(MainState())
     private var targetDate = ""
@@ -57,13 +57,15 @@ class MainViewModel @Inject constructor(
             }
     }
 
-    private fun getUserInfo() = intent {
-        kotlin.runCatching {
-            onmiDao.getUserInfo()
-        }.onSuccess {
-            it.collectLatest { userEntity ->
-                if (userEntity != null) {
-                    getTargetDate()
+    private fun getUserInfo() = viewModelScope.launch {
+        getUserInfoFlowUseCase()
+            .catch {
+                intent {
+                    postSideEffect(MainSideEffect.ShowToast("사용자 정보를 가져오는데 실패했습니다."))
+                }
+            }.collect { userEntity ->
+                getTargetDate()
+                intent {
                     reduce {
                         state.copy(
                             schoolName = userEntity.schoolName,
@@ -71,13 +73,8 @@ class MainViewModel @Inject constructor(
                             `class` = userEntity.classroom
                         )
                     }
-                } else {
-                    postSideEffect(MainSideEffect.ShowToast("사용자 정보를 가져오는데 실패했습니다."))
                 }
             }
-        }.onFailure {
-            postSideEffect(MainSideEffect.ShowToast("사용자 정보를 가져오는데 실패했습니다."))
-        }
     }
 
     fun getTodayTimeTable() = intent {

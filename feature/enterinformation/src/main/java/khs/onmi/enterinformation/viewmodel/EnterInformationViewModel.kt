@@ -5,10 +5,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.ViewModel
-import com.onmi.database.user.UserDao
-import com.onmi.database.user.UserEntity
+import com.onmi.domain.model.user.UserInfoModel
 import com.onmi.domain.usecase.school.GetSchoolDepartmentsUseCase
 import com.onmi.domain.usecase.school.SearchSchoolByNameUseCase
+import com.onmi.domain.usecase.user.UpdateUserInfoUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import khs.onmi.core.common.android.EventLogger
 import khs.onmi.enterinformation.model.CurrentState
@@ -27,7 +27,7 @@ import javax.inject.Inject
 class EnterInformationViewModel @Inject constructor(
     private val searchSchoolByNameUseCase: SearchSchoolByNameUseCase,
     private val getSchoolDepartmentsUseCase: GetSchoolDepartmentsUseCase,
-    private val userDao: UserDao,
+    private val updateUserInfoUseCase: UpdateUserInfoUseCase,
 ) : ContainerHost<EnterInformationState, EnterInformationSideEffect>, ViewModel() {
     override val container =
         container<EnterInformationState, EnterInformationSideEffect>(EnterInformationState())
@@ -90,9 +90,9 @@ class EnterInformationViewModel @Inject constructor(
         `class`: Int,
         department: String,
     ) = intent {
-        kotlin.runCatching {
-            userDao.replaceUserInfo(
-                UserEntity(
+        runCatching {
+            updateUserInfoUseCase(
+                UserInfoModel(
                     schoolCode = schoolCode,
                     educationCode = educationCode,
                     schoolName = schoolName,

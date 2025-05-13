@@ -9,6 +9,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":domain"))
     implementation(project(":navigation"))
     implementation(project(":feature:enterinformation"))
     implementation(project(":feature:main"))

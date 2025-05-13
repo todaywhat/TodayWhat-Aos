@@ -1,10 +1,10 @@
 package com.onmi.domain.usecase.meal
 
-import com.onmi.database.user.UserDao
 import com.onmi.domain.exception.NeisException
 import com.onmi.domain.exception.NeisResult
 import com.onmi.domain.model.meal.response.GetMealsResponseModel
 import com.onmi.domain.repository.MealRepository
+import com.onmi.domain.usecase.user.GetUserInfoFlowUseCase
 import kotlinx.coroutines.flow.first
 import java.net.UnknownHostException
 import java.nio.channels.UnresolvedAddressException
@@ -35,12 +35,10 @@ sealed interface MealState {
 
 class GetMealsUseCase @Inject constructor(
     private val repository: MealRepository,
-    private val userDao: UserDao,
+    private val getUserInfoFlowUseCase: GetUserInfoFlowUseCase,
 ) {
     suspend operator fun invoke(targetDate: String) = runCatching {
-        val userInfo = userDao.getUserInfo().first() ?: return MealState.Failure(
-            MealException.Unknown(NeisResult.UNKNOWN_ERROR.code)
-        )
+        val userInfo = getUserInfoFlowUseCase().first()
 
         repository.getMeals(
             educationCode = userInfo.educationCode,
