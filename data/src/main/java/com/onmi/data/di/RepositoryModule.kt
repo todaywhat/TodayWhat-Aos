@@ -1,8 +1,12 @@
-package khs.onmi.aos.modules
+package com.onmi.data.di
 
+import com.onmi.data.repository.LocalOptionRepositoryImpl
+import com.onmi.data.repository.LocalUserRepositoryImpl
 import com.onmi.data.repository.MealRepositoryImpl
 import com.onmi.data.repository.SchoolRepositoryImpl
 import com.onmi.data.repository.TimeTableRepositoryImpl
+import com.onmi.domain.repository.LocalOptionRepository
+import com.onmi.domain.repository.LocalUserRepository
 import com.onmi.domain.repository.MealRepository
 import com.onmi.domain.repository.SchoolRepository
 import com.onmi.domain.repository.TimeTableRepository
@@ -33,4 +37,16 @@ interface RepositoryModule {
     fun bindTimeTableRepository(
         impl: TimeTableRepositoryImpl,
     ): TimeTableRepository
+
+    @Singleton
+    @Binds
+    fun bindLocalUserRepository(
+        impl: LocalUserRepositoryImpl,
+    ): LocalUserRepository
+
+    @Singleton
+    @Binds
+    fun bindLocalOptionRepository(
+        impl: LocalOptionRepositoryImpl,
+    ): LocalOptionRepository
 }

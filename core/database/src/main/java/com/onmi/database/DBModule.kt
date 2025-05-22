@@ -1,6 +1,8 @@
 package com.onmi.database
 
 import android.content.Context
+import com.onmi.database.option.OptionDao
+import com.onmi.database.user.UserDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,10 +17,14 @@ object DBModule {
     @Singleton
     @Provides
     fun provideONMIDatabase(
-        @ApplicationContext context: Context
+        @ApplicationContext context: Context,
     ): ONMIDatabase = ONMIDatabase.getInstance(context)
 
     @Singleton
     @Provides
     fun provideUserDao(database: ONMIDatabase): UserDao = database.userDao()
+
+    @Singleton
+    @Provides
+    fun provideOptionDao(database: ONMIDatabase): OptionDao = database.optionDao()
 }
