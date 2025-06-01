@@ -1,9 +1,9 @@
 package com.onmi.domain.usecase.timetable
 
-import com.onmi.database.UserDao
 import com.onmi.domain.exception.NeisException
 import com.onmi.domain.exception.NeisResult
 import com.onmi.domain.repository.TimeTableRepository
+import com.onmi.domain.usecase.user.GetUserInfoFlowUseCase
 import com.onmi.domain.util.DateUtils
 import kotlinx.coroutines.flow.first
 import java.net.UnknownHostException
@@ -38,11 +38,10 @@ sealed interface TimeTableState {
 
 class GetTimeTableUseCase @Inject constructor(
     private val repository: TimeTableRepository,
-    private val userDao: UserDao,
+    private val getUserInfoFlowUseCase: GetUserInfoFlowUseCase,
 ) {
     suspend operator fun invoke(targetDate: String) = runCatching {
-        val userInfo = userDao.getUserInfo().first()
-            ?: return TimeTableState.Failure(TimeTableException.Unknown(NeisResult.UNKNOWN_ERROR.code))
+        val userInfo = getUserInfoFlowUseCase().first()
 
         repository.getTimeTable(
             schoolCode = userInfo.schoolCode,
