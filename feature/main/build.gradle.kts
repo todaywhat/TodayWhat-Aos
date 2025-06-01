@@ -12,7 +12,6 @@ dependencies {
     implementation(project(":navigation"))
     implementation(project(":core:designsystem"))
     implementation(project(":core:ui"))
-    implementation(project(":core:database"))
     implementation(project(":core:common-android"))
 
     implementation(project(":domain"))

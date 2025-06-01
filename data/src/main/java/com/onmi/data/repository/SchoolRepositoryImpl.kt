@@ -1,14 +1,14 @@
 package com.onmi.data.repository
 
 import com.onmi.data.dto.school.response.toModel
-import com.onmi.data.service.SchoolService
+import com.onmi.data.datasource.SchoolDataSource
 import com.onmi.domain.model.school.response.GetSchoolDepartmentResponseModel
 import com.onmi.domain.model.school.response.SearchSchoolByNameResponseModel
 import com.onmi.domain.repository.SchoolRepository
 import javax.inject.Inject
 
 class SchoolRepositoryImpl @Inject constructor(
-    private val service: SchoolService,
+    private val service: SchoolDataSource,
 ) : SchoolRepository {
 
     override suspend fun searchSchoolByName(searchKeyword: String): List<SearchSchoolByNameResponseModel> {

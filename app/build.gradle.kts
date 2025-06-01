@@ -8,8 +8,8 @@ android {
     namespace = "khs.onmi.aos"
 
     defaultConfig {
-        versionCode = 13
-        versionName = "1.5.1"
+        versionCode = 14
+        versionName = "1.5.2"
     }
 
     packaging {
