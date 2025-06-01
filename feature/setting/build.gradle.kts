@@ -14,7 +14,6 @@ dependencies {
     implementation(project(":core:designsystem"))
     implementation(project(":core:ui"))
     implementation(project(":core:common-android"))
-    implementation(project(":core:database"))
     implementation(project(":feature:widget"))
 
     implementation(libs.bundles.orbit)

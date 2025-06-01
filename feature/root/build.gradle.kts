@@ -14,7 +14,6 @@ dependencies {
     implementation(project(":feature:enterinformation"))
     implementation(project(":feature:main"))
     implementation(project(":feature:setting"))
-    implementation(project(":core:database"))
     implementation(project(":core:designsystem"))
 
     implementation(libs.accompanist.systemuicontroller)
