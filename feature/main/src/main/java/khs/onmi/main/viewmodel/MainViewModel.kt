@@ -13,6 +13,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import khs.onmi.main.viewmodel.container.MainSideEffect
 import khs.onmi.main.viewmodel.container.MainState
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.syntax.simple.intent
@@ -29,55 +30,39 @@ class MainViewModel @Inject constructor(
     private val getUserInfoFlowUseCase: GetUserInfoFlowUseCase,
 ) : ContainerHost<MainState, MainSideEffect>, ViewModel() {
     override val container = container<MainState, MainSideEffect>(MainState())
-    private var targetDate = ""
 
     init {
-        getUserInfo()
-        getTargetDate()
+        settingMainScreen()
     }
 
-    private fun settingMainScreen() {
-        if (targetDate.isNotEmpty()) {
-            getTodayMeals()
-            getTodayTimeTable()
+    private fun settingMainScreen() = viewModelScope.launch {
+        combine(
+            calculateTargetDateUseCase(),
+            getUserInfoFlowUseCase()
+        ) { targetDate, userInfo ->
+            targetDate to userInfo
+        }.catch {
+            intent {
+                postSideEffect(MainSideEffect.ShowToast("메인화면 정보를 가져오는데 문제가 발생했습니다."))
+            }
+        }.collect { (targetDate, userEntity) ->
+            intent {
+                reduce {
+                    state.copy(
+                        targetDate = DateUtils.convertToMonthDay(targetDate),
+                        schoolName = userEntity.schoolName,
+                        grade = userEntity.grade,
+                        `class` = userEntity.classroom
+                    )
+                }
+            }
+
+            launch { getTodayTimeTable(targetDate = targetDate) }
+            launch { getTodayMeals(targetDate = targetDate) }
         }
     }
 
-    private fun getTargetDate() = intent {
-        calculateTargetDateUseCase()
-            .onSuccess { targetDate ->
-                this@MainViewModel.targetDate = targetDate
-                reduce {
-                    state.copy(targetDate = DateUtils.convertToMonthDay(targetDate))
-                }
-
-                settingMainScreen()
-            }.onFailure {
-                postSideEffect(MainSideEffect.ShowToast("메인화면 정보를 가져오는데 문제가 발생했습니다."))
-            }
-    }
-
-    private fun getUserInfo() = viewModelScope.launch {
-        getUserInfoFlowUseCase()
-            .catch {
-                intent {
-                    postSideEffect(MainSideEffect.ShowToast("사용자 정보를 가져오는데 실패했습니다."))
-                }
-            }.collect { userEntity ->
-                getTargetDate()
-                intent {
-                    reduce {
-                        state.copy(
-                            schoolName = userEntity.schoolName,
-                            grade = userEntity.grade,
-                            `class` = userEntity.classroom
-                        )
-                    }
-                }
-            }
-    }
-
-    fun getTodayTimeTable() = intent {
+    fun getTodayTimeTable(targetDate: String = "") = intent {
         reduce {
             state.copy(timeTableState = TimeTableState.Loading)
         }
@@ -91,7 +76,7 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun getTodayMeals() = intent {
+    fun getTodayMeals(targetDate: String = "") = intent {
         reduce {
             state.copy(mealState = MealState.Loading)
         }
