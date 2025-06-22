@@ -1,12 +1,16 @@
 package khs.onmi.setting.viewmodel
 
 import androidx.lifecycle.ViewModel
-import com.onmi.database.UserDao
+import androidx.lifecycle.viewModelScope
+import com.onmi.domain.usecase.option.GetOptionInfoFlowUseCase
+import com.onmi.domain.usecase.option.SetIsShowNextDayInfoAfterDinnerUseCase
+import com.onmi.domain.usecase.option.SetIsSkipWeekendUseCase
+import com.onmi.domain.usecase.user.GetUserInfoFlowUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import khs.onmi.setting.viewmodel.container.SettingSideEffect
 import khs.onmi.setting.viewmodel.container.SettingState
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
@@ -16,41 +20,59 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SettingViewModel @Inject constructor(
-    private val onmiDao: UserDao,
+    private val getUserInfoFlowUseCase: GetUserInfoFlowUseCase,
+    private val getOptionInfoFlowUseCase: GetOptionInfoFlowUseCase,
+    private val setIsSkipWeekendUseCase: SetIsSkipWeekendUseCase,
+    private val setIsShowNextDayInfoAfterDinnerUseCase: SetIsShowNextDayInfoAfterDinnerUseCase,
 ) : ContainerHost<SettingState, SettingSideEffect>, ViewModel() {
 
-    override val container = container<SettingState, SettingSideEffect>(
-        SettingState()
-    )
+    override val container = container<SettingState, SettingSideEffect>(SettingState())
 
     init {
         getUserInfo()
+        getOptionInfo()
     }
 
-    private fun getUserInfo() = intent {
-        onmiDao.getUserInfo()
+    private fun getUserInfo() = viewModelScope.launch {
+        getUserInfoFlowUseCase()
             .catch {
-                postSideEffect(SettingSideEffect.ShowToast("사용자 정보를 가져오는데 실패했습니다."))
-            }.collectLatest { userEntity ->
-                if (userEntity != null) {
+                intent {
+                    postSideEffect(SettingSideEffect.ShowToast("사용자 정보를 가져오는데 실패했습니다."))
+                }
+            }.collect { userEntity ->
+                intent {
                     reduce {
                         state.copy(
                             schoolName = userEntity.schoolName,
                             grade = userEntity.grade,
                             `class` = userEntity.classroom,
-                            isSkipWeekend = userEntity.isSkipWeekend,
-                            isShowNextDayInfoAfterDinner = userEntity.isShowNextDayInfoAfterDinner
                         )
                     }
-                } else {
-                    postSideEffect(SettingSideEffect.ShowToast("사용자 정보를 가져오는데 실패했습니다."))
+                }
+            }
+    }
+
+    private fun getOptionInfo() = viewModelScope.launch {
+        getOptionInfoFlowUseCase()
+            .catch {
+                intent {
+                    postSideEffect(SettingSideEffect.ShowToast("옵션 정보를 가져오는데 실패했습니다."))
+                }
+            }.collect { optionInfo ->
+                intent {
+                    reduce {
+                        state.copy(
+                            isSkipWeekend = optionInfo.isSkipWeekend,
+                            isShowNextDayInfoAfterDinner = optionInfo.isShowNextDayInfoAfterDinner
+                        )
+                    }
                 }
             }
     }
 
     fun setIsSkipWeekend(isSkipWeekend: Boolean) = intent {
         runCatching {
-            onmiDao.setIsSkipWeekend(isSkipWeekend = isSkipWeekend)
+            setIsSkipWeekendUseCase(isSkipWeekend = isSkipWeekend)
         }.onFailure {
             postSideEffect(SettingSideEffect.ShowToast("주말 건너뛰기 여부를 설정하지 못하였습니다."))
         }
@@ -58,7 +80,7 @@ class SettingViewModel @Inject constructor(
 
     fun setIsShowNextDayInfoAfterDinner(isShowNextDayInfoAfterDinner: Boolean) = intent {
         runCatching {
-            onmiDao.setIsShowNextDayInfoAfterDinner(isShowNextDayInfoAfterDinner = isShowNextDayInfoAfterDinner)
+            setIsShowNextDayInfoAfterDinnerUseCase(isShowNextDayInfoAfterDinner = isShowNextDayInfoAfterDinner)
         }.onFailure {
             postSideEffect(SettingSideEffect.ShowToast("저녁 후 내일 급식 표시 여부를 설정하지 못하였습니다."))
         }

@@ -13,4 +13,7 @@ dependencies {
 
     implementation(libs.bundles.ktor)
     implementation(libs.kotlinx.serialization.json)
+
+    implementation(libs.androidx.datastore)
+    implementation(libs.androidx.datastore.core)
 }
