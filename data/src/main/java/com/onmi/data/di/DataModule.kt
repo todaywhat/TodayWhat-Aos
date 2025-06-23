@@ -1,5 +1,6 @@
 package com.onmi.data.di
 
+import com.onmi.data.datasource.AppLaunchDataSource
 import com.onmi.data.datasource.LocalOptionDataSource
 import com.onmi.data.datasource.LocalUserDataSource
 import com.onmi.data.datasourceimpl.MealDataSourceImpl
@@ -8,6 +9,7 @@ import com.onmi.data.datasourceimpl.TimeTableDataSourceImpl
 import com.onmi.data.datasource.MealDataSource
 import com.onmi.data.datasource.SchoolDataSource
 import com.onmi.data.datasource.TimeTableDataSource
+import com.onmi.data.datasourceimpl.AppLaunchDataSourceImpl
 import com.onmi.data.datasourceimpl.LocalOptionDataSourceImpl
 import com.onmi.data.datasourceimpl.LocalUserDataSourceImpl
 import dagger.Binds
@@ -49,4 +51,10 @@ internal interface DataModule {
     fun bindLocalUserDataSource(
         impl: LocalUserDataSourceImpl,
     ): LocalUserDataSource
+
+    @Singleton
+    @Binds
+    fun bindAppLaunchDataSource(
+        impl: AppLaunchDataSourceImpl,
+    ): AppLaunchDataSource
 }
