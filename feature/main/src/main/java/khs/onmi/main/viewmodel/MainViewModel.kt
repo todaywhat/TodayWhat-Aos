@@ -1,7 +1,10 @@
 package khs.onmi.main.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.onmi.domain.usecase.applaunch.GetAppLaunchCountUseCase
+import com.onmi.domain.usecase.applaunch.IncreaseAppLaunchCountUseCase
 import com.onmi.domain.usecase.common.CalculateTargetDateUseCase
 import com.onmi.domain.usecase.meal.GetMealsUseCase
 import com.onmi.domain.usecase.meal.MealState
@@ -28,10 +31,14 @@ class MainViewModel @Inject constructor(
     private val getTimeTableUseCase: GetTimeTableUseCase,
     private val getMealsUseCase: GetMealsUseCase,
     private val getUserInfoFlowUseCase: GetUserInfoFlowUseCase,
+    private val getAppLaunchCountUseCase: GetAppLaunchCountUseCase,
+    private val increaseAppLaunchCountUseCase: IncreaseAppLaunchCountUseCase,
 ) : ContainerHost<MainState, MainSideEffect>, ViewModel() {
     override val container = container<MainState, MainSideEffect>(MainState())
 
     init {
+        getAppLaunchCount()
+        increaseAppLaunchCount()
         settingMainScreen()
     }
 
@@ -88,5 +95,18 @@ class MainViewModel @Inject constructor(
                 state.copy(mealState = response)
             }
         }
+    }
+
+    private fun getAppLaunchCount() = viewModelScope.launch {
+        getAppLaunchCountUseCase().collect { count ->
+            Log.d("logtag", count.toString())
+            if (count == 3) {
+                // show nudge
+            }
+        }
+    }
+
+    private fun increaseAppLaunchCount() = viewModelScope.launch {
+        increaseAppLaunchCountUseCase()
     }
 }
