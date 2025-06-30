@@ -206,6 +206,19 @@ fun WidgetAddIcon(
     )
 }
 
+@Composable
+fun ArrowUpRightIcon(
+    tint: Color,
+    modifier: Modifier = Modifier,
+) {
+    Icon(
+        painter = painterResource(id = R.drawable.ic_arrow_up_right),
+        contentDescription = "Arrow Up Right Icon",
+        tint = tint,
+        modifier = modifier
+    )
+}
+
 @Preview
 @Composable
 fun IconsPre() {
@@ -226,6 +239,7 @@ fun IconsPre() {
             ArrowBackIcon(tint = color.TextPrimary)
             PaperIcon(tint = color.TextPrimary)
             WidgetAddIcon(tint = color.TextPrimary)
+            ArrowUpRightIcon(tint = color.TextPrimary)
         }
     }
 }
