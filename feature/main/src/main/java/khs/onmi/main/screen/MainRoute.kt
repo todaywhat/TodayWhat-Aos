@@ -40,6 +40,7 @@ fun MainRoute(
         uiState = uiState,
         navigate = navController::navigate,
         reloadTimeTable = viewModel::getTodayTimeTable,
-        reloadMeal = viewModel::getTodayMeals
+        reloadMeal = viewModel::getTodayMeals,
+        updateReviewNudgeVisible = viewModel::updateReviewNudgeVisible
     )
 }

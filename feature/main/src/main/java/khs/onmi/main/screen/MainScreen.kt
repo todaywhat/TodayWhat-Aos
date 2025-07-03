@@ -2,6 +2,7 @@ package khs.onmi.main.screen
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.interaction.DragInteraction
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,6 +19,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import khs.onmi.core.common.android.EventLogger
@@ -29,6 +31,7 @@ import khs.onmi.core.designsystem.theme.ONMITheme
 import khs.onmi.core.designsystem.utils.WrappedIconButton
 import khs.onmi.main.component.MainTabRow
 import khs.onmi.main.component.MealsSection
+import khs.onmi.main.component.ReviewNudge
 import khs.onmi.main.component.TimeTableSection
 import khs.onmi.main.viewmodel.container.MainState
 import khs.onmi.navigation.ONMINavRoutes
@@ -40,6 +43,7 @@ fun MainScreen(
     navigate: (route: String) -> Unit,
     reloadTimeTable: () -> Unit,
     reloadMeal: () -> Unit,
+    updateReviewNudgeVisible: (visible: Boolean) -> Unit,
 ) {
     val pagerState = rememberPagerState()
     var dragStartPage by remember { mutableStateOf(pagerState.currentPage) }
@@ -102,24 +106,41 @@ fun MainScreen(
             },
             containerColor = color.BackgroundMain
         ) { paddingValues ->
-            HorizontalPager(
+            Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(paddingValues),
-                state = pagerState,
-                pageCount = 2
-            ) { index ->
-                when (index) {
-                    0 -> MealsSection(
-                        state = uiState.mealState,
-                        onReloadClick = reloadMeal
-                    )
+                    .padding(paddingValues)
+            ) {
+                HorizontalPager(
+                    modifier = Modifier.matchParentSize(),
+                    state = pagerState,
+                    pageCount = 2
+                ) { index ->
+                    when (index) {
+                        0 -> MealsSection(
+                            state = uiState.mealState,
+                            onReloadClick = reloadMeal
+                        )
 
-                    1 -> TimeTableSection(
-                        timeTableState = uiState.timeTableState,
-                        onReloadClick = reloadTimeTable
-                    )
+                        1 -> TimeTableSection(
+                            timeTableState = uiState.timeTableState,
+                            onReloadClick = reloadTimeTable
+                        )
+                    }
                 }
+                ReviewNudge(
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .padding(
+                            horizontal = 16.dp,
+                            vertical = 8.dp
+                        ),
+                    visible = uiState.reviewNudgeVisible,
+                    text = "더 나은 급식, 시간표를 위해 리뷰를 남겨주세요",
+                    onClick = {
+                        updateReviewNudgeVisible(false)
+                    },
+                )
             }
         }
     }

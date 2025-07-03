@@ -10,4 +10,5 @@ data class MainState(
     val targetDate: String = "",
     val mealState: MealState = MealState.Loading,
     val timeTableState: TimeTableState = TimeTableState.Loading,
+    val reviewNudgeVisible: Boolean = false,
 )

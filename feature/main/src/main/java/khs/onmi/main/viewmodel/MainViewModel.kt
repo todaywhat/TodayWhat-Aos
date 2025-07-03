@@ -100,13 +100,19 @@ class MainViewModel @Inject constructor(
     private fun getAppLaunchCount() = viewModelScope.launch {
         getAppLaunchCountUseCase().collect { count ->
             Log.d("logtag", count.toString())
-            if (count == 3) {
-                // show nudge
+            if (count >= 5) {
+                updateReviewNudgeVisible(true)
             }
         }
     }
 
     private fun increaseAppLaunchCount() = viewModelScope.launch {
         increaseAppLaunchCountUseCase()
+    }
+
+    fun updateReviewNudgeVisible(visible: Boolean) = intent {
+        reduce {
+            state.copy(reviewNudgeVisible = visible)
+        }
     }
 }
