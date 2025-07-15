@@ -33,7 +33,6 @@ androidXHilt = "1.2.0"
 hilt-navigation = "1.0.0"
 ktor = "2.3.7"
 kotlinxSerializationJson = "1.5.1"
-room = "2.6.0"
 datastore = "1.1.6"
 
 [libraries]
@@ -94,11 +93,6 @@ hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.r
 hilt-work = { group = "androidx.hilt", name = "hilt-work", version.ref = "androidXHilt" }
 androidx-hilt-compiler = { group = "androidx.hilt", name = "hilt-compiler", version.ref = "androidXHilt" }
 hilt-navigation = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hilt-navigation" }
-
-# room
-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 
 # datastore
 androidx-datastore = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
