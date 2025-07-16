@@ -26,7 +26,7 @@ dependencies {
     implementation(project(":feature:widget"))
 
     implementation(libs.bundles.ktor)
-    implementation(libs.hilt.work)
+    implementation(libs.androidx.hilt.work)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)

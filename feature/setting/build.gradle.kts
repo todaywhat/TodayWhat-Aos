@@ -17,7 +17,7 @@ dependencies {
     implementation(project(":feature:widget"))
 
     implementation(libs.bundles.orbit)
-    implementation(libs.hilt.navigation)
+    implementation(libs.androidx.hilt.navigation.compose)
 
     implementation(libs.androidx.glance.appwidget)
 }

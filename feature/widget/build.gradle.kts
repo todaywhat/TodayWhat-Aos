@@ -25,11 +25,11 @@ dependencies {
 
     // Glance & Compose
     implementation(libs.androidx.glance.appwidget)
-    implementation(libs.androidx.glance.appwidget.material)
-    implementation(libs.compose.material3)
+    implementation(libs.androidx.glance.material3)
+    implementation(libs.androidx.compose.material3)
 
     // Work & Hilt
-    implementation(libs.androidx.work.runtime)
-    implementation(libs.hilt.work)
+    implementation(libs.androidx.work)
+    implementation(libs.androidx.hilt.work)
     ksp(libs.androidx.hilt.compiler)
 }
