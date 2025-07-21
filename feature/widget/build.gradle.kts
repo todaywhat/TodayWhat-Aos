@@ -1,19 +1,12 @@
 plugins {
     id("khs.onmi.library")
+    id("khs.onmi.compose")
     id("khs.onmi.hilt")
     id("kotlinx-serialization")
 }
 
 android {
     namespace = "com.onmi.widget"
-
-    buildFeatures {
-        compose = true
-    }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
-    }
 }
 
 dependencies {

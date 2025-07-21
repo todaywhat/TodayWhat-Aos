@@ -28,9 +28,6 @@ dependencies {
     implementation(libs.bundles.ktor)
     implementation(libs.androidx.hilt.work)
 
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.test.ext.junit)
-
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
 }

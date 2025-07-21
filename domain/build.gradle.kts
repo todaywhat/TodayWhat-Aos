@@ -15,6 +15,5 @@ android {
 }
 
 dependencies {
-    testImplementation(libs.io.kotest.runner.junit5)
-    testImplementation(libs.io.mockk.android)
+
 }
