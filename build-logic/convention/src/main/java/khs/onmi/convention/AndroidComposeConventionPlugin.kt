@@ -16,6 +16,12 @@ class AndroidComposeConventionPlugin : Plugin<Project> {
             }
 
             dependencies {
+                val bom = libs.findLibrary("androidx-compose-bom").get()
+
+                add("implementation", platform(bom))
+                add("androidTestImplementation", platform(bom))
+
+                // compose bundle 추후 각 feature가 필요한 libs만 사용하도록 개선
                 add("implementation", libs.findBundle("compose").get())
             }
         }
