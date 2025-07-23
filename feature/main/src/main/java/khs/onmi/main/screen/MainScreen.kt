@@ -1,6 +1,5 @@
 package khs.onmi.main.screen
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.interaction.DragInteraction
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -15,7 +14,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -33,7 +32,6 @@ import khs.onmi.main.component.TimeTableSection
 import khs.onmi.main.viewmodel.container.MainState
 import khs.onmi.navigation.ONMINavRoutes
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MainScreen(
     uiState: MainState,
@@ -41,8 +39,8 @@ fun MainScreen(
     reloadTimeTable: () -> Unit,
     reloadMeal: () -> Unit,
 ) {
-    val pagerState = rememberPagerState()
-    var dragStartPage by remember { mutableStateOf(pagerState.currentPage) }
+    val pagerState = rememberPagerState(pageCount = { 2 })
+    var dragStartPage by remember { mutableIntStateOf(pagerState.currentPage) }
 
     // 메인페이지 Pager 로깅 관련 코드
     LaunchedEffect(pagerState) {
@@ -107,7 +105,6 @@ fun MainScreen(
                     .fillMaxSize()
                     .padding(paddingValues),
                 state = pagerState,
-                pageCount = 2
             ) { index ->
                 when (index) {
                     0 -> MealsSection(
