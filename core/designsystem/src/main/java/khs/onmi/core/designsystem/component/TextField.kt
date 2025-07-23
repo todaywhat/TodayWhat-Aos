@@ -8,11 +8,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -32,7 +31,6 @@ import androidx.compose.ui.unit.dp
 import khs.onmi.core.designsystem.icon.XMarkCircleFillIcon
 import khs.onmi.core.designsystem.theme.ONMITheme
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ONMITextField(
     modifier: Modifier = Modifier,
@@ -70,11 +68,12 @@ fun ONMITextField(
             value = value,
             onValueChange = onValueChange,
             textStyle = typography.Body1,
-            colors = TextFieldDefaults.outlinedTextFieldColors(
+            colors = OutlinedTextFieldDefaults.colors(
                 focusedTextColor = color.TextPrimary,
                 unfocusedTextColor = color.TextPrimary,
                 cursorColor = color.TextPrimary,
-                containerColor = color.CardBackground,
+                focusedContainerColor = color.TextPrimary,
+                unfocusedContainerColor = color.TextPrimary,
                 focusedBorderColor = Color.Transparent,
                 unfocusedBorderColor = Color.Transparent,
             ),
