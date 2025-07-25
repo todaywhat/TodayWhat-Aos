@@ -50,6 +50,7 @@ fun ONMITextField(
     }
 
     ONMITheme { color, typography ->
+        // TODO : BasicTextField 이용해 개선
         OutlinedTextField(
             modifier = modifier
                 .height(52.dp)
@@ -72,8 +73,8 @@ fun ONMITextField(
                 focusedTextColor = color.TextPrimary,
                 unfocusedTextColor = color.TextPrimary,
                 cursorColor = color.TextPrimary,
-                focusedContainerColor = color.TextPrimary,
-                unfocusedContainerColor = color.TextPrimary,
+                focusedContainerColor = color.CardBackground,
+                unfocusedContainerColor = color.CardBackground,
                 focusedBorderColor = Color.Transparent,
                 unfocusedBorderColor = Color.Transparent,
             ),
