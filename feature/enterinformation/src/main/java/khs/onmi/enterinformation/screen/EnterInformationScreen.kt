@@ -3,13 +3,13 @@ package khs.onmi.enterinformation.screen
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -63,7 +63,7 @@ fun EnterInformationScreen(
         Scaffold(
             modifier = Modifier
                 .fillMaxSize()
-                .background(color.BackgroundMain),
+                .safeDrawingPadding(),
             containerColor = color.BackgroundMain,
             topBar = {
                 TopNavigationBar(

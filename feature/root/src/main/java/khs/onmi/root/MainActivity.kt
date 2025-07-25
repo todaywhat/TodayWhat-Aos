@@ -2,8 +2,11 @@ package khs.onmi.root
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.compose.ui.graphics.toArgb
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -20,12 +23,15 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         viewModel.checkUserAlreadyEnteredInfo { isEntered ->
             setContent {
                 ONMITheme { color, _ ->
                     val navController = rememberNavController()
                     val systemUiController = rememberSystemUiController()
                     systemUiController.setSystemBarsColor(color = color.BackgroundMain)
+
+                    enableEdgeToEdge()
 
                     NavHost(
                         navController = navController,
