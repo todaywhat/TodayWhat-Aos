@@ -2,14 +2,11 @@ package khs.onmi.root
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
-import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.compose.ui.graphics.toArgb
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
 import khs.onmi.core.designsystem.theme.ONMITheme
 import khs.onmi.enterinformation.navigation.enterInformationNavGraph
@@ -28,8 +25,6 @@ class MainActivity : ComponentActivity() {
             setContent {
                 ONMITheme { color, _ ->
                     val navController = rememberNavController()
-                    val systemUiController = rememberSystemUiController()
-                    systemUiController.setSystemBarsColor(color = color.BackgroundMain)
 
                     enableEdgeToEdge()
 
