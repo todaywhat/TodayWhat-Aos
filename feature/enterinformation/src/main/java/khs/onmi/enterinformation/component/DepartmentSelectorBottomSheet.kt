@@ -36,7 +36,6 @@ fun DepartmentSelectorBottomSheet(
 ) {
     ONMITheme { color, typography ->
         ModalBottomSheet(
-            modifier = Modifier.fillMaxHeight(0.5f),
             containerColor = color.BackgroundMain,
             sheetState = sheetState,
             onDismissRequest = onDismissRequest,
@@ -77,7 +76,7 @@ fun DepartmentSelectorBottomSheet(
 @Preview
 @Composable
 fun DepartmentSelectorBottomSheetPre() {
-    val sheetState = rememberModalBottomSheetState()
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val scope = rememberCoroutineScope()
     val (selectedItemIdx, setSelectedItemIdx) = remember {
         mutableStateOf(-1)

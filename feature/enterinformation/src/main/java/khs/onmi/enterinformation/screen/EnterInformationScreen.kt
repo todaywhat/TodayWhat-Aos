@@ -56,7 +56,7 @@ fun EnterInformationScreen(
     onFinishButtonClick: () -> Unit,
 ) {
     val focusManager = LocalFocusManager.current
-    val sheetState = rememberModalBottomSheetState()
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val scope = rememberCoroutineScope()
 
     ONMITheme { color, _ ->
