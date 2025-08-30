@@ -1,6 +1,5 @@
 package khs.onmi.setting.screen
 
-import android.app.Activity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -10,14 +9,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalUriHandler
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.dp
 import khs.onmi.core.designsystem.component.TopNavigationBar
 import khs.onmi.core.designsystem.icon.ArrowBackIcon
@@ -46,37 +41,23 @@ fun SettingScreen(
     onShowNextDayInfoAfterDinnerValueChanged: (value: Boolean) -> Unit,
 ) {
     val uriHandler = LocalUriHandler.current
-    val view = LocalView.current
 
     ONMITheme { color, typography ->
-        if (!view.isInEditMode) {
-            SideEffect {
-                val window = (view.context as Activity).window
-                window.statusBarColor = color.BackgroundSecondary.toArgb()
-            }
-        }
-
-        Scaffold(
+        Column(
             modifier = Modifier
                 .fillMaxSize()
-                .safeDrawingPadding(),
-            containerColor = color.BackgroundSecondary,
-            topBar = {
-                TopNavigationBar(
-                    leading = {
-                        WrappedIconButton(onClick = onBackPressed) {
-                            ArrowBackIcon(tint = color.Black)
-                        }
-                    }
-                )
-            },
+                .background(color.BackgroundSecondary)
+                .safeDrawingPadding()
         ) {
+            TopNavigationBar(
+                leading = {
+                    WrappedIconButton(onClick = onBackPressed) {
+                        ArrowBackIcon(tint = color.Black)
+                    }
+                }
+            )
             Column(
-                modifier = Modifier.padding(
-                    top = it.calculateTopPadding().value.dp,
-                    start = 15.dp,
-                    end = 15.dp
-                ),
+                modifier = Modifier.padding(16.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 Spacer(modifier = Modifier.height(12.dp))

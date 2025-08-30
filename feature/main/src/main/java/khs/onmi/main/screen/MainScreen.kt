@@ -1,16 +1,15 @@
 package khs.onmi.main.screen
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.DragInteraction
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -60,54 +59,45 @@ fun MainScreen(
     }
 
     ONMITheme { color, typography ->
-        Scaffold(
+        Column(
             modifier = Modifier
                 .fillMaxSize()
-                .safeDrawingPadding(),
-            containerColor = color.BackgroundMain,
-            topBar = {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 16.dp)
-                ) {
-                    TopNavigationBar(
-                        leading = {
-                            Text(
-                                text = "오늘뭐임",
-                                style = typography.Headline3,
-                                color = color.Black
-                            )
-                        },
-                        trailing = {
-                            WrappedIconButton(onClick = { navigate(ONMINavRoutes.SETTING) }) {
-                                SettingIcon(tint = color.Black)
-                            }
-                        }
+                .background(color.BackgroundMain)
+                .safeDrawingPadding()
+        ) {
+            Spacer(modifier = Modifier.height(16.dp))
+            TopNavigationBar(
+                leading = {
+                    Text(
+                        text = "오늘뭐임",
+                        style = typography.Headline3,
+                        color = color.Black
                     )
-                    Spacer(modifier = Modifier.height(21.dp))
-                    InfoCard(
-                        modifier = Modifier
-                            .height(95.dp)
-                            .padding(horizontal = 16.dp),
-                        isMeal = pagerState.currentPage == 0,
-                        school = uiState.schoolName,
-                        grade = uiState.grade,
-                        `class` = uiState.`class`,
-                        date = uiState.targetDate
-                    )
-                    Spacer(modifier = Modifier.height(25.dp))
-                    MainTabRow(
-                        pagerState = pagerState,
-                        tabs = listOf("급식", "시간표")
-                    )
+                },
+                trailing = {
+                    WrappedIconButton(onClick = { navigate(ONMINavRoutes.SETTING) }) {
+                        SettingIcon(tint = color.Black)
+                    }
                 }
-            },
-        ) { paddingValues ->
-            HorizontalPager(
+            )
+            Spacer(modifier = Modifier.height(21.dp))
+            InfoCard(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues),
+                    .height(95.dp)
+                    .padding(horizontal = 16.dp),
+                isMeal = pagerState.currentPage == 0,
+                school = uiState.schoolName,
+                grade = uiState.grade,
+                `class` = uiState.`class`,
+                date = uiState.targetDate
+            )
+            Spacer(modifier = Modifier.height(25.dp))
+            MainTabRow(
+                pagerState = pagerState,
+                tabs = listOf("급식", "시간표")
+            )
+            HorizontalPager(
+                modifier = Modifier.fillMaxSize(),
                 state = pagerState,
             ) { index ->
                 when (index) {

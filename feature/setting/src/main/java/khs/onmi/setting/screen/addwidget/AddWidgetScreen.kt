@@ -3,14 +3,14 @@ package khs.onmi.setting.screen.addwidget
 import android.app.PendingIntent
 import android.content.Intent
 import androidx.annotation.DrawableRes
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -70,24 +70,21 @@ fun AddWidgetScreen(
     val coroutineScope = rememberCoroutineScope()
 
     ONMITheme { color, _ ->
-        Scaffold(
+        Column(
             modifier = Modifier
                 .fillMaxSize()
-                .safeDrawingPadding(),
-            containerColor = color.BackgroundSecondary,
-            topBar = {
-                TopNavigationBar(
-                    title = "위젯 추가",
-                    leading = {
-                        WrappedIconButton(onClick = onBackPressed) {
-                            ArrowBackIcon(tint = color.Black)
-                        }
+                .background(color.BackgroundSecondary)
+                .safeDrawingPadding()
+        ) {
+            TopNavigationBar(
+                title = "위젯 추가",
+                leading = {
+                    WrappedIconButton(onClick = onBackPressed) {
+                        ArrowBackIcon(tint = color.Black)
                     }
-                )
-            },
-        ) { paddingValues ->
+                }
+            )
             LazyColumn(
-                modifier = Modifier.padding(paddingValues),
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 contentPadding = PaddingValues(vertical = 24.dp)
             ) {
