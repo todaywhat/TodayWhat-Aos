@@ -2,7 +2,6 @@ package khs.onmi.core.designsystem.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -35,6 +34,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import khs.onmi.core.designsystem.icon.XMarkCircleFillIcon
 import khs.onmi.core.designsystem.theme.ONMITheme
+import khs.onmi.core.designsystem.utils.WrappedIconButton
 
 @Composable
 fun ONMITextField(
@@ -106,12 +106,12 @@ fun ONMITextField(
                         innerTextField()
                     }
                     if (value.isNotEmpty()) {
-                        XMarkCircleFillIcon(
-                            modifier = Modifier
-                                .size(24.dp)
-                                .clickable(onClick = onTrailingIconClick),
-                            tint = color.UnselectedPrimary
-                        )
+                        WrappedIconButton(onClick = onTrailingIconClick) {
+                            XMarkCircleFillIcon(
+                                modifier = Modifier.size(24.dp),
+                                tint = color.UnselectedPrimary
+                            )
+                        }
                     }
                 }
             }
