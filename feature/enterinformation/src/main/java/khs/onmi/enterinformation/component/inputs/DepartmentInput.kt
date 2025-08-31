@@ -1,6 +1,8 @@
 package khs.onmi.enterinformation.component.inputs
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardActionScope
 import androidx.compose.foundation.text.KeyboardActions
@@ -17,7 +19,11 @@ fun DepartmentInput(
     onClear: () -> Unit,
     onDone: KeyboardActionScope.() -> Unit,
 ) {
-    AnimatedVisibility(visible = visible) {
+    AnimatedVisibility(
+        visible = visible,
+        enter = slideInVertically { -it },
+        exit = fadeOut()
+    ) {
         LabelTextFiled(
             modifier = Modifier.fillMaxWidth(),
             label = "학과",
