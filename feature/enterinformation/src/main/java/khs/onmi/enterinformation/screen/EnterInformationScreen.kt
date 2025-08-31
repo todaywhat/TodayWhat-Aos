@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -22,19 +21,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import khs.onmi.core.designsystem.component.ColumnSpacer
 import khs.onmi.core.designsystem.component.ONMIButton
 import khs.onmi.core.designsystem.component.TopNavigationBar
 import khs.onmi.core.designsystem.icon.ArrowBackIcon
 import khs.onmi.core.designsystem.theme.ONMITheme
 import khs.onmi.core.designsystem.utils.WrappedIconButton
-import khs.onmi.core.ui.LabelTextFiled
 import khs.onmi.enterinformation.component.DepartmentSelectorBottomSheet
 import khs.onmi.enterinformation.component.GreetingComponent
-import khs.onmi.enterinformation.component.SchoolSelector
+import khs.onmi.enterinformation.component.inputs.ClassInput
+import khs.onmi.enterinformation.component.inputs.DepartmentInput
+import khs.onmi.enterinformation.component.inputs.GradeInput
+import khs.onmi.enterinformation.component.inputs.SchoolInput
 import khs.onmi.enterinformation.model.CurrentState
 import khs.onmi.enterinformation.viewmodel.container.EnterInformationState
 import kotlinx.coroutines.launch
@@ -59,7 +57,7 @@ fun EnterInformationScreen(
     onFinishButtonClick: () -> Unit,
 ) {
     val focusManager = LocalFocusManager.current
-    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
 
     ONMITheme { color, _ ->
@@ -117,104 +115,50 @@ fun EnterInformationScreen(
                             )
                         )
                     }
-                    AnimatedVisibility(
-                        visible = uiState.currentState == CurrentState.ENTERDEPARTMENT || uiState.currentState == CurrentState.FINISH
-                    ) {
-                        LabelTextFiled(
-                            modifier = Modifier
-                                .fillMaxWidth(),
-                            label = "학과",
-                            value = department,
-                            placeHolderText = "학과를 선택해주세요.",
-                            isReadOnly = true,
-                            onClick = {
-                                setDepartmentSelectorVisible(true)
-                            },
-                            onTrailingIconClick = {
-                                onDepartmentValueChange("")
-                            },
-                            imeAction = ImeAction.Done,
-                            keyboardActions = KeyboardActions(onDone = {
-                                focusManager.clearFocus()
-                            })
-                        )
-                    }
-                    AnimatedVisibility(
-                        visible = uiState.currentState == CurrentState.ENTERCLASS || uiState.currentState == CurrentState.ENTERDEPARTMENT || uiState.currentState == CurrentState.FINISH
-                    ) {
-                        LabelTextFiled(
-                            modifier = Modifier.fillMaxWidth(),
-                            label = "반",
-                            value = `class`,
-                            onValueChange = onClassValueChange,
-                            placeHolderText = "반을 입력해주세요.",
-                            onTrailingIconClick = {
-                                onClassValueChange("")
-                            },
-                            imeAction = ImeAction.Next,
-                            keyboardType = KeyboardType.NumberPassword,
-                            keyboardActions = KeyboardActions(onNext = {
-                                focusManager.moveFocus(FocusDirection.Up)
-                            })
-                        )
-                    }
-                    AnimatedVisibility(
-                        visible = uiState.currentState != CurrentState.ENTERSCHOOL
-                    ) {
-                        LabelTextFiled(
-                            modifier = Modifier.fillMaxWidth(),
-                            label = "학년",
-                            value = grade,
-                            onValueChange = onGradeValueChange,
-                            placeHolderText = "학년을 입력해주세요.",
-                            onTrailingIconClick = {
-                                onGradeValueChange("")
-                            },
-                            keyboardType = KeyboardType.NumberPassword,
-                            imeAction = ImeAction.Next,
-                            keyboardActions = KeyboardActions(onNext = {
-                                focusManager.moveFocus(FocusDirection.Up)
-                            })
-                        )
-                    }
-                    LabelTextFiled(
-                        modifier = Modifier.fillMaxWidth(),
-                        label = "학교이름",
+                    DepartmentInput(
+                        visible = uiState.currentState == CurrentState.ENTERDEPARTMENT || uiState.currentState == CurrentState.FINISH,
+                        value = department,
+                        onClick = { setDepartmentSelectorVisible(true) },
+                        onClear = { onDepartmentValueChange("") },
+                        onDone = { focusManager.clearFocus() }
+                    )
+                    ClassInput(
+                        visible = uiState.currentState == CurrentState.ENTERCLASS || uiState.currentState == CurrentState.ENTERDEPARTMENT || uiState.currentState == CurrentState.FINISH,
+                        value = `class`,
+                        onClassValueChange = onClassValueChange,
+                        onNext = { focusManager.moveFocus(FocusDirection.Up) }
+                    )
+                    GradeInput(
+                        visible = uiState.currentState != CurrentState.ENTERSCHOOL,
+                        value = grade,
+                        onGradeValueChange = onGradeValueChange,
+                        onNext = { focusManager.moveFocus(FocusDirection.Up) }
+                    )
+                    SchoolInput(
+                        selectorVisible = uiState.schoolSelectorVisible,
+                        schools = uiState.schoolList.map { school ->
+                            Pair(
+                                school.schoolName,
+                                school.schoolLocation
+                            )
+                        },
                         value = school,
-                        placeHolderText = "학교이름을 입력해주세요.",
-                        onValueChange = onSchoolValueChange,
+                        onSchoolValueChange = onSchoolValueChange,
                         onClick = {
                             setSchoolSelectorVisible(true)
                             setCurrentState(CurrentState.ENTERSCHOOL)
                         },
-                        onTrailingIconClick = {
-                            onSchoolValueChange("")
-                        },
-                        imeAction = ImeAction.Next,
-                        keyboardActions = KeyboardActions(onNext = {
-                            focusManager.moveFocus(FocusDirection.Up)
-                        })
+                        onNext = { focusManager.moveFocus(FocusDirection.Up) },
+                        onSchoolSelected = { idx ->
+                            onSchoolValueChange(uiState.schoolList[idx].schoolName)
+                            setSchoolSelectorVisible(false)
+                            onSchoolItemClick(
+                                uiState.schoolList[idx].educationCode,
+                                uiState.schoolList[idx].schoolCode
+                            )
+                            focusManager.clearFocus()
+                        }
                     )
-                    AnimatedVisibility(visible = uiState.schoolSelectorVisible) {
-                        ColumnSpacer(dp = 8.dp)
-                        SchoolSelector(
-                            schools = uiState.schoolList.map { school ->
-                                Pair(
-                                    school.schoolName,
-                                    school.schoolLocation
-                                )
-                            },
-                            onItemClick = { idx ->
-                                onSchoolValueChange(uiState.schoolList[idx].schoolName)
-                                setSchoolSelectorVisible(false)
-                                onSchoolItemClick(
-                                    uiState.schoolList[idx].educationCode,
-                                    uiState.schoolList[idx].schoolCode
-                                )
-                                focusManager.clearFocus()
-                            }
-                        )
-                    }
                 }
             }
             AnimatedVisibility(
