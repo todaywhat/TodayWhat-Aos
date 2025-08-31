@@ -1,28 +1,33 @@
 package khs.onmi.core.designsystem.component
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -50,10 +55,12 @@ fun ONMITextField(
     }
 
     ONMITheme { color, typography ->
-        // TODO : BasicTextField 이용해 개선
-        OutlinedTextField(
+        BasicTextField(
             modifier = modifier
-                .height(52.dp)
+                .background(
+                    color = color.CardBackground,
+                    shape = RoundedCornerShape(8.dp)
+                )
                 .border(
                     1.dp,
                     if (isFocused) color.Black else Color.Transparent,
@@ -68,38 +75,46 @@ fun ONMITextField(
                 },
             value = value,
             onValueChange = onValueChange,
-            textStyle = typography.Body1,
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedTextColor = color.TextPrimary,
-                unfocusedTextColor = color.TextPrimary,
-                cursorColor = color.TextPrimary,
-                focusedContainerColor = color.CardBackground,
-                unfocusedContainerColor = color.CardBackground,
-                focusedBorderColor = Color.Transparent,
-                unfocusedBorderColor = Color.Transparent,
-            ),
-            placeholder = {
-                Text(
-                    text = placeHolderText,
-                    style = typography.Body1,
-                    color = color.UnselectedPrimary
-                )
-            },
-            trailingIcon = {
-                if (value != "") {
-                    IconButton(onClick = onTrailingIconClick) {
-                        XMarkCircleFillIcon(tint = color.UnselectedPrimary)
-                    }
-                }
-            },
+            textStyle = typography.Body1.copy(color = color.TextPrimary),
             keyboardOptions = KeyboardOptions(
                 keyboardType = keyboardType,
                 imeAction = imeAction
             ),
             keyboardActions = keyboardActions,
-            maxLines = 1,
-            shape = RoundedCornerShape(8.dp),
+            singleLine = true,
             readOnly = isReadOnly,
+            cursorBrush = SolidColor(color.TextPrimary),
+            decorationBox = { innerTextField ->
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .padding(vertical = 14.dp)
+                            .weight(1f),
+                    ) {
+                        if (value.isEmpty()) {
+                            Text(
+                                text = placeHolderText,
+                                style = typography.Body1,
+                                color = color.UnselectedPrimary
+                            )
+                        }
+                        innerTextField()
+                    }
+                    if (value.isNotEmpty()) {
+                        XMarkCircleFillIcon(
+                            modifier = Modifier
+                                .size(24.dp)
+                                .clickable(onClick = onTrailingIconClick),
+                            tint = color.UnselectedPrimary
+                        )
+                    }
+                }
+            }
         )
     }
 }
