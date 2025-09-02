@@ -17,9 +17,6 @@ import khs.onmi.enterinformation.viewmodel.container.EnterInformationSideEffect
 import khs.onmi.enterinformation.viewmodel.container.EnterInformationState
 import khs.onmi.navigation.ONMINavRoutes
 import org.orbitmvi.orbit.ContainerHost
-import org.orbitmvi.orbit.syntax.simple.intent
-import org.orbitmvi.orbit.syntax.simple.postSideEffect
-import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
 import javax.inject.Inject
 

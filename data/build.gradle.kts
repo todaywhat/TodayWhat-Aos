@@ -14,6 +14,6 @@ dependencies {
     implementation(libs.bundles.ktor)
     implementation(libs.kotlinx.serialization.json)
 
-    implementation(libs.androidx.datastore)
-    implementation(libs.androidx.datastore.core)
+    implementation(libs.androidx.datastore.preferences)
+    implementation(libs.androidx.datastore.preferences.core)
 }

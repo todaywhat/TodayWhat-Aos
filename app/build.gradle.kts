@@ -26,10 +26,7 @@ dependencies {
     implementation(project(":feature:widget"))
 
     implementation(libs.bundles.ktor)
-    implementation(libs.hilt.work)
-
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.test.ext.junit)
+    implementation(libs.androidx.hilt.work)
 
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)

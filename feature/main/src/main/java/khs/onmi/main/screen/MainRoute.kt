@@ -1,8 +1,8 @@
 package khs.onmi.main.screen
 
-import android.app.Activity
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
+import androidx.activity.compose.LocalActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -18,15 +18,16 @@ fun MainRoute(
     navController: NavController,
     viewModel: MainViewModel = hiltViewModel(),
 ) {
-    val activity = LocalContext.current as Activity
+    val activity = LocalActivity.current
+    val context = LocalContext.current
     var backPressedTime: Long = 0
 
     BackHandler {
         if (System.currentTimeMillis() - backPressedTime >= 2000) {
             backPressedTime = System.currentTimeMillis()
-            Toast.makeText(activity, "한번 더 누르면 종료됩니다.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "한번 더 누르면 종료됩니다.", Toast.LENGTH_SHORT).show()
         } else {
-            activity.finish()
+            activity?.finish()
         }
     }
 

@@ -18,5 +18,5 @@ dependencies {
     implementation(project(":data"))
 
     implementation(libs.bundles.orbit)
-    implementation(libs.hilt.navigation)
+    implementation(libs.androidx.hilt.navigation.compose)
 }
