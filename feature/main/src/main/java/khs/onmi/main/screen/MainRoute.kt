@@ -6,6 +6,7 @@ import androidx.activity.compose.LocalActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import khs.onmi.core.common.android.EventLogger
@@ -18,12 +19,13 @@ fun MainRoute(
     viewModel: MainViewModel = hiltViewModel(),
 ) {
     val activity = LocalActivity.current
+    val context = LocalContext.current
     var backPressedTime: Long = 0
 
     BackHandler {
         if (System.currentTimeMillis() - backPressedTime >= 2000) {
             backPressedTime = System.currentTimeMillis()
-            Toast.makeText(activity, "한번 더 누르면 종료됩니다.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "한번 더 누르면 종료됩니다.", Toast.LENGTH_SHORT).show()
         } else {
             activity?.finish()
         }
