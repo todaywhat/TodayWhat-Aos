@@ -45,7 +45,7 @@ fun ONMITextField(
     imeAction: ImeAction = ImeAction.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     isReadOnly: Boolean = false,
-    focusRequester: FocusRequester = FocusRequester(),
+    focusRequester: FocusRequester = remember { FocusRequester() },
     onClick: () -> Unit = {},
     onValueChange: (String) -> Unit,
     onTrailingIconClick: () -> Unit,
