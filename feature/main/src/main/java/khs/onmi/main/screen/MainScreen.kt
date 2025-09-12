@@ -1,21 +1,20 @@
 package khs.onmi.main.screen
 
-import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.DragInteraction
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -33,7 +32,6 @@ import khs.onmi.main.component.TimeTableSection
 import khs.onmi.main.viewmodel.container.MainState
 import khs.onmi.navigation.ONMINavRoutes
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MainScreen(
     uiState: MainState,
@@ -41,8 +39,8 @@ fun MainScreen(
     reloadTimeTable: () -> Unit,
     reloadMeal: () -> Unit,
 ) {
-    val pagerState = rememberPagerState()
-    var dragStartPage by remember { mutableStateOf(pagerState.currentPage) }
+    val pagerState = rememberPagerState(pageCount = { 2 })
+    var dragStartPage by remember { mutableIntStateOf(pagerState.currentPage) }
 
     // 메인페이지 Pager 로깅 관련 코드
     LaunchedEffect(pagerState) {
@@ -61,53 +59,46 @@ fun MainScreen(
     }
 
     ONMITheme { color, typography ->
-        Scaffold(
-            topBar = {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 16.dp)
-                ) {
-                    TopNavigationBar(
-                        leading = {
-                            Text(
-                                text = "오늘뭐임",
-                                style = typography.Headline3,
-                                color = color.Black
-                            )
-                        },
-                        trailing = {
-                            WrappedIconButton(onClick = { navigate(ONMINavRoutes.SETTING) }) {
-                                SettingIcon(tint = color.Black)
-                            }
-                        }
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(color.BackgroundMain)
+                .safeDrawingPadding()
+        ) {
+            Spacer(modifier = Modifier.height(16.dp))
+            TopNavigationBar(
+                leading = {
+                    Text(
+                        text = "오늘뭐임",
+                        style = typography.Headline3,
+                        color = color.Black
                     )
-                    Spacer(modifier = Modifier.height(21.dp))
-                    InfoCard(
-                        modifier = Modifier
-                            .height(95.dp)
-                            .padding(horizontal = 16.dp),
-                        isMeal = pagerState.currentPage == 0,
-                        school = uiState.schoolName,
-                        grade = uiState.grade,
-                        `class` = uiState.`class`,
-                        date = uiState.targetDate
-                    )
-                    Spacer(modifier = Modifier.height(25.dp))
-                    MainTabRow(
-                        pagerState = pagerState,
-                        tabs = listOf("급식", "시간표")
-                    )
+                },
+                trailing = {
+                    WrappedIconButton(onClick = { navigate(ONMINavRoutes.SETTING) }) {
+                        SettingIcon(tint = color.Black)
+                    }
                 }
-            },
-            containerColor = color.BackgroundMain
-        ) { paddingValues ->
-            HorizontalPager(
+            )
+            Spacer(modifier = Modifier.height(21.dp))
+            InfoCard(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues),
+                    .height(95.dp)
+                    .padding(horizontal = 16.dp),
+                isMeal = pagerState.currentPage == 0,
+                school = uiState.schoolName,
+                grade = uiState.grade,
+                `class` = uiState.`class`,
+                date = uiState.targetDate
+            )
+            Spacer(modifier = Modifier.height(25.dp))
+            MainTabRow(
+                pagerState = pagerState,
+                tabs = listOf("급식", "시간표")
+            )
+            HorizontalPager(
+                modifier = Modifier.fillMaxSize(),
                 state = pagerState,
-                pageCount = 2
             ) { index ->
                 when (index) {
                     0 -> MealsSection(

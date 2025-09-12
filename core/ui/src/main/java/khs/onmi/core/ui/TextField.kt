@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.text.input.ImeAction
@@ -21,7 +22,7 @@ fun LabelTextFiled(
     onValueChange: (String) -> Unit = {},
     placeHolderText: String,
     isReadOnly: Boolean = false,
-    focusRequester: FocusRequester = FocusRequester(),
+    focusRequester: FocusRequester = remember { FocusRequester() },
     onClick: () -> Unit = {},
     onTrailingIconClick: () -> Unit,
     keyboardType: KeyboardType = KeyboardType.Text,

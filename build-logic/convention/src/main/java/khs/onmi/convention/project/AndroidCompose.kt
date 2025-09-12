@@ -6,11 +6,11 @@ import org.gradle.api.Project
 internal fun Project.configureAndroidCompose(
     commonExtension: CommonExtension<*, *, *, *, *, *>
 ) {
-    commonExtension.apply {
-        buildFeatures.compose = true
+    pluginManager.apply("org.jetbrains.kotlin.plugin.compose")
 
-        composeOptions {
-            kotlinCompilerExtensionVersion = libs.findVersion("composeCompiler").get().toString()
+    commonExtension.apply {
+        buildFeatures {
+            compose = true
         }
     }
 }

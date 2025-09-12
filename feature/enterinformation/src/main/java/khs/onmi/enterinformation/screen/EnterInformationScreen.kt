@@ -4,34 +4,36 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import khs.onmi.core.designsystem.component.ColumnSpacer
 import khs.onmi.core.designsystem.component.ONMIButton
 import khs.onmi.core.designsystem.component.TopNavigationBar
 import khs.onmi.core.designsystem.icon.ArrowBackIcon
 import khs.onmi.core.designsystem.theme.ONMITheme
 import khs.onmi.core.designsystem.utils.WrappedIconButton
-import khs.onmi.core.ui.LabelTextFiled
 import khs.onmi.enterinformation.component.DepartmentSelectorBottomSheet
 import khs.onmi.enterinformation.component.GreetingComponent
-import khs.onmi.enterinformation.component.SchoolSelector
+import khs.onmi.enterinformation.component.inputs.ClassInput
+import khs.onmi.enterinformation.component.inputs.DepartmentInput
+import khs.onmi.enterinformation.component.inputs.GradeInput
+import khs.onmi.enterinformation.component.inputs.SchoolInput
 import khs.onmi.enterinformation.model.CurrentState
 import khs.onmi.enterinformation.viewmodel.container.EnterInformationState
 import kotlinx.coroutines.launch
@@ -60,12 +62,34 @@ fun EnterInformationScreen(
     val scope = rememberCoroutineScope()
 
     ONMITheme { color, _ ->
-        Scaffold(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(color.BackgroundMain),
-            containerColor = color.BackgroundMain,
-            topBar = {
+        if (uiState.departmentSelectorVisible) {
+            DepartmentSelectorBottomSheet(
+                departments = uiState.departmentList,
+                sheetState = sheetState,
+                selectedItemIdx = uiState.departmentList.indexOf(department),
+                onItemClick = { idx ->
+                    onDepartmentValueChange(uiState.departmentList[idx])
+                    scope.launch { sheetState.hide() }.invokeOnCompletion {
+                        if (!sheetState.isVisible) {
+                            setDepartmentSelectorVisible(false)
+                            focusManager.moveFocus(FocusDirection.Up)
+                        }
+                    }
+                },
+                onDismissRequest = {
+                    setDepartmentSelectorVisible(false)
+                    focusManager.clearFocus()
+                }
+            )
+        }
+
+        Box {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(color.BackgroundMain)
+                    .safeDrawingPadding()
+            ) {
                 TopNavigationBar(
                     leading = {
                         WrappedIconButton(onClick = onBackButtonClick) {
@@ -73,135 +97,60 @@ fun EnterInformationScreen(
                         }
                     }
                 )
-            },
-            bottomBar = {
-                AnimatedVisibility(
-                    visible = uiState.currentState == CurrentState.ENTERDEPARTMENT || uiState.currentState == CurrentState.FINISH,
-                    enter = slideInVertically { it },
-                    exit = slideOutVertically { it }
+                Spacer(modifier = Modifier.height(16.dp))
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                    verticalArrangement = Arrangement.spacedBy(24.dp)
                 ) {
-                    ONMIButton(
-                        modifier = Modifier
-                            .padding(16.dp)
-                            .fillMaxWidth()
-                            .height(52.dp),
-                        text = if (uiState.currentState == CurrentState.ENTERDEPARTMENT) "이대로하기" else "확인!",
-                        isEnabled = true,
-                        onClick = onFinishButtonClick
-                    )
-                }
-            }
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(
-                        PaddingValues(
-                            start = 16.dp,
-                            end = 16.dp,
-                            top = it.calculateTopPadding() + 16.dp
+                    AnimatedVisibility(
+                        visible = uiState.currentState != CurrentState.ENTERSCHOOL,
+                        enter = slideInVertically(),
+                        exit = slideOutVertically()
+                    ) {
+                        GreetingComponent(
+                            greetings = Pair(
+                                uiState.greetingTitle,
+                                uiState.greetingBody
+                            )
                         )
-                    ),
-            ) {
-                AnimatedVisibility(
-                    modifier = Modifier.padding(bottom = 24.dp),
-                    visible = uiState.currentState != CurrentState.ENTERSCHOOL,
-                    enter = slideInVertically(),
-                    exit = slideOutVertically()
-                ) {
-                    GreetingComponent(greetings = Pair(uiState.greetingTitle, uiState.greetingBody))
-                }
-                AnimatedVisibility(
-                    modifier = Modifier.padding(bottom = 24.dp),
-                    visible = uiState.currentState == CurrentState.ENTERDEPARTMENT || uiState.currentState == CurrentState.FINISH
-                ) {
-                    LabelTextFiled(
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        label = "학과",
+                    }
+                    DepartmentInput(
+                        visible = uiState.currentState == CurrentState.ENTERDEPARTMENT || uiState.currentState == CurrentState.FINISH,
                         value = department,
-                        placeHolderText = "학과를 선택해주세요.",
-                        isReadOnly = true,
-                        onClick = {
-                            setDepartmentSelectorVisible(true)
-                        },
-                        onTrailingIconClick = {
-                            onDepartmentValueChange("")
-                        },
-                        imeAction = ImeAction.Done,
-                        keyboardActions = KeyboardActions(onDone = {
-                            focusManager.clearFocus()
-                        })
+                        onClick = { setDepartmentSelectorVisible(true) },
+                        onClear = { onDepartmentValueChange("") },
+                        onDone = { focusManager.clearFocus() }
                     )
-                }
-                AnimatedVisibility(
-                    modifier = Modifier.padding(bottom = 24.dp),
-                    visible = uiState.currentState == CurrentState.ENTERCLASS || uiState.currentState == CurrentState.ENTERDEPARTMENT || uiState.currentState == CurrentState.FINISH
-                ) {
-                    LabelTextFiled(
-                        modifier = Modifier.fillMaxWidth(),
-                        label = "반",
+                    ClassInput(
+                        visible = uiState.currentState == CurrentState.ENTERCLASS || uiState.currentState == CurrentState.ENTERDEPARTMENT || uiState.currentState == CurrentState.FINISH,
                         value = `class`,
-                        onValueChange = onClassValueChange,
-                        placeHolderText = "반을 입력해주세요.",
-                        onTrailingIconClick = {
-                            onClassValueChange("")
-                        },
-                        imeAction = ImeAction.Next,
-                        keyboardType = KeyboardType.NumberPassword,
-                        keyboardActions = KeyboardActions(onNext = {
-                            focusManager.moveFocus(FocusDirection.Up)
-                        })
+                        onClassValueChange = onClassValueChange,
+                        onNext = { focusManager.moveFocus(FocusDirection.Up) }
                     )
-                }
-                AnimatedVisibility(
-                    modifier = Modifier.padding(bottom = 24.dp),
-                    visible = uiState.currentState != CurrentState.ENTERSCHOOL
-                ) {
-                    LabelTextFiled(
-                        modifier = Modifier.fillMaxWidth(),
-                        label = "학년",
+                    GradeInput(
+                        visible = uiState.currentState != CurrentState.ENTERSCHOOL,
                         value = grade,
-                        onValueChange = onGradeValueChange,
-                        placeHolderText = "학년을 입력해주세요.",
-                        onTrailingIconClick = {
-                            onGradeValueChange("")
-                        },
-                        keyboardType = KeyboardType.NumberPassword,
-                        imeAction = ImeAction.Next,
-                        keyboardActions = KeyboardActions(onNext = {
-                            focusManager.moveFocus(FocusDirection.Up)
-                        })
+                        onGradeValueChange = onGradeValueChange,
+                        onNext = { focusManager.moveFocus(FocusDirection.Up) }
                     )
-                }
-                LabelTextFiled(
-                    modifier = Modifier.fillMaxWidth(),
-                    label = "학교이름",
-                    value = school,
-                    placeHolderText = "학교이름을 입력해주세요.",
-                    onValueChange = onSchoolValueChange,
-                    onClick = {
-                        setSchoolSelectorVisible(true)
-                        setCurrentState(CurrentState.ENTERSCHOOL)
-                    },
-                    onTrailingIconClick = {
-                        onSchoolValueChange("")
-                    },
-                    imeAction = ImeAction.Next,
-                    keyboardActions = KeyboardActions(onNext = {
-                        focusManager.moveFocus(FocusDirection.Up)
-                    })
-                )
-                AnimatedVisibility(visible = uiState.schoolSelectorVisible) {
-                    ColumnSpacer(dp = 8.dp)
-                    SchoolSelector(
+                    SchoolInput(
+                        selectorVisible = uiState.schoolSelectorVisible,
                         schools = uiState.schoolList.map { school ->
                             Pair(
                                 school.schoolName,
                                 school.schoolLocation
                             )
                         },
-                        onItemClick = { idx ->
+                        value = school,
+                        onSchoolValueChange = onSchoolValueChange,
+                        onClick = {
+                            setSchoolSelectorVisible(true)
+                            setCurrentState(CurrentState.ENTERSCHOOL)
+                        },
+                        onNext = { focusManager.moveFocus(FocusDirection.Up) },
+                        onSchoolSelected = { idx ->
                             onSchoolValueChange(uiState.schoolList[idx].schoolName)
                             setSchoolSelectorVisible(false)
                             onSchoolItemClick(
@@ -213,25 +162,23 @@ fun EnterInformationScreen(
                     )
                 }
             }
-
-            if (uiState.departmentSelectorVisible) {
-                DepartmentSelectorBottomSheet(
-                    departments = uiState.departmentList,
-                    sheetState = sheetState,
-                    selectedItemIdx = uiState.departmentList.indexOf(department),
-                    onItemClick = { idx ->
-                        onDepartmentValueChange(uiState.departmentList[idx])
-                        scope.launch { sheetState.hide() }.invokeOnCompletion {
-                            if (!sheetState.isVisible) {
-                                setDepartmentSelectorVisible(false)
-                                focusManager.moveFocus(FocusDirection.Up)
-                            }
-                        }
-                    },
-                    onDismissRequest = {
-                        setDepartmentSelectorVisible(false)
-                        focusManager.clearFocus()
-                    }
+            AnimatedVisibility(
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .safeDrawingPadding()
+                    .imePadding(),
+                visible = uiState.currentState == CurrentState.ENTERDEPARTMENT || uiState.currentState == CurrentState.FINISH,
+                enter = slideInVertically { it },
+                exit = slideOutVertically { it }
+            ) {
+                ONMIButton(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
+                        .height(52.dp),
+                    text = if (uiState.currentState == CurrentState.ENTERDEPARTMENT) "이대로하기" else "확인!",
+                    isEnabled = true,
+                    onClick = onFinishButtonClick
                 )
             }
         }

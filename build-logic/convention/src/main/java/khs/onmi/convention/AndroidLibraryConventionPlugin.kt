@@ -18,7 +18,7 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
 
             extensions.configure<LibraryExtension> {
                 configureKotlinAndroid(this)
-                defaultConfig.targetSdk = 34
+                defaultConfig.targetSdk = 35
 
                 buildTypes {
                     getByName("release") {
@@ -26,11 +26,6 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
                         proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
                     }
                 }
-            }
-
-            dependencies {
-                add("implementation", libs.findLibrary("junit").get())
-                add("implementation", libs.findLibrary("androidx-test-ext-junit").get())
             }
         }
     }

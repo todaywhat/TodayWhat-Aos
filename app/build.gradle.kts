@@ -8,8 +8,8 @@ android {
     namespace = "khs.onmi.aos"
 
     defaultConfig {
-        versionCode = 15
-        versionName = "1.6.0"
+        versionCode = 16
+        versionName = "1.6.1"
     }
 
     packaging {
@@ -26,10 +26,7 @@ dependencies {
     implementation(project(":feature:widget"))
 
     implementation(libs.bundles.ktor)
-    implementation(libs.hilt.work)
-
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.test.ext.junit)
+    implementation(libs.androidx.hilt.work)
 
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
