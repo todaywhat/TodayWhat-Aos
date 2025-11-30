@@ -6,6 +6,7 @@ import com.onmi.data.dto.timetable.response.GetMiddleSchoolTimeTableResponse
 import com.onmi.data.dto.timetable.response.GetSpecialSchoolTimeTableResponse
 import com.onmi.data.datasource.TimeTableDataSource
 import com.onmi.data.utils.bodyOrThrow
+import com.onmi.domain.model.school.SchoolType
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
@@ -18,13 +19,13 @@ class TimeTableDataSourceImpl @Inject constructor(
 
     override suspend fun getTimeTable(
         schoolCode: String,
-        schoolType: String,
+        schoolType: SchoolType,
         educationCode: String,
         grade: Int,
         `class`: Int,
         department: String?,
         date: String,
-    ): List<String> {
+    ): List<String>? {
         val response = httpClient.get {
             url("/hub/${schoolType}Timetable")
             parameter("ATPT_OFCDC_SC_CODE", educationCode)
@@ -36,31 +37,15 @@ class TimeTableDataSourceImpl @Inject constructor(
         }
 
         return when (schoolType) {
-            "els" -> response.bodyOrThrow<GetElementarySchoolTimTableResponse>().timetable?.getOrNull(
-                1
-            )?.row
-                ?.distinctBy { it.period }
-                ?.map { it.subject }
-                ?: emptyList()
+            SchoolType.Elementary -> response.bodyOrThrow<GetElementarySchoolTimTableResponse>().timetable
 
-            "mis" -> response.bodyOrThrow<GetMiddleSchoolTimeTableResponse>().timetable?.getOrNull(1)?.row
-                ?.distinctBy { it.period }
-                ?.map { it.subject }
-                ?: emptyList()
+            SchoolType.High -> response.bodyOrThrow<GetMiddleSchoolTimeTableResponse>().timetable
 
-            "his" -> response.bodyOrThrow<GetHighSchoolTimeTableResponse>().timetable?.getOrNull(1)?.row
-                ?.distinctBy { it.period }
-                ?.map { it.subject }
-                ?: emptyList()
+            SchoolType.Middle -> response.bodyOrThrow<GetHighSchoolTimeTableResponse>().timetable
 
-            "sps" -> response.bodyOrThrow<GetSpecialSchoolTimeTableResponse>().timetable?.getOrNull(
-                1
-            )?.row
-                ?.distinctBy { it.period }
-                ?.map { it.subject }
-                ?: emptyList()
-
-            else -> emptyList()
-        }
+            SchoolType.Special -> response.bodyOrThrow<GetSpecialSchoolTimeTableResponse>().timetable
+        }?.getOrNull(1)?.row
+            ?.distinctBy { it.period }
+            ?.map { it.subject }
     }
 }

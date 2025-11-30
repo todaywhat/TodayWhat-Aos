@@ -1,0 +1,23 @@
+package com.onmi.domain.model.school
+
+sealed interface SchoolType {
+    data object Elementary : SchoolType
+
+    data object Middle : SchoolType
+
+    data object High : SchoolType
+
+    data object Special : SchoolType
+
+    companion object {
+        fun convertSchoolTypeToKey(type: String): SchoolType {
+            return when (type) {
+                "초등학교" -> Elementary
+                "중학교" -> Middle
+                "고등학교" -> High
+                "특수학교" -> Special
+                else -> throw RuntimeException("알 수 없는 학교 타입입니다.")
+            }
+        }
+    }
+}

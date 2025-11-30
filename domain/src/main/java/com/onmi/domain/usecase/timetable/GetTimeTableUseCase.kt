@@ -2,6 +2,7 @@ package com.onmi.domain.usecase.timetable
 
 import com.onmi.domain.exception.NeisException
 import com.onmi.domain.exception.NeisResult
+import com.onmi.domain.model.school.SchoolType
 import com.onmi.domain.repository.TimeTableRepository
 import com.onmi.domain.usecase.user.GetUserInfoFlowUseCase
 import com.onmi.domain.util.DateUtils
@@ -46,14 +47,14 @@ class GetTimeTableUseCase @Inject constructor(
         retryOnDataNotFound { isRetry ->
             repository.getTimeTable(
                 schoolCode = userInfo.schoolCode,
-                schoolType = convertSchoolTypeToKey(userInfo.schoolType),
+                schoolType = SchoolType.convertSchoolTypeToKey(userInfo.schoolType),
                 educationCode = userInfo.educationCode,
                 grade = userInfo.grade,
                 `class` = userInfo.classroom,
                 department = if (isRetry || userInfo.department.isEmpty()) null else userInfo.department,
                 date = targetDate
             )
-        }
+        } ?: throw NeisException(NeisResult.DATA_NOT_FOUND)
     }.fold(
         onSuccess = { result ->
             TimeTableState.Success(result)
@@ -78,16 +79,6 @@ class GetTimeTableUseCase @Inject constructor(
             TimeTableState.Failure(error)
         }
     )
-
-    private fun convertSchoolTypeToKey(type: String): String {
-        return when (type) {
-            "초등학교" -> "els"
-            "중학교" -> "mis"
-            "고등학교" -> "his"
-            "특수학교" -> "sps"
-            else -> throw RuntimeException("알 수 없는 학교 타입입니다.")
-        }
-    }
 
     private suspend fun <T> retryOnDataNotFound(block: suspend (isRetry: Boolean) -> T): T {
         return try {

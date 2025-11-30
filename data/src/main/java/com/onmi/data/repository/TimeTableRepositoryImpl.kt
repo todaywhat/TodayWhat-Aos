@@ -1,6 +1,7 @@
 package com.onmi.data.repository
 
 import com.onmi.data.datasource.TimeTableDataSource
+import com.onmi.domain.model.school.SchoolType
 import com.onmi.domain.repository.TimeTableRepository
 import javax.inject.Inject
 
@@ -10,13 +11,13 @@ class TimeTableRepositoryImpl @Inject constructor(
 
     override suspend fun getTimeTable(
         schoolCode: String,
-        schoolType: String,
+        schoolType: SchoolType,
         educationCode: String,
         grade: Int,
         `class`: Int,
         department: String?,
         date: String,
-    ): List<String> {
+    ): List<String>? {
         return service.getTimeTable(
             schoolCode = schoolCode,
             schoolType = schoolType,
