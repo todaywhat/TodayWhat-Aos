@@ -14,7 +14,7 @@ class TimeTableRepositoryImpl @Inject constructor(
         educationCode: String,
         grade: Int,
         `class`: Int,
-        department: String,
+        department: String?,
         date: String,
     ): List<String> {
         return service.getTimeTable(

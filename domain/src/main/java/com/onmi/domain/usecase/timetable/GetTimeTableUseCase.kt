@@ -43,15 +43,17 @@ class GetTimeTableUseCase @Inject constructor(
     suspend operator fun invoke(targetDate: String) = runCatching {
         val userInfo = getUserInfoFlowUseCase().first()
 
-        repository.getTimeTable(
-            schoolCode = userInfo.schoolCode,
-            schoolType = convertSchoolTypeToKey(userInfo.schoolType),
-            educationCode = userInfo.educationCode,
-            grade = userInfo.grade,
-            `class` = userInfo.classroom,
-            department = userInfo.department,
-            date = targetDate
-        )
+        retryOnDataNotFound { isRetry ->
+            repository.getTimeTable(
+                schoolCode = userInfo.schoolCode,
+                schoolType = convertSchoolTypeToKey(userInfo.schoolType),
+                educationCode = userInfo.educationCode,
+                grade = userInfo.grade,
+                `class` = userInfo.classroom,
+                department = if (isRetry || userInfo.department.isEmpty()) null else userInfo.department,
+                date = targetDate
+            )
+        }
     }.fold(
         onSuccess = { result ->
             TimeTableState.Success(result)
@@ -84,6 +86,18 @@ class GetTimeTableUseCase @Inject constructor(
             "고등학교" -> "his"
             "특수학교" -> "sps"
             else -> throw RuntimeException("알 수 없는 학교 타입입니다.")
+        }
+    }
+
+    private suspend fun <T> retryOnDataNotFound(block: suspend (isRetry: Boolean) -> T): T {
+        return try {
+            block(false)
+        } catch (exception: NeisException) {
+            if (exception.result == NeisResult.DATA_NOT_FOUND) {
+                block(true)
+            } else {
+                throw exception
+            }
         }
     }
 }

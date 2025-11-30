@@ -8,7 +8,7 @@ interface TimeTableDataSource {
         educationCode: String,
         grade: Int,
         `class`: Int,
-        department: String,
+        department: String?,
         date: String,
     ): List<String>
 }
