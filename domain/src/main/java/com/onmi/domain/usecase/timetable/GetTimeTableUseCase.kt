@@ -1,5 +1,6 @@
 package com.onmi.domain.usecase.timetable
 
+import android.util.Log
 import com.onmi.domain.exception.NeisException
 import com.onmi.domain.exception.NeisResult
 import com.onmi.domain.model.school.SchoolType

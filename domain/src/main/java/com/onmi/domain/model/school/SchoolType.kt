@@ -1,13 +1,10 @@
 package com.onmi.domain.model.school
 
-sealed interface SchoolType {
-    data object Elementary : SchoolType
-
-    data object Middle : SchoolType
-
-    data object High : SchoolType
-
-    data object Special : SchoolType
+enum class SchoolType(val key: String) {
+    Elementary("els"),
+    Middle("mis"),
+    High("his"),
+    Special("sps");
 
     companion object {
         fun convertSchoolTypeToKey(type: String): SchoolType {

@@ -27,7 +27,7 @@ class TimeTableDataSourceImpl @Inject constructor(
         date: String,
     ): List<String>? {
         val response = httpClient.get {
-            url("/hub/${schoolType}Timetable")
+            url("/hub/${schoolType.key}Timetable")
             parameter("ATPT_OFCDC_SC_CODE", educationCode)
             parameter("SD_SCHUL_CODE", schoolCode)
             if (department != null) parameter("DDDEP_NM", department)
