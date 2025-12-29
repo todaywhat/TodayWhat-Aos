@@ -39,9 +39,9 @@ class TimeTableDataSourceImpl @Inject constructor(
         return when (schoolType) {
             SchoolType.Elementary -> response.bodyOrThrow<GetElementarySchoolTimTableResponse>().timetable
 
-            SchoolType.High -> response.bodyOrThrow<GetMiddleSchoolTimeTableResponse>().timetable
+            SchoolType.Middle -> response.bodyOrThrow<GetMiddleSchoolTimeTableResponse>().timetable
 
-            SchoolType.Middle -> response.bodyOrThrow<GetHighSchoolTimeTableResponse>().timetable
+            SchoolType.High -> response.bodyOrThrow<GetHighSchoolTimeTableResponse>().timetable
 
             SchoolType.Special -> response.bodyOrThrow<GetSpecialSchoolTimeTableResponse>().timetable
         }?.getOrNull(1)?.row

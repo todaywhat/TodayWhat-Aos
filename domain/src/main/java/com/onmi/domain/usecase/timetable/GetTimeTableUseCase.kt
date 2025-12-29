@@ -1,6 +1,5 @@
 package com.onmi.domain.usecase.timetable
 
-import android.util.Log
 import com.onmi.domain.exception.NeisException
 import com.onmi.domain.exception.NeisResult
 import com.onmi.domain.model.school.SchoolType
@@ -45,17 +44,15 @@ class GetTimeTableUseCase @Inject constructor(
     suspend operator fun invoke(targetDate: String) = runCatching {
         val userInfo = getUserInfoFlowUseCase().first()
 
-        retryOnDataNotFound { isRetry ->
-            repository.getTimeTable(
-                schoolCode = userInfo.schoolCode,
-                schoolType = SchoolType.convertSchoolTypeToKey(userInfo.schoolType),
-                educationCode = userInfo.educationCode,
-                grade = userInfo.grade,
-                `class` = userInfo.classroom,
-                department = if (isRetry || userInfo.department.isEmpty()) null else userInfo.department,
-                date = targetDate
-            )
-        } ?: throw NeisException(NeisResult.DATA_NOT_FOUND)
+        repository.getTimeTable(
+            schoolCode = userInfo.schoolCode,
+            schoolType = SchoolType.convertSchoolTypeToKey(userInfo.schoolType),
+            educationCode = userInfo.educationCode,
+            grade = userInfo.grade,
+            `class` = userInfo.classroom,
+            department = userInfo.department,
+            date = targetDate
+        ) ?: throw NeisException(NeisResult.DATA_NOT_FOUND)
     }.fold(
         onSuccess = { result ->
             TimeTableState.Success(result)
@@ -80,16 +77,4 @@ class GetTimeTableUseCase @Inject constructor(
             TimeTableState.Failure(error)
         }
     )
-
-    private suspend fun <T> retryOnDataNotFound(block: suspend (isRetry: Boolean) -> T): T {
-        return try {
-            block(false)
-        } catch (exception: NeisException) {
-            if (exception.result == NeisResult.DATA_NOT_FOUND) {
-                block(true)
-            } else {
-                throw exception
-            }
-        }
-    }
 }
