@@ -44,13 +44,25 @@ class GetTimeTableUseCase @Inject constructor(
     suspend operator fun invoke(targetDate: String) = runCatching {
         val userInfo = getUserInfoFlowUseCase().first()
 
-        repository.getTimeTable(
+        // 첫 번째 시도: 학과 정보 포함
+        val resultWithDepartment = repository.getTimeTable(
             schoolCode = userInfo.schoolCode,
             schoolType = SchoolType.convertSchoolTypeToKey(userInfo.schoolType),
             educationCode = userInfo.educationCode,
             grade = userInfo.grade,
             `class` = userInfo.classroom,
             department = userInfo.department,
+            date = targetDate
+        )
+
+        // 결과가 없으면 학과 정보 없이 재시도
+        resultWithDepartment ?: repository.getTimeTable(
+            schoolCode = userInfo.schoolCode,
+            schoolType = SchoolType.convertSchoolTypeToKey(userInfo.schoolType),
+            educationCode = userInfo.educationCode,
+            grade = userInfo.grade,
+            `class` = userInfo.classroom,
+            department = null, // 또는 빈 문자열 ""
             date = targetDate
         ) ?: throw NeisException(NeisResult.DATA_NOT_FOUND)
     }.fold(
