@@ -3,6 +3,7 @@ package com.onmi.domain.usecase.timetable
 import com.onmi.domain.exception.NeisException
 import com.onmi.domain.exception.NeisResult
 import com.onmi.domain.model.school.SchoolType
+import com.onmi.domain.model.user.UserInfoModel
 import com.onmi.domain.repository.TimeTableRepository
 import com.onmi.domain.usecase.user.GetUserInfoFlowUseCase
 import com.onmi.domain.util.DateUtils
@@ -44,27 +45,7 @@ class GetTimeTableUseCase @Inject constructor(
     suspend operator fun invoke(targetDate: String) = runCatching {
         val userInfo = getUserInfoFlowUseCase().first()
 
-        // 첫 번째 시도: 학과 정보 포함
-        val resultWithDepartment = repository.getTimeTable(
-            schoolCode = userInfo.schoolCode,
-            schoolType = SchoolType.convertSchoolTypeToKey(userInfo.schoolType),
-            educationCode = userInfo.educationCode,
-            grade = userInfo.grade,
-            `class` = userInfo.classroom,
-            department = userInfo.department,
-            date = targetDate
-        )
-
-        // 결과가 없으면 학과 정보 없이 재시도
-        resultWithDepartment ?: repository.getTimeTable(
-            schoolCode = userInfo.schoolCode,
-            schoolType = SchoolType.convertSchoolTypeToKey(userInfo.schoolType),
-            educationCode = userInfo.educationCode,
-            grade = userInfo.grade,
-            `class` = userInfo.classroom,
-            department = null, // 또는 빈 문자열 ""
-            date = targetDate
-        ) ?: throw NeisException(NeisResult.DATA_NOT_FOUND)
+        TODO("재시도 구현")
     }.fold(
         onSuccess = { result ->
             TimeTableState.Success(result)
@@ -89,4 +70,11 @@ class GetTimeTableUseCase @Inject constructor(
             TimeTableState.Failure(error)
         }
     )
+
+    private suspend fun request(
+        userInfo: UserInfoModel,
+        targetDate: String,
+    ) {
+        TODO("학과 정보가 없다면 에러를 반환, 학과 정보 없이 데이터가 비어있다면 재시도 하도록 구현")
+    }
 }
