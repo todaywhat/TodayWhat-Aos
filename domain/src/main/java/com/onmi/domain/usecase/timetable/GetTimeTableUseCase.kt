@@ -44,7 +44,7 @@ class GetTimeTableUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(targetDate: String) = runCatching {
         val userInfo = getUserInfoFlowUseCase().first()
-        val department = userInfo.department.takeIf { it.isNotEmpty() }
+        val department = userInfo.department.takeIf { it.isNotBlank() }
         val schoolType = SchoolType.convertSchoolTypeToKey(userInfo.schoolType)
 
         try {
