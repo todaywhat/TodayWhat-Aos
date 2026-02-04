@@ -44,8 +44,27 @@ class GetTimeTableUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(targetDate: String) = runCatching {
         val userInfo = getUserInfoFlowUseCase().first()
+        val department = userInfo.department.takeIf { it.isNotEmpty() }
+        val schoolType = SchoolType.convertSchoolTypeToKey(userInfo.schoolType)
 
-        TODO("재시도 구현")
+        try {
+            request(
+                userInfo = userInfo,
+                schoolType = schoolType,
+                targetDate = targetDate,
+                department = department
+            )
+        } catch (e: NeisException) {
+            // 학과 정보가 있고, DATA_NOT_FOUND 에러인 경우에만 학과 정보 제외하고 재시도
+            if (department != null && e.result == NeisResult.DATA_NOT_FOUND) {
+                request(
+                    userInfo = userInfo,
+                    schoolType = schoolType,
+                    targetDate = targetDate,
+                    department = null
+                )
+            } else throw e
+        }
     }.fold(
         onSuccess = { result ->
             TimeTableState.Success(result)
@@ -73,8 +92,18 @@ class GetTimeTableUseCase @Inject constructor(
 
     private suspend fun request(
         userInfo: UserInfoModel,
+        schoolType: SchoolType,
         targetDate: String,
-    ) {
-        TODO("학과 정보가 없다면 에러를 반환, 학과 정보 없이 데이터가 비어있다면 재시도 하도록 구현")
+        department: String?,
+    ): List<String> {
+        return repository.getTimeTable(
+            schoolCode = userInfo.schoolCode,
+            schoolType = schoolType,
+            educationCode = userInfo.educationCode,
+            grade = userInfo.grade,
+            `class` = userInfo.classroom,
+            department = department,
+            date = targetDate
+        ) ?: throw NeisException(NeisResult.UNKNOWN_ERROR)
     }
 }
