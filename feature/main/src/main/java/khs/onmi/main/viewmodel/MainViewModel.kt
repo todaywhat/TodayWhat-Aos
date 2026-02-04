@@ -1,6 +1,5 @@
 package khs.onmi.main.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.onmi.domain.usecase.common.CalculateTargetDateUseCase
@@ -67,8 +66,6 @@ class MainViewModel @Inject constructor(
 
         viewModelScope.launch {
             val response = getTimeTableUseCase(targetDate = targetDate)
-
-            Log.d("logtag", response.toString())
 
             reduce {
                 state.copy(timeTableState = response)
