@@ -44,7 +44,7 @@ class GetTimeTableUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(targetDate: String) = runCatching {
         val userInfo = getUserInfoFlowUseCase().first()
-        val department = userInfo.department.takeIf { it.isNotEmpty() }
+        val department = userInfo.department.takeIf { it.isNotBlank() }
         val schoolType = SchoolType.convertSchoolTypeToKey(userInfo.schoolType)
 
         try {
@@ -104,6 +104,6 @@ class GetTimeTableUseCase @Inject constructor(
             `class` = userInfo.classroom,
             department = department,
             date = targetDate
-        ) ?: throw NeisException(NeisResult.UNKNOWN_ERROR)
+        ) ?: throw NeisException(NeisResult.DATA_NOT_FOUND)
     }
 }
