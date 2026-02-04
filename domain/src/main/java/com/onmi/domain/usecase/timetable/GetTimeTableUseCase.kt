@@ -104,6 +104,6 @@ class GetTimeTableUseCase @Inject constructor(
             `class` = userInfo.classroom,
             department = department,
             date = targetDate
-        ) ?: throw NeisException(NeisResult.UNKNOWN_ERROR)
+        ) ?: throw NeisException(NeisResult.DATA_NOT_FOUND)
     }
 }
