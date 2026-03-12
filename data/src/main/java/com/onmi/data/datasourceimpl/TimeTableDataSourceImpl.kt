@@ -6,6 +6,7 @@ import com.onmi.data.dto.timetable.response.GetMiddleSchoolTimeTableResponse
 import com.onmi.data.dto.timetable.response.GetSpecialSchoolTimeTableResponse
 import com.onmi.data.datasource.TimeTableDataSource
 import com.onmi.data.utils.bodyOrThrow
+import com.onmi.domain.model.school.SchoolType
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
@@ -18,58 +19,33 @@ class TimeTableDataSourceImpl @Inject constructor(
 
     override suspend fun getTimeTable(
         schoolCode: String,
-        schoolType: String,
+        schoolType: SchoolType,
         educationCode: String,
         grade: Int,
         `class`: Int,
-        department: String,
+        department: String?,
         date: String,
-    ): List<String> {
-        return fetchTimeTable(
-            schoolType, educationCode, schoolCode, grade, `class`, date, department
-        ) ?: fetchTimeTable(
-            schoolType, educationCode, schoolCode, grade, `class`, date
-        ) ?: emptyList()
-    }
-
-
-    private suspend fun fetchTimeTable(
-        schoolType: String,
-        educationCode: String,
-        schoolCode: String,
-        grade: Int,
-        `class`: Int,
-        date: String,
-        department: String? = null,
     ): List<String>? {
         val response = httpClient.get {
-            url("/hub/${schoolType}Timetable")
+            url("/hub/${schoolType.key}Timetable")
             parameter("ATPT_OFCDC_SC_CODE", educationCode)
             parameter("SD_SCHUL_CODE", schoolCode)
-            parameter("DDDEP_NM", department)
+            if (department != null) parameter("DDDEP_NM", department)
             parameter("GRADE", grade)
             parameter("CLASS_NM", `class`)
             parameter("ALL_TI_YMD", date)
         }
 
         return when (schoolType) {
-            "els" -> response.bodyOrThrow<GetElementarySchoolTimTableResponse>().timetable?.getOrNull(1)?.row
-                ?.distinctBy { it.period }
-                ?.map { it.subject }
+            SchoolType.Elementary -> response.bodyOrThrow<GetElementarySchoolTimTableResponse>().timetable
 
-            "mis" -> response.bodyOrThrow<GetMiddleSchoolTimeTableResponse>().timetable?.getOrNull(1)?.row
-                ?.distinctBy { it.period }
-                ?.map { it.subject }
+            SchoolType.Middle -> response.bodyOrThrow<GetMiddleSchoolTimeTableResponse>().timetable
 
-            "his" -> response.bodyOrThrow<GetHighSchoolTimeTableResponse>().timetable?.getOrNull(1)?.row
-                ?.distinctBy { it.period }
-                ?.map { it.subject }
+            SchoolType.High -> response.bodyOrThrow<GetHighSchoolTimeTableResponse>().timetable
 
-            "sps" -> response.bodyOrThrow<GetSpecialSchoolTimeTableResponse>().timetable?.getOrNull(1)?.row
-                ?.distinctBy { it.period }
-                ?.map { it.subject }
-
-            else -> emptyList()
-        }
+            SchoolType.Special -> response.bodyOrThrow<GetSpecialSchoolTimeTableResponse>().timetable
+        }?.getOrNull(1)?.row
+            ?.distinctBy { it.period }
+            ?.map { it.subject }
     }
 }

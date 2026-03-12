@@ -54,7 +54,7 @@ orbit-compose = { group = "org.orbit-mvi", name = "orbit-compose", version.ref =
 
 # ktor
 ktor-client-core = { group = "io.ktor", name = "ktor-client-core", version.ref = "ktor" }
-ktor-client-cio = { group = "io.ktor", name = "ktor-client-cio", version.ref = "ktor" }
+ktor-client-android = { group = "io.ktor", name = "ktor-client-android", version.ref = "ktor" }
 ktor-client-logging-jvm = { group = "io.ktor", name = "ktor-client-logging-jvm", version.ref = "ktor" }
 ktor-client-serialization = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version.ref = "ktor" }
 ktor-client-content-negotiation = { group = "io.ktor", name = "ktor-client-content-negotiation", version.ref = "ktor" }
@@ -109,7 +109,7 @@ orbit = [
 ]
 ktor = [
     "ktor-client-core",
-    "ktor-client-cio",
+    "ktor-client-android",
     "ktor-client-logging-jvm",
     "ktor-client-serialization",
     "ktor-client-content-negotiation"

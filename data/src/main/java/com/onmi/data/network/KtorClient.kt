@@ -7,7 +7,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import io.ktor.client.HttpClient
-import io.ktor.client.engine.cio.CIO
+import io.ktor.client.engine.android.Android
 import io.ktor.client.plugins.DefaultRequest
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.logging.LogLevel
@@ -27,7 +27,7 @@ object KtorClient {
     @Singleton
     @Provides
     fun provideKtorHttpClient(): HttpClient {
-        val client = HttpClient(CIO) {
+        val client = HttpClient(Android) {
             install(Logging) {
                 level = LogLevel.ALL
                 logger = object : Logger {
