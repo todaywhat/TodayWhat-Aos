@@ -16,4 +16,9 @@ object ONMINavRoutes {
         const val MAIN = "setting-main"
         const val ADD_WIDGET = "setting-add-widget"
     }
+
+    const val ALLERGIES = "allergies"
+    object Allergies {
+        const val MAIN = "allergies-main"
+    }
 }

@@ -53,7 +53,7 @@ fun SettingRoute(
         onEnterInformationClick = { navController.navigate(ONMINavRoutes.EnterInformation.MAIN) },
         onAllergySettingClick = {
             EventLogger.clickAllergySettingButton()
-            // TODO: navController.navigate(ONMINavRoutes.Setting.ALLERGY)
+            navController.navigate(ONMINavRoutes.ALLERGIES)
         },
         onAddWidgetClick = {
             EventLogger.clickAddToWidget()
