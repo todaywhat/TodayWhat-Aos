@@ -1,5 +1,7 @@
 [versions]
 accompanist = "0.36.0"
+amplitude = "1.16.8"
+amplitudeSessionReplay = "0.24.1"
 airbnbLottie = "6.0.0"
 androidGradlePlugin = "8.9.0"
 androidxActivityCompose = "1.10.1"
@@ -77,6 +79,10 @@ firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics
 # plugin
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
 kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
+
+# amplitude
+amplitude-analytics = { group = "com.amplitude", name = "analytics-android", version.ref = "amplitude" }
+amplitude-session-replay = { group = "com.amplitude", name = "plugin-session-replay-android", version.ref = "amplitudeSessionReplay" }
 
 # Others
 airbnb-android-lottie = { group = "com.airbnb.android", name = "lottie-compose", version.ref = "airbnbLottie" }
