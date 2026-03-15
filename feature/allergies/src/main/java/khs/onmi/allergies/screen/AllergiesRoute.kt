@@ -32,5 +32,6 @@ fun AllergiesRoute(
     AllergiesScreen(
         uiState = uiState,
         onBackPressed = { navController.popBackStack() },
+        onAllergyToggle = viewModel::toggleAllergy,
     )
 }

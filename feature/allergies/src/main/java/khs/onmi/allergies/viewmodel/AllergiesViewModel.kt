@@ -14,4 +14,14 @@ class AllergiesViewModel @Inject constructor() :
 
     override val container =
         container<AllergiesState, AllergiesSideEffect>(AllergiesState())
+
+    fun toggleAllergy(index: Int) = intent {
+        reduce {
+            val updated = if (state.selectedAllergies.contains(index))
+                state.selectedAllergies - index
+            else
+                state.selectedAllergies + index
+            state.copy(selectedAllergies = updated)
+        }
+    }
 }

@@ -1,5 +1,5 @@
 package khs.onmi.allergies.viewmodel.container
 
 data class AllergiesState(
-    val isLoading: Boolean = false,
+    val selectedAllergies: Set<Int> = emptySet(),
 )
