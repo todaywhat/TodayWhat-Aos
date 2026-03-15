@@ -11,4 +11,6 @@ dependencies {
 
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
+    implementation(libs.amplitude.analytics)
+    implementation(libs.amplitude.session.replay)
 }
