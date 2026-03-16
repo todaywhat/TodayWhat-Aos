@@ -9,19 +9,22 @@ import org.orbitmvi.orbit.viewmodel.container
 import javax.inject.Inject
 
 @HiltViewModel
-class AllergiesViewModel @Inject constructor() :
-    ContainerHost<AllergiesState, AllergiesSideEffect>, ViewModel() {
+class AllergiesViewModel @Inject constructor(
+
+) : ContainerHost<AllergiesState, AllergiesSideEffect>, ViewModel() {
 
     override val container =
         container<AllergiesState, AllergiesSideEffect>(AllergiesState())
 
-    fun toggleAllergy(index: Int) = intent {
+    fun toggleAllergy(id: Int) = intent {
         reduce {
-            val updated = if (state.selectedAllergies.contains(index))
-                state.selectedAllergies - index
-            else
-                state.selectedAllergies + index
-            state.copy(selectedAllergies = updated)
+            val updatedIds = if (id in state.selectedAllergyIds) {
+                state.selectedAllergyIds - id
+            } else {
+                state.selectedAllergyIds + id
+            }
+
+            state.copy(selectedAllergyIds = updatedIds)
         }
     }
 }
