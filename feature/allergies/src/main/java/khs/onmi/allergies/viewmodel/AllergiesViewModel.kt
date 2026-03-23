@@ -1,6 +1,7 @@
 package khs.onmi.allergies.viewmodel
 
 import androidx.lifecycle.ViewModel
+import com.onmi.domain.repository.AllergyRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import khs.onmi.allergies.viewmodel.container.AllergiesSideEffect
 import khs.onmi.allergies.viewmodel.container.AllergiesState
@@ -10,11 +11,21 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AllergiesViewModel @Inject constructor(
-
+    private val allergyRepository: AllergyRepository,
 ) : ContainerHost<AllergiesState, AllergiesSideEffect>, ViewModel() {
 
     override val container =
         container<AllergiesState, AllergiesSideEffect>(AllergiesState())
+
+    init {
+        loadSavedAllergies()
+    }
+
+    private fun loadSavedAllergies() = intent {
+        allergyRepository.getSelectedAllergyIds().collect { savedIds ->
+            reduce { state.copy(selectedAllergyIds = savedIds) }
+        }
+    }
 
     fun toggleAllergy(id: Int) = intent {
         reduce {
@@ -26,5 +37,6 @@ class AllergiesViewModel @Inject constructor(
 
             state.copy(selectedAllergyIds = updatedIds)
         }
+        allergyRepository.saveSelectedAllergyIds(state.selectedAllergyIds)
     }
 }
