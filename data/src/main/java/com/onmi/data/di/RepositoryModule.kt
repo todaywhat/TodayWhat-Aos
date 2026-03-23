@@ -1,10 +1,12 @@
 package com.onmi.data.di
 
+import com.onmi.data.repository.AllergyRepositoryImpl
 import com.onmi.data.repository.LocalOptionRepositoryImpl
 import com.onmi.data.repository.LocalUserRepositoryImpl
 import com.onmi.data.repository.MealRepositoryImpl
 import com.onmi.data.repository.SchoolRepositoryImpl
 import com.onmi.data.repository.TimeTableRepositoryImpl
+import com.onmi.domain.repository.AllergyRepository
 import com.onmi.domain.repository.LocalOptionRepository
 import com.onmi.domain.repository.LocalUserRepository
 import com.onmi.domain.repository.MealRepository
@@ -49,4 +51,10 @@ interface RepositoryModule {
     fun bindLocalOptionRepository(
         impl: LocalOptionRepositoryImpl,
     ): LocalOptionRepository
+
+    @Singleton
+    @Binds
+    fun bindAllergyRepository(
+        impl: AllergyRepositoryImpl,
+    ): AllergyRepository
 }
