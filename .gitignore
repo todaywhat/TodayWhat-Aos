@@ -22,3 +22,4 @@
 .externalNativeBuild
 .cxx
 local.properties
+.omc
