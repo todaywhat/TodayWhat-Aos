@@ -38,7 +38,7 @@ class MainViewModel @Inject constructor(
     private fun collectAllergyIds() = intent {
         getSelectedAllergyIdsUseCase()
             .catch {
-                reduce { state.copy(selectedAllergyIds = emptyList()) }
+                reduce { state.copy(selectedAllergyIds = emptySet()) }
             }
             .collect { ids ->
                 reduce { state.copy(selectedAllergyIds = ids) }

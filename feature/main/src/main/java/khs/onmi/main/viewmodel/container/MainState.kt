@@ -10,5 +10,5 @@ data class MainState(
     val targetDate: String = "",
     val mealState: MealState = MealState.Loading,
     val timeTableState: TimeTableState = TimeTableState.Loading,
-    val selectedAllergyIds: List<Int> = emptyList(),
+    val selectedAllergyIds: Set<Int> = emptySet(),
 )

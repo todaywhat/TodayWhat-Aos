@@ -87,7 +87,7 @@ private fun AllergiesScreenPreview() {
 @Composable
 private fun AllergiesScreenSelectedPreview() {
     AllergiesScreen(
-        uiState = AllergiesState(selectedAllergyIds = listOf(1, 3, 7)),
+        uiState = AllergiesState(selectedAllergyIds = setOf(1, 3, 7)),
         onBackPressed = {},
         onAllergyToggle = {},
     )

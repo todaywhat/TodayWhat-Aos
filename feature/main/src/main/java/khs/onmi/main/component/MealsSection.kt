@@ -27,7 +27,7 @@ import khs.onmi.core.designsystem.theme.ONMITheme
 @Composable
 fun MealsSection(
     state: MealState,
-    selectedAllergyIds: List<Int> = emptyList(),
+    selectedAllergyIds: Set<Int> = emptySet(),
     onReloadClick: () -> Unit,
 ) {
     when (state) {
@@ -66,7 +66,7 @@ fun MealsSectionItem(
     breakfast: Pair<List<MealMenuItem>, String>,
     lunch: Pair<List<MealMenuItem>, String>,
     dinner: Pair<List<MealMenuItem>, String>,
-    selectedAllergyIds: List<Int> = emptyList(),
+    selectedAllergyIds: Set<Int> = emptySet(),
 ) {
     ONMITheme { color, _ ->
         LazyColumn(

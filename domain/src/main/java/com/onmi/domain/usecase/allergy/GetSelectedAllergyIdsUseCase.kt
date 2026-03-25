@@ -7,5 +7,5 @@ import javax.inject.Inject
 class GetSelectedAllergyIdsUseCase @Inject constructor(
     private val allergyRepository: AllergyRepository,
 ) {
-    operator fun invoke(): Flow<List<Int>> = allergyRepository.getSelectedAllergyIds()
+    operator fun invoke(): Flow<Set<Int>> = allergyRepository.getSelectedAllergyIds()
 }

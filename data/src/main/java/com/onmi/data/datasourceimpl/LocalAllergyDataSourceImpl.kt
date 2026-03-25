@@ -17,13 +17,13 @@ class LocalAllergyDataSourceImpl @Inject constructor(
         private val SELECTED_ALLERGY_IDS = stringSetPreferencesKey("selected_allergy_ids")
     }
 
-    override fun getSelectedAllergyIds(): Flow<List<Int>> {
+    override fun getSelectedAllergyIds(): Flow<Set<Int>> {
         return dataStore.data.map { prefs ->
-            prefs[SELECTED_ALLERGY_IDS]?.mapNotNull { it.toIntOrNull() } ?: emptyList()
+            prefs[SELECTED_ALLERGY_IDS]?.mapNotNull { it.toIntOrNull() }?.toSet() ?: emptySet()
         }
     }
 
-    override suspend fun saveSelectedAllergyIds(ids: List<Int>) {
+    override suspend fun saveSelectedAllergyIds(ids: Set<Int>) {
         dataStore.edit { prefs ->
             prefs[SELECTED_ALLERGY_IDS] = ids.map { it.toString() }.toSet()
         }

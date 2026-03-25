@@ -9,11 +9,11 @@ class AllergyRepositoryImpl @Inject constructor(
     private val dataSource: LocalAllergyDataSource,
 ) : AllergyRepository {
 
-    override fun getSelectedAllergyIds(): Flow<List<Int>> {
+    override fun getSelectedAllergyIds(): Flow<Set<Int>> {
         return dataSource.getSelectedAllergyIds()
     }
 
-    override suspend fun saveSelectedAllergyIds(ids: List<Int>) {
+    override suspend fun saveSelectedAllergyIds(ids: Set<Int>) {
         dataSource.saveSelectedAllergyIds(ids)
     }
 }

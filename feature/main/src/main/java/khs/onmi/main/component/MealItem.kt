@@ -20,7 +20,7 @@ fun MealsItem(
     name: String,
     kcal: String,
     meals: List<MealMenuItem>,
-    selectedAllergyIds: List<Int> = emptyList(),
+    selectedAllergyIds: Set<Int> = emptySet(),
 ) {
     ONMITheme { color, typography ->
         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
