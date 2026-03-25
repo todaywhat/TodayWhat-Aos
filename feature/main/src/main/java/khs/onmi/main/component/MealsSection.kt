@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -83,7 +83,7 @@ fun MealsSectionItem(
                         meals = meals,
                         selectedAllergyIds = selectedAllergyIds
                     )
-                    Divider(
+                    HorizontalDivider(
                         thickness = 1.dp,
                         color = color.UnselectedSecondary,
                         modifier = Modifier.padding(vertical = 32.dp)
@@ -102,7 +102,7 @@ fun MealsSectionItem(
             }
             dinner.first.takeIf { it.isNotEmpty() }?.let { meals ->
                 item {
-                    Divider(
+                    HorizontalDivider(
                         thickness = 1.dp,
                         color = color.UnselectedSecondary,
                         modifier = Modifier.padding(vertical = 32.dp)
