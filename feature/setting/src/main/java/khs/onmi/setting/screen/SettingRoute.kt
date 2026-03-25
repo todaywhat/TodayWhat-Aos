@@ -51,6 +51,12 @@ fun SettingRoute(
         uiState = uiState,
         onBackPressed = { navController.popBackStack() },
         onEnterInformationClick = { navController.navigate(ONMINavRoutes.EnterInformation.MAIN) },
+        onAllergySettingClick = {
+            EventLogger.clickAllergySettingButton()
+            navController.navigate(ONMINavRoutes.ALLERGIES) {
+                launchSingleTop = true
+            }
+        },
         onAddWidgetClick = {
             EventLogger.clickAddToWidget()
             navController.navigate(ONMINavRoutes.Setting.ADD_WIDGET)

@@ -1,5 +1,6 @@
 package khs.onmi.core.designsystem.component
 
+import androidx.annotation.DrawableRes
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.LinearOutSlowInEasing
@@ -21,6 +22,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -31,23 +33,24 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import khs.onmi.core.designsystem.icon.AllergiesEggIcon
 import khs.onmi.core.designsystem.icon.InfoCardMealIcon
 import khs.onmi.core.designsystem.icon.InfoCardTimeTableIcon
 import khs.onmi.core.designsystem.modifier.addBounceEffect
 import khs.onmi.core.designsystem.modifier.onmiClickable
 import khs.onmi.core.designsystem.theme.ONMITheme
+import khs.onmi.core.designsystem.R as DR
 
 @Composable
 fun AllergiesCard(
     modifier: Modifier = Modifier,
+    id: Int,
+    name: String,
+    @DrawableRes iconId: Int,
     isSelected: Boolean,
-    itemNumber: Int,
-    allergyName: String,
-    allergyIcon: @Composable () -> Unit,
     onItemClick: () -> Unit,
 ) {
     ONMITheme { color, typography ->
@@ -73,10 +76,22 @@ fun AllergiesCard(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.padding(start = 20.dp)
                 ) {
-                    allergyIcon()
+                    Box(
+                        modifier = Modifier
+                            .size(56.dp)
+                            .clip(RoundedCornerShape(8.dp))
+                            .background(color.BackgroundSecondary)
+                    ) {
+                        Icon(
+                            painter = painterResource(id = iconId),
+                            contentDescription = "Allergies Icon",
+                            modifier = Modifier.align(Alignment.Center),
+                            tint = if (isSelected) color.Black else color.UnselectedPrimary
+                        )
+                    }
                     RowSpacer(dp = 8.dp)
                     Text(
-                        text = allergyName,
+                        text = name,
                         style = typography.Body3,
                         color = if (isSelected) color.TextPrimary else color.UnselectedPrimary
                     )
@@ -89,7 +104,7 @@ fun AllergiesCard(
                     .offset(x = (-8).dp, y = 8.dp)
             ) {
                 Text(
-                    text = itemNumber.toString(),
+                    text = id.toString(),
                     style = typography.Body3,
                     color = if (isSelected) color.TextPrimary else color.UnselectedPrimary,
                     modifier = Modifier.align(Alignment.Center)
@@ -171,23 +186,15 @@ fun InfoCard(
 @Preview
 @Composable
 fun AllergiesCardPre() {
-    var isSelected by remember {
-        mutableStateOf(false)
-    }
-
     AllergiesCard(
         modifier = Modifier
             .width(167.dp)
             .height(96.dp),
-        isSelected = isSelected,
-        itemNumber = 1,
-        allergyName = "난류",
-        allergyIcon = {
-            AllergiesEggIcon(isItemSelected = isSelected)
-        },
-        onItemClick = {
-            isSelected = !isSelected
-        }
+        isSelected = true,
+        id = 1,
+        name = "난류",
+        iconId = DR.drawable.ic_allergies_egg,
+        onItemClick = {}
     )
 }
 

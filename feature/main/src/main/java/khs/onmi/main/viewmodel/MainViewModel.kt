@@ -2,6 +2,7 @@ package khs.onmi.main.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.onmi.domain.usecase.allergy.GetSelectedAllergyIdsUseCase
 import com.onmi.domain.usecase.common.CalculateTargetDateUseCase
 import com.onmi.domain.usecase.meal.GetMealsUseCase
 import com.onmi.domain.usecase.meal.MealState
@@ -25,11 +26,23 @@ class MainViewModel @Inject constructor(
     private val getTimeTableUseCase: GetTimeTableUseCase,
     private val getMealsUseCase: GetMealsUseCase,
     private val getUserInfoFlowUseCase: GetUserInfoFlowUseCase,
+    private val getSelectedAllergyIdsUseCase: GetSelectedAllergyIdsUseCase,
 ) : ContainerHost<MainState, MainSideEffect>, ViewModel() {
     override val container = container<MainState, MainSideEffect>(MainState())
 
     init {
         settingMainScreen()
+        collectAllergyIds()
+    }
+
+    private fun collectAllergyIds() = intent {
+        getSelectedAllergyIdsUseCase()
+            .catch {
+                reduce { state.copy(selectedAllergyIds = emptySet()) }
+            }
+            .collect { ids ->
+                reduce { state.copy(selectedAllergyIds = ids) }
+            }
     }
 
     private fun settingMainScreen() = viewModelScope.launch {

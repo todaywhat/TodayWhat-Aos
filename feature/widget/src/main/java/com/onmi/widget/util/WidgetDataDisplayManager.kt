@@ -55,7 +55,7 @@ object WidgetDataDisplayManager {
                     if (currentMeal.first.isNotEmpty()) {
                         return MealInfoState.Available(
                             convertTimeToString(currentMealTime),
-                            currentMeal.first
+                            currentMeal.first.map { it.name }
                         )
                     }
                 }
@@ -81,7 +81,7 @@ object WidgetDataDisplayManager {
                     if (currentMeal.first.isNotEmpty()) {
                         return MealInfoState.Available(
                             convertTimeToString(currentMealTime),
-                            currentMeal.first
+                            currentMeal.first.map { it.name }
                         )
                     }
                 }

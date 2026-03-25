@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.onmi.domain.model.meal.MealMenuItem
 import khs.onmi.core.designsystem.component.MealItem
 import khs.onmi.core.designsystem.theme.ONMITheme
 
@@ -18,7 +19,8 @@ import khs.onmi.core.designsystem.theme.ONMITheme
 fun MealsItem(
     name: String,
     kcal: String,
-    meals: List<String>,
+    meals: List<MealMenuItem>,
+    selectedAllergyIds: Set<Int> = emptySet(),
 ) {
     ONMITheme { color, typography ->
         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -45,8 +47,8 @@ fun MealsItem(
                     modifier = Modifier
                         .height(52.dp)
                         .fillMaxWidth(),
-                    meal = meal,
-                    isAllergyFood = false
+                    meal = meal.name,
+                    isAllergyFood = meal.allergyIds.any { it in selectedAllergyIds }
                 )
             }
         }

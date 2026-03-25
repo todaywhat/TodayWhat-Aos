@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.onmi.domain.model.meal.MealMenuItem
 import com.onmi.domain.model.meal.response.GetMealsResponseModel
 import com.onmi.domain.usecase.meal.MealException
 import com.onmi.domain.usecase.meal.MealState
@@ -26,6 +27,7 @@ import khs.onmi.core.designsystem.theme.ONMITheme
 @Composable
 fun MealsSection(
     state: MealState,
+    selectedAllergyIds: Set<Int> = emptySet(),
     onReloadClick: () -> Unit,
 ) {
     when (state) {
@@ -34,7 +36,8 @@ fun MealsSection(
                 MealsSectionItem(
                     breakfast = breakfast,
                     lunch = lunch,
-                    dinner = dinner
+                    dinner = dinner,
+                    selectedAllergyIds = selectedAllergyIds
                 )
             }
         }
@@ -60,9 +63,10 @@ fun MealsSection(
 
 @Composable
 fun MealsSectionItem(
-    breakfast: Pair<List<String>, String>,
-    lunch: Pair<List<String>, String>,
-    dinner: Pair<List<String>, String>,
+    breakfast: Pair<List<MealMenuItem>, String>,
+    lunch: Pair<List<MealMenuItem>, String>,
+    dinner: Pair<List<MealMenuItem>, String>,
+    selectedAllergyIds: Set<Int> = emptySet(),
 ) {
     ONMITheme { color, _ ->
         LazyColumn(
@@ -76,9 +80,10 @@ fun MealsSectionItem(
                     MealsItem(
                         name = "아침",
                         kcal = breakfast.second,
-                        meals = meals
+                        meals = meals,
+                        selectedAllergyIds = selectedAllergyIds
                     )
-                    Divider(
+                    HorizontalDivider(
                         thickness = 1.dp,
                         color = color.UnselectedSecondary,
                         modifier = Modifier.padding(vertical = 32.dp)
@@ -90,13 +95,14 @@ fun MealsSectionItem(
                     MealsItem(
                         name = "점심",
                         kcal = lunch.second,
-                        meals = meals
+                        meals = meals,
+                        selectedAllergyIds = selectedAllergyIds
                     )
                 }
             }
             dinner.first.takeIf { it.isNotEmpty() }?.let { meals ->
                 item {
-                    Divider(
+                    HorizontalDivider(
                         thickness = 1.dp,
                         color = color.UnselectedSecondary,
                         modifier = Modifier.padding(vertical = 32.dp)
@@ -104,7 +110,8 @@ fun MealsSectionItem(
                     MealsItem(
                         name = "저녁",
                         kcal = dinner.second,
-                        meals = meals
+                        meals = meals,
+                        selectedAllergyIds = selectedAllergyIds
                     )
                 }
             }
@@ -168,7 +175,14 @@ fun MealsSectionErrorItem(
 @Preview
 @Composable
 fun MealsSectionPre() {
-    val mealsDummy = listOf("쌀밥", "쇠고기미역국", "소불고기", "배추김치", "무생채", "유기농요구르트")
+    val mealsDummy = listOf(
+        MealMenuItem("쌀밥", listOf(5)),
+        MealMenuItem("쇠고기미역국", listOf(1, 16)),
+        MealMenuItem("소불고기", listOf(5, 6)),
+        MealMenuItem("배추김치", emptyList()),
+        MealMenuItem("무생채", emptyList()),
+        MealMenuItem("유기농요구르트", listOf(2)),
+    )
 
     MealsSection(
         state = MealState.Success(
