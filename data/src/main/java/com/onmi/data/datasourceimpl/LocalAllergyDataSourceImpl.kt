@@ -19,7 +19,7 @@ class LocalAllergyDataSourceImpl @Inject constructor(
 
     override fun getSelectedAllergyIds(): Flow<List<Int>> {
         return dataStore.data.map { prefs ->
-            prefs[SELECTED_ALLERGY_IDS]?.map { it.toInt() } ?: emptyList()
+            prefs[SELECTED_ALLERGY_IDS]?.mapNotNull { it.toIntOrNull() } ?: emptyList()
         }
     }
 

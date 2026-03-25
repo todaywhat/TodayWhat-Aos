@@ -36,9 +36,13 @@ class MainViewModel @Inject constructor(
     }
 
     private fun collectAllergyIds() = intent {
-        getSelectedAllergyIdsUseCase().collect { ids ->
-            reduce { state.copy(selectedAllergyIds = ids) }
-        }
+        getSelectedAllergyIdsUseCase()
+            .catch {
+                reduce { state.copy(selectedAllergyIds = emptyList()) }
+            }
+            .collect { ids ->
+                reduce { state.copy(selectedAllergyIds = ids) }
+            }
     }
 
     private fun settingMainScreen() = viewModelScope.launch {

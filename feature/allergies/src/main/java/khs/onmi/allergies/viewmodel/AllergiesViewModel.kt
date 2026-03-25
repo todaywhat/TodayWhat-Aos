@@ -28,15 +28,21 @@ class AllergiesViewModel @Inject constructor(
     }
 
     fun toggleAllergy(id: Int) = intent {
-        reduce {
-            val updatedIds = if (id in state.selectedAllergyIds) {
-                state.selectedAllergyIds - id
-            } else {
-                state.selectedAllergyIds + id
-            }
+        val previousIds = state.selectedAllergyIds
+        val updatedIds = if (id in previousIds) {
+            previousIds - id
+        } else {
+            previousIds + id
+        }
 
+        reduce {
             state.copy(selectedAllergyIds = updatedIds)
         }
-        allergyRepository.saveSelectedAllergyIds(state.selectedAllergyIds)
+        runCatching {
+            allergyRepository.saveSelectedAllergyIds(updatedIds)
+        }.onFailure {
+            reduce { state.copy(selectedAllergyIds = previousIds) }
+            postSideEffect(AllergiesSideEffect.ShowToast("알레르기 저장에 실패했습니다."))
+        }
     }
 }
