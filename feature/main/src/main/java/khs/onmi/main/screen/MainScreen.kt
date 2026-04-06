@@ -103,6 +103,7 @@ fun MainScreen(
                 when (index) {
                     0 -> MealsSection(
                         state = uiState.mealState,
+                        selectedAllergyIds = uiState.selectedAllergyIds,
                         onReloadClick = reloadMeal
                     )
 

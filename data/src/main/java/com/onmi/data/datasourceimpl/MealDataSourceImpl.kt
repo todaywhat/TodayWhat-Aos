@@ -5,6 +5,7 @@ import com.onmi.data.dto.meal.response.GetTodayMealsResponse
 import com.onmi.data.dto.meal.response.SchoolMealInfo
 import com.onmi.data.datasource.MealDataSource
 import com.onmi.data.utils.bodyOrThrow
+import com.onmi.domain.model.meal.MealMenuItem
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
@@ -34,15 +35,24 @@ class MealDataSourceImpl @Inject constructor(
         )
     }
 
-    private fun String.removeDetailInfo(): String {
-        val regex = Regex("\\([^)]*\\)")
-        return this.replace(regex, "")
+    private fun String.parseMealMenuItem(): MealMenuItem {
+        val regex = Regex("\\(([^)]*?)\\)\\s*$")
+        val match = regex.find(this.trim())
+        return if (match != null) {
+            val name = this.substring(0, match.range.first).trim()
+            val allergyIds = match.groupValues[1]
+                .split(".")
+                .mapNotNull { it.trim().toIntOrNull() }
+            MealMenuItem(name = name, allergyIds = allergyIds)
+        } else {
+            MealMenuItem(name = this.trim(), allergyIds = emptyList())
+        }
     }
 
-    private fun List<SchoolMealInfo>.findMealInfo(type: String): Pair<List<String>, String> {
+    private fun List<SchoolMealInfo>.findMealInfo(type: String): Pair<List<MealMenuItem>, String> {
         return this.find { findData -> findData.type == type }?.let { schoolMealInfo ->
             Pair(
-                schoolMealInfo.meal.split("<br/>").map { it.removeDetailInfo() },
+                schoolMealInfo.meal.split("<br/>").map { it.parseMealMenuItem() },
                 schoolMealInfo.kcal
             )
         } ?: Pair(emptyList(), "")

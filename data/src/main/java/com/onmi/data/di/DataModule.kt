@@ -1,7 +1,9 @@
 package com.onmi.data.di
 
+import com.onmi.data.datasource.LocalAllergyDataSource
 import com.onmi.data.datasource.LocalOptionDataSource
 import com.onmi.data.datasource.LocalUserDataSource
+import com.onmi.data.datasourceimpl.LocalAllergyDataSourceImpl
 import com.onmi.data.datasourceimpl.MealDataSourceImpl
 import com.onmi.data.datasourceimpl.SchoolDataSourceImpl
 import com.onmi.data.datasourceimpl.TimeTableDataSourceImpl
@@ -49,4 +51,10 @@ internal interface DataModule {
     fun bindLocalUserDataSource(
         impl: LocalUserDataSourceImpl,
     ): LocalUserDataSource
+
+    @Singleton
+    @Binds
+    fun bindLocalAllergyDataSource(
+        impl: LocalAllergyDataSourceImpl,
+    ): LocalAllergyDataSource
 }

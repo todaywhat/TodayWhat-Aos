@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.dp
 import khs.onmi.core.designsystem.component.TopNavigationBar
+import khs.onmi.core.designsystem.icon.AllergiesIcon
 import khs.onmi.core.designsystem.icon.ArrowBackIcon
 import khs.onmi.core.designsystem.icon.CalendarIcon
 import khs.onmi.core.designsystem.icon.PaperIcon
@@ -36,6 +37,7 @@ fun SettingScreen(
     uiState: SettingState,
     onBackPressed: () -> Unit,
     onEnterInformationClick: () -> Unit,
+    onAllergySettingClick: () -> Unit,
     onAddWidgetClick: () -> Unit,
     onSkipWeekendToggleValueChanged: (value: Boolean) -> Unit,
     onShowNextDayInfoAfterDinnerValueChanged: (value: Boolean) -> Unit,
@@ -87,6 +89,12 @@ fun SettingScreen(
                 RoundedWhiteBox {
                     SettingListComponent(
                         items = listOf(
+                            SettingItemsData(
+                                leading = { AllergiesIcon(tint = color.Black) },
+                                text = "알레르기 설정",
+                                trailing = { RightArrowIcon(tint = color.UnselectedPrimary) },
+                                onClick = onAllergySettingClick
+                            ),
                             SettingItemsData(
                                 trailing = { RightArrowIcon(tint = color.UnselectedPrimary) },
                                 text = "위젯 추가",
