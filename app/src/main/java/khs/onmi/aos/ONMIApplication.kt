@@ -5,6 +5,7 @@ import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
 import com.google.firebase.FirebaseApp
 import dagger.hilt.android.HiltAndroidApp
+import khs.onmi.core.common.android.EventLogger
 import javax.inject.Inject
 
 @HiltAndroidApp
@@ -23,5 +24,6 @@ class ONMIApplication : Application(), Configuration.Provider {
         super.onCreate()
 
         FirebaseApp.initializeApp(this)
+        EventLogger.init(this, BuildConfig.AMPLITUDE_API_KEY)
     }
 }
