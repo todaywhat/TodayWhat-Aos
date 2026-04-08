@@ -16,6 +16,11 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
 
             extensions.configure<ApplicationExtension> {
                 configureKotlinAndroid(this)
+
+                buildFeatures {
+                    buildConfig = true
+                }
+
                 defaultConfig {
                     applicationId = "com.onmi.aos"
                     minSdk = 24

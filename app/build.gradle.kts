@@ -12,6 +12,18 @@ android {
         versionName = "1.7.0"
     }
 
+    buildTypes {
+        debug {
+            applicationIdSuffix = ".dev"
+            buildConfigField("String", "AMPLITUDE_API_KEY", "\"dev_placeholder\"")
+            resValue("string", "app_name", "오늘 뭐임 (Dev)")
+        }
+        release {
+            buildConfigField("String", "AMPLITUDE_API_KEY", "\"prod_placeholder\"")
+            resValue("string", "app_name", "오늘 뭐임")
+        }
+    }
+
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
