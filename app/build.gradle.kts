@@ -1,7 +1,14 @@
+import java.util.Properties
+
 plugins {
     id("khs.onmi.application")
     id("khs.onmi.hilt")
     id("com.google.gms.google-services")
+}
+
+val localProperties = Properties().apply {
+    val file = rootProject.file("local.properties")
+    if (file.exists()) file.inputStream().use { load(it) }
 }
 
 android {
@@ -10,6 +17,18 @@ android {
     defaultConfig {
         versionCode = 18
         versionName = "1.7.0"
+    }
+
+    signingConfigs {
+        create("release") {
+            val storeFilePath = localProperties.getProperty("STORE_FILE")
+            if (storeFilePath != null) {
+                storeFile = rootProject.file(storeFilePath)
+                storePassword = localProperties.getProperty("STORE_PASSWORD")
+                keyAlias = localProperties.getProperty("KEY_ALIAS")
+                keyPassword = localProperties.getProperty("KEY_PASSWORD")
+            }
+        }
     }
 
     buildTypes {
@@ -21,6 +40,11 @@ android {
         release {
             buildConfigField("String", "AMPLITUDE_API_KEY", "\"prod_placeholder\"")
             resValue("string", "app_name", "오늘 뭐임")
+            signingConfig = if (localProperties.getProperty("STORE_FILE") != null) {
+                signingConfigs.getByName("release")
+            } else {
+                signingConfigs.getByName("debug")
+            }
         }
     }
 
