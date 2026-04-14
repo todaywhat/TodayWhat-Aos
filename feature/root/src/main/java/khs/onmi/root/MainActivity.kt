@@ -66,7 +66,7 @@ class MainActivity : ComponentActivity() {
                             DebugRibbon(
                                 modifier = Modifier
                                     .align(Alignment.TopCenter)
-                                    .zIndex(Float.MAX_VALUE)
+                                    .zIndex(1f)
                             )
                         }
                     }
@@ -76,12 +76,14 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+private val DebugRibbonBackgroundColor = Color(0xCCD32F2F)
+
 @Composable
 private fun DebugRibbon(modifier: Modifier = Modifier) {
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .background(Color(0xCCD32F2F))
+            .background(DebugRibbonBackgroundColor)
             .statusBarsPadding()
             .padding(vertical = 2.dp),
         contentAlignment = Alignment.Center

@@ -11,6 +11,10 @@ val localProperties = Properties().apply {
     if (file.exists()) file.inputStream().use { load(it) }
 }
 
+val hasReleaseSigning = !localProperties.getProperty("STORE_FILE").isNullOrBlank()
+val isReleaseTaskRequested = gradle.startParameter.taskNames
+    .any { it.contains("Release", ignoreCase = true) }
+
 android {
     namespace = "khs.onmi.aos"
 
@@ -21,12 +25,24 @@ android {
 
     signingConfigs {
         create("release") {
-            val storeFilePath = localProperties.getProperty("STORE_FILE")
-            if (storeFilePath != null) {
-                storeFile = rootProject.file(storeFilePath)
-                storePassword = localProperties.getProperty("STORE_PASSWORD")
-                keyAlias = localProperties.getProperty("KEY_ALIAS")
-                keyPassword = localProperties.getProperty("KEY_PASSWORD")
+            if (hasReleaseSigning) {
+                val storeFilePath = localProperties.getProperty("STORE_FILE")
+                val resolvedStoreFile = rootProject.file(storeFilePath)
+                require(resolvedStoreFile.exists()) {
+                    "Invalid STORE_FILE: $storeFilePath"
+                }
+
+                val storePwd = localProperties.getProperty("STORE_PASSWORD")?.takeIf { it.isNotBlank() }
+                val alias = localProperties.getProperty("KEY_ALIAS")?.takeIf { it.isNotBlank() }
+                val keyPwd = localProperties.getProperty("KEY_PASSWORD")?.takeIf { it.isNotBlank() }
+                require(storePwd != null && alias != null && keyPwd != null) {
+                    "Missing release signing properties: STORE_PASSWORD, KEY_ALIAS, KEY_PASSWORD"
+                }
+
+                storeFile = resolvedStoreFile
+                storePassword = storePwd
+                keyAlias = alias
+                keyPassword = keyPwd
             }
         }
     }
@@ -40,10 +56,13 @@ android {
         release {
             buildConfigField("String", "AMPLITUDE_API_KEY", "\"prod_placeholder\"")
             resValue("string", "app_name", "오늘 뭐임")
-            signingConfig = if (localProperties.getProperty("STORE_FILE") != null) {
-                signingConfigs.getByName("release")
-            } else {
-                signingConfigs.getByName("debug")
+            signingConfig = when {
+                hasReleaseSigning -> signingConfigs.getByName("release")
+                isReleaseTaskRequested -> error(
+                    "Release signing is required for release tasks. " +
+                        "Set STORE_FILE/STORE_PASSWORD/KEY_ALIAS/KEY_PASSWORD in local.properties."
+                )
+                else -> signingConfigs.getByName("debug")
             }
         }
     }
