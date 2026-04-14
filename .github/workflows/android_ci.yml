@@ -37,6 +37,20 @@ jobs:
         run: |
           echo '${{ secrets.GOOGLE_SERVICES }}' > app/google-services.json;
 
+      - name: Decode Keystore
+        run: |
+          mkdir -p keystore
+          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > keystore/onmi
+
+      - name: Create local.properties
+        run: |
+          cat > local.properties <<EOF
+          STORE_FILE=keystore/onmi
+          STORE_PASSWORD=${{ secrets.STORE_PASSWORD }}
+          KEY_ALIAS=${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD=${{ secrets.KEY_PASSWORD }}
+          EOF
+
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
