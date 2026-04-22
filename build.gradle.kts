@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.kotlin.serialization) apply false
     alias(libs.plugins.kotlin.compose.compiler) apply false
     alias(libs.plugins.com.google.gms.google.services) apply false
+    alias(libs.plugins.com.google.firebase.crashlytics) apply false
 }
 
 tasks.register("clean", Delete::class) {

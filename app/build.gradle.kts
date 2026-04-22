@@ -4,6 +4,7 @@ plugins {
     id("khs.onmi.application")
     id("khs.onmi.hilt")
     id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
 }
 
 val keyProperties = Properties().apply {
@@ -59,4 +60,5 @@ dependencies {
 
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
+    implementation(libs.firebase.crashlytics)
 }
