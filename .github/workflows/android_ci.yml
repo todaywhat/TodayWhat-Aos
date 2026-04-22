@@ -33,9 +33,17 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v2
 
-      - name: Prepare Environment
+      - name: Inject google-services.json per variant
+        env:
+          GOOGLE_SERVICES_DEV: ${{ secrets.GOOGLE_SERVICES_DEV }}
+          GOOGLE_SERVICES_PROD: ${{ secrets.GOOGLE_SERVICES_PROD }}
         run: |
-          echo '${{ secrets.GOOGLE_SERVICES }}' > app/google-services.json;
+          set -euo pipefail
+          : "${GOOGLE_SERVICES_DEV:?GOOGLE_SERVICES_DEV secret is required}"
+          : "${GOOGLE_SERVICES_PROD:?GOOGLE_SERVICES_PROD secret is required}"
+          mkdir -p app/src/debug app/src/release
+          printf '%s' "$GOOGLE_SERVICES_DEV" > app/src/debug/google-services.json
+          printf '%s' "$GOOGLE_SERVICES_PROD" > app/src/release/google-services.json
 
       - name: Decode Keystore
         run: |
