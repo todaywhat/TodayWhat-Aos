@@ -9,10 +9,11 @@ fun Context.safeOpenUri(
     addNewTaskFlag: Boolean = false,
     onError: ((Throwable) -> Unit)? = null,
 ): Boolean {
-    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri)).apply {
-        if (addNewTaskFlag) addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-    }
-    return runCatching { startActivity(intent) }
-        .onFailure { onError?.invoke(it) }
+    return runCatching {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri)).apply {
+            if (addNewTaskFlag) addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        }
+        startActivity(intent)
+    }.onFailure { onError?.invoke(it) }
         .isSuccess
 }
