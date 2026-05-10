@@ -1,5 +1,6 @@
 package khs.onmi.setting.screen
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,8 +13,9 @@ import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import khs.onmi.core.common.android.safeOpenUri
 import khs.onmi.core.designsystem.component.TopNavigationBar
 import khs.onmi.core.designsystem.icon.AllergiesIcon
 import khs.onmi.core.designsystem.icon.ArrowBackIcon
@@ -42,7 +44,7 @@ fun SettingScreen(
     onSkipWeekendToggleValueChanged: (value: Boolean) -> Unit,
     onShowNextDayInfoAfterDinnerValueChanged: (value: Boolean) -> Unit,
 ) {
-    val uriHandler = LocalUriHandler.current
+    val context = LocalContext.current
 
     ONMITheme { color, typography ->
         Column(
@@ -105,7 +107,18 @@ fun SettingScreen(
                                 trailing = { RightArrowIcon(tint = color.UnselectedPrimary) },
                                 text = "이용 약관",
                                 leading = { PaperIcon(tint = color.Black) },
-                                onClick = { uriHandler.openUri(WebLink.PolicyUrl) }
+                                onClick = {
+                                    context.safeOpenUri(
+                                        uri = WebLink.PolicyUrl,
+                                        onError = {
+                                            Toast.makeText(
+                                                context,
+                                                "브라우저를 열 수 없습니다.",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                        }
+                                    )
+                                }
                             )
                         )
                     )
