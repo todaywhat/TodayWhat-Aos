@@ -11,6 +11,7 @@ androidxNavigationCompose = "2.9.2"
 androidxWorkManager = "2.10.2"
 datastore = "1.1.7"
 firebaseBom = "33.16.0"
+firebaseCrashlyticsPlugin = "3.0.5"
 glance = "1.1.1"
 googleServices = "4.4.3"
 hilt = "2.56"
@@ -73,6 +74,7 @@ androidx-datastore-preferences-core = { group = "androidx.datastore", name = "da
 # firebase
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics" }
+firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics" }
 
 # plugin
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
@@ -90,6 +92,7 @@ kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", versi
 kotlin-compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 com-google-devtools-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 com-google-gms-google-services = { id = "com.google.gms.google-services", version.ref = "googleServices" }
+com-google-firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebaseCrashlyticsPlugin" }
 
 
 [bundles]

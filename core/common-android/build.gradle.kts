@@ -1,6 +1,5 @@
 plugins {
     id("khs.onmi.library")
-    id("com.google.gms.google-services")
 }
 
 android {
