@@ -32,7 +32,7 @@ import androidx.glance.layout.width
 import com.onmi.widget.components.MessageBox
 import com.onmi.widget.theme.ONMIWidgetColorScheme
 import com.onmi.widget.util.SuitText
-import com.onmi.widget.util.launchApp
+import com.onmi.widget.util.launchAppAction
 
 class TimeTableWidget : GlanceAppWidget() {
     override val stateDefinition = TimeTableInfoStateDefinition
@@ -99,7 +99,7 @@ private fun TimeTableWidgetContent(timeTable: List<String>) {
     Box(
         modifier = GlanceModifier
             .fillMaxSize()
-            .clickable { context.launchApp() },
+            .clickable(launchAppAction()),
         content = {}
     )
 }
