@@ -41,7 +41,7 @@ for b in develop master main; do
   mb=$(git merge-base HEAD "origin/$b")
   cnt=$(git rev-list --count "$mb"..HEAD)
   echo "$cnt $b"
-done | sort -n | head -1
+done | sort -n | head -1 | cut -d' ' -f2
 ```
 **규칙**: 이렇게 감지한 base 브랜치를 신뢰하고 그대로 사용한다. 사용자의 요청이 없는 한 develop/master 등으로 임의 교체하지 않는다. (릴리스 브랜치는 보통 master를 향하는 등 develop이 아닐 수 있다.)
 
@@ -62,15 +62,15 @@ git log  origin/$BASE..HEAD --oneline        # 커밋 히스토리
 - 커밋이 여러 개면 `### 커밋 이력`을 `🔀 변경사항` 아래 둔다.
 
 #### 본문 템플릿
-```markdown
+````markdown
 ## 💡 개요
 - 이 PR이 무엇을/왜 하는지 1~3줄 요약
 
 ## 🔍 원인 (Root Cause)   ← 버그·크래시 수정 시에만
 스택 트레이스 핵심:
-\`\`\`
+```
 ...
-\`\`\`
+```
 원인 설명
 
 ## 📃 작업내용
@@ -90,7 +90,7 @@ git log  origin/$BASE..HEAD --oneline        # 커밋 히스토리
 - 참고/주의/후속 작업 등 (없으면 섹션 생략)
 
 🤖 Generated with [Claude Code](https://claude.com/claude-code)
-```
+````
 
 ### 4. PR 제목
 저장소 커밋/PR 컨벤션(gitmoji + 한국어)을 따른다: `<emoji> :: <설명>`.
@@ -100,7 +100,8 @@ git log  origin/$BASE..HEAD --oneline        # 커밋 히스토리
 ### 5. Draft PR 생성 또는 수정
 본문을 임시 파일로 저장한 뒤, 기존 PR 유무에 따라 분기한다.
 ```bash
-cat > /tmp/pr_body.md <<'EOF'
+PR_BODY_FILE=$(mktemp)
+cat > "$PR_BODY_FILE" <<'EOF'
 <위에서 작성한 본문>
 EOF
 
@@ -108,11 +109,11 @@ EOF
 EXISTING=$(gh pr list --head "$(git branch --show-current)" --state open --json number -q '.[0].number')
 
 if [ -n "$EXISTING" ]; then
-  gh pr edit "$EXISTING" --title "$PR_TITLE" --body-file /tmp/pr_body.md
+  gh pr edit "$EXISTING" --title "$PR_TITLE" --body-file "$PR_BODY_FILE"
 else
-  gh pr create --draft --base "$BASE" --title "$PR_TITLE" --body-file /tmp/pr_body.md
+  gh pr create --draft --base "$BASE" --title "$PR_TITLE" --body-file "$PR_BODY_FILE"
 fi
 
-rm -f /tmp/pr_body.md
+rm -f "$PR_BODY_FILE"
 ```
 생성/수정된 PR URL을 사용자에게 보고한다.
