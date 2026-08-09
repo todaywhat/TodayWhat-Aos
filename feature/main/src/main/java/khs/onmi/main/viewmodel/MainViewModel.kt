@@ -15,6 +15,7 @@ import khs.onmi.main.viewmodel.container.MainSideEffect
 import khs.onmi.main.viewmodel.container.MainState
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.viewmodel.container
@@ -55,11 +56,15 @@ class MainViewModel @Inject constructor(
             intent {
                 postSideEffect(MainSideEffect.ShowToast("메인화면 정보를 가져오는데 문제가 발생했습니다."))
             }
-        }.collect { (targetDate, userEntity) ->
+        }.collect { (calculatedDate, userEntity) ->
+            /* 디버그 모드에서 날짜를 지정했다면 자동 계산 결과보다 우선한다. */
+            val targetDate = container.stateFlow.value.debugTargetDate ?: calculatedDate
+
             intent {
                 reduce {
                     state.copy(
                         targetDate = DateUtils.convertToMonthDay(targetDate),
+                        rawTargetDate = targetDate,
                         schoolName = userEntity.schoolName,
                         grade = userEntity.grade,
                         `class` = userEntity.classroom
@@ -67,36 +72,62 @@ class MainViewModel @Inject constructor(
                 }
             }
 
-            launch { getTodayTimeTable(targetDate = targetDate) }
-            launch { getTodayMeals(targetDate = targetDate) }
+            getTodayTimeTable(targetDate = targetDate)
+            getTodayMeals(targetDate = targetDate)
         }
     }
 
-    fun getTodayTimeTable(targetDate: String = "") = intent {
+    fun reloadTimeTable() = intent {
+        getTodayTimeTable(targetDate = state.rawTargetDate)
+    }
+
+    fun reloadMeals() = intent {
+        getTodayMeals(targetDate = state.rawTargetDate)
+    }
+
+    /* 디버그 모드 전용. Compose DatePicker 가 돌려주는 UTC 자정 millis 를 받는다. */
+    fun setDebugTargetDate(utcMillis: Long) =
+        applyDebugTargetDate(DateUtils.convertUtcMillisToDateString(utcMillis))
+
+    /* 디버그 모드 전용. 강제 지정한 날짜를 해제하고 원래 계산된 날짜로 되돌린다. */
+    fun clearDebugTargetDate() = applyDebugTargetDate(null)
+
+    private fun applyDebugTargetDate(date: String?) = intent {
+        val targetDate = date ?: calculateTargetDateUseCase().first()
+
+        reduce {
+            state.copy(
+                targetDate = DateUtils.convertToMonthDay(targetDate),
+                rawTargetDate = targetDate,
+                debugTargetDate = date
+            )
+        }
+
+        getTodayTimeTable(targetDate = targetDate)
+        getTodayMeals(targetDate = targetDate)
+    }
+
+    private fun getTodayTimeTable(targetDate: String) = intent {
         reduce {
             state.copy(timeTableState = TimeTableState.Loading)
         }
 
-        viewModelScope.launch {
-            val response = getTimeTableUseCase(targetDate = targetDate)
+        val response = getTimeTableUseCase(targetDate = targetDate)
 
-            reduce {
-                state.copy(timeTableState = response)
-            }
+        reduce {
+            state.copy(timeTableState = response)
         }
     }
 
-    fun getTodayMeals(targetDate: String = "") = intent {
+    private fun getTodayMeals(targetDate: String) = intent {
         reduce {
             state.copy(mealState = MealState.Loading)
         }
 
-        viewModelScope.launch {
-            val response = getMealsUseCase(targetDate = targetDate)
+        val response = getMealsUseCase(targetDate = targetDate)
 
-            reduce {
-                state.copy(mealState = response)
-            }
+        reduce {
+            state.copy(mealState = response)
         }
     }
 }
