@@ -37,7 +37,7 @@ class TimeTableWorker @AssistedInject constructor(
 
             manager.enqueueUniquePeriodicWork(
                 uniqueWorkName,
-                ExistingPeriodicWorkPolicy.CANCEL_AND_REENQUEUE,
+                ExistingPeriodicWorkPolicy.UPDATE,
                 requestBuilder.build()
             )
         }
