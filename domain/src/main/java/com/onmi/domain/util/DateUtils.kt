@@ -11,12 +11,34 @@ import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
+import java.util.TimeZone
 
 object DateUtils {
     fun convertMillisToDateString(millis: Long): String {
         val formatter = SimpleDateFormat("yyyyMMdd", Locale.getDefault())
         val date = Date(millis)
         return formatter.format(date)
+    }
+
+    /**
+     * UTC 자정 기준 millis 를 yyyyMMdd 로 변환한다.
+     * Compose Material3 DatePicker 가 선택 날짜를 UTC 자정으로 돌려주기 때문에,
+     * 기기 타임존을 따르는 [convertMillisToDateString] 을 쓰면 UTC 음수 오프셋 지역에서 하루가 밀린다.
+     */
+    fun convertUtcMillisToDateString(millis: Long): String {
+        val formatter = SimpleDateFormat("yyyyMMdd", Locale.getDefault()).apply {
+            timeZone = TimeZone.getTimeZone("UTC")
+        }
+        return formatter.format(Date(millis))
+    }
+
+    /* [convertUtcMillisToDateString] 의 역변환. 형식이 잘못되면 null 을 돌려준다. */
+    fun convertDateStringToUtcMillis(dateString: String): Long? {
+        return runCatching {
+            SimpleDateFormat("yyyyMMdd", Locale.getDefault()).apply {
+                timeZone = TimeZone.getTimeZone("UTC")
+            }.parse(dateString)?.time
+        }.getOrNull()
     }
 
     fun checkIsWeekend(): Boolean {

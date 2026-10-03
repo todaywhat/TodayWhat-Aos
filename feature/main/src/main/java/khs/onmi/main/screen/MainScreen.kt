@@ -15,17 +15,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.onmi.domain.util.DateUtils
 import khs.onmi.core.common.android.EventLogger
 import khs.onmi.core.common.android.SelectedType
 import khs.onmi.core.designsystem.component.InfoCard
 import khs.onmi.core.designsystem.component.TopNavigationBar
+import khs.onmi.core.designsystem.icon.CalendarIcon
 import khs.onmi.core.designsystem.icon.SettingIcon
 import khs.onmi.core.designsystem.theme.ONMITheme
 import khs.onmi.core.designsystem.utils.WrappedIconButton
+import khs.onmi.main.component.DebugDatePickerDialog
 import khs.onmi.main.component.MainTabRow
 import khs.onmi.main.component.MealsSection
 import khs.onmi.main.component.TimeTableSection
@@ -35,12 +39,16 @@ import khs.onmi.navigation.ONMINavRoutes
 @Composable
 fun MainScreen(
     uiState: MainState,
+    isDebuggable: Boolean,
     navigate: (route: String) -> Unit,
     reloadTimeTable: () -> Unit,
     reloadMeal: () -> Unit,
+    onDebugDateSelected: (utcMillis: Long) -> Unit,
+    onDebugDateReset: () -> Unit,
 ) {
     val pagerState = rememberPagerState(pageCount = { 2 })
     var dragStartPage by remember { mutableIntStateOf(pagerState.currentPage) }
+    var isDebugDatePickerVisible by remember { mutableStateOf(false) }
 
     // 메인페이지 Pager 로깅 관련 코드
     LaunchedEffect(pagerState) {
@@ -75,6 +83,11 @@ fun MainScreen(
                     )
                 },
                 trailing = {
+                    if (isDebuggable) {
+                        WrappedIconButton(onClick = { isDebugDatePickerVisible = true }) {
+                            CalendarIcon(tint = color.Black)
+                        }
+                    }
                     WrappedIconButton(onClick = { navigate(ONMINavRoutes.SETTING) }) {
                         SettingIcon(tint = color.Black)
                     }
@@ -113,6 +126,23 @@ fun MainScreen(
                     )
                 }
             }
+        }
+
+        if (isDebuggable && isDebugDatePickerVisible) {
+            DebugDatePickerDialog(
+                initialSelectedDateMillis = uiState.rawTargetDate
+                    .takeIf { it.isNotBlank() }
+                    ?.let(DateUtils::convertDateStringToUtcMillis),
+                onDateSelected = { utcMillis ->
+                    onDebugDateSelected(utcMillis)
+                    isDebugDatePickerVisible = false
+                },
+                onReset = {
+                    onDebugDateReset()
+                    isDebugDatePickerVisible = false
+                },
+                onDismiss = { isDebugDatePickerVisible = false }
+            )
         }
     }
 }

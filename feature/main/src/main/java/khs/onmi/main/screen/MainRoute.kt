@@ -1,5 +1,6 @@
 package khs.onmi.main.screen
 
+import android.content.pm.ApplicationInfo
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.LocalActivity
@@ -20,6 +21,7 @@ fun MainRoute(
 ) {
     val activity = LocalActivity.current
     val context = LocalContext.current
+    val isDebuggable = context.applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE != 0
     var backPressedTime: Long = 0
 
     BackHandler {
@@ -39,8 +41,11 @@ fun MainRoute(
 
     MainScreen(
         uiState = uiState,
+        isDebuggable = isDebuggable,
         navigate = navController::navigate,
-        reloadTimeTable = viewModel::getTodayTimeTable,
-        reloadMeal = viewModel::getTodayMeals
+        reloadTimeTable = viewModel::reloadTimeTable,
+        reloadMeal = viewModel::reloadMeals,
+        onDebugDateSelected = viewModel::setDebugTargetDate,
+        onDebugDateReset = viewModel::clearDebugTargetDate
     )
 }
