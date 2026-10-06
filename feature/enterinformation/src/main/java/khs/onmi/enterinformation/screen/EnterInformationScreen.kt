@@ -1,10 +1,13 @@
 package khs.onmi.enterinformation.screen
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -23,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
+import khs.onmi.core.designsystem.component.ColumnSpacer
 import khs.onmi.core.designsystem.component.ONMIButton
 import khs.onmi.core.designsystem.component.TopNavigationBar
 import khs.onmi.core.designsystem.icon.ArrowBackIcon
@@ -96,15 +100,17 @@ fun EnterInformationScreen(
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
-                    verticalArrangement = Arrangement.spacedBy(24.dp)
+                        .padding(horizontal = 16.dp)
                 ) {
                     AnimatedVisibility(
                         visible = uiState.currentState != CurrentState.ENTERSCHOOL,
-                        enter = slideInVertically(),
-                        exit = slideOutVertically()
+                        enter = expandVertically(expandFrom = Alignment.Top) + fadeIn(),
+                        exit = shrinkVertically(shrinkTowards = Alignment.Top) + fadeOut()
                     ) {
-                        GreetingComponent(greetings = uiState.greetings)
+                        Column {
+                            GreetingComponent(greetings = uiState.greetings)
+                            ColumnSpacer(dp = 24.dp)
+                        }
                     }
                     DepartmentInput(
                         visible = uiState.currentState == CurrentState.ENTERDEPARTMENT || uiState.currentState == CurrentState.FINISH,
