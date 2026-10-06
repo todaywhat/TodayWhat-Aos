@@ -84,7 +84,7 @@ fun EnterInformationRoute(
                     schoolCode = schoolCode,
                 )
             },
-            onBackButtonClick = {},
+            onBackButtonClick = navController::navigateUp,
             onFinishButtonClick = {
                 saveEnteredUserInfo(
                     schoolCode = uiState.schoolList.find { it.schoolName == school }
