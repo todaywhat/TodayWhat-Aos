@@ -42,13 +42,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun EnterInformationScreen(
     uiState: EnterInformationState,
-    school: String,
-    department: String,
-    grade: String,
-    `class`: String,
     setSchoolSelectorVisible: (visible: Boolean) -> Unit,
     setDepartmentSelectorVisible: (visible: Boolean) -> Unit,
-    setCurrentState: (state: CurrentState) -> Unit,
     onSchoolValueChange: (school: String) -> Unit,
     onGradeValueChange: (grade: String) -> Unit,
     onClassValueChange: (`class`: String) -> Unit,
@@ -66,7 +61,7 @@ fun EnterInformationScreen(
             DepartmentSelectorBottomSheet(
                 departments = uiState.departmentList,
                 sheetState = sheetState,
-                selectedItemIdx = uiState.departmentList.indexOf(department),
+                selectedItemIdx = uiState.departmentList.indexOf(uiState.department),
                 onItemClick = { idx ->
                     onDepartmentValueChange(uiState.departmentList[idx])
                     scope.launch { sheetState.hide() }.invokeOnCompletion {
@@ -109,29 +104,24 @@ fun EnterInformationScreen(
                         enter = slideInVertically(),
                         exit = slideOutVertically()
                     ) {
-                        GreetingComponent(
-                            greetings = Pair(
-                                uiState.greetingTitle,
-                                uiState.greetingBody
-                            )
-                        )
+                        GreetingComponent(greetings = uiState.greetings)
                     }
                     DepartmentInput(
                         visible = uiState.currentState == CurrentState.ENTERDEPARTMENT || uiState.currentState == CurrentState.FINISH,
-                        value = department,
+                        value = uiState.department,
                         onClick = { setDepartmentSelectorVisible(true) },
                         onClear = { onDepartmentValueChange("") },
                         onDone = { focusManager.clearFocus() }
                     )
                     ClassInput(
                         visible = uiState.currentState == CurrentState.ENTERCLASS || uiState.currentState == CurrentState.ENTERDEPARTMENT || uiState.currentState == CurrentState.FINISH,
-                        value = `class`,
+                        value = uiState.`class`,
                         onClassValueChange = onClassValueChange,
                         onNext = { focusManager.moveFocus(FocusDirection.Up) }
                     )
                     GradeInput(
                         visible = uiState.currentState != CurrentState.ENTERSCHOOL,
-                        value = grade,
+                        value = uiState.grade,
                         onGradeValueChange = onGradeValueChange,
                         onNext = { focusManager.moveFocus(FocusDirection.Up) }
                     )
@@ -143,12 +133,9 @@ fun EnterInformationScreen(
                                 school.schoolLocation
                             )
                         },
-                        value = school,
+                        value = uiState.school,
                         onSchoolValueChange = onSchoolValueChange,
-                        onClick = {
-                            setSchoolSelectorVisible(true)
-                            setCurrentState(CurrentState.ENTERSCHOOL)
-                        },
+                        onClick = { setSchoolSelectorVisible(true) },
                         onNext = { focusManager.moveFocus(FocusDirection.Up) },
                         onSchoolSelected = { idx ->
                             onSchoolValueChange(uiState.schoolList[idx].schoolName)

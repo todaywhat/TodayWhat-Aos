@@ -1,8 +1,5 @@
 package khs.onmi.enterinformation.viewmodel
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.ViewModel
 import com.onmi.domain.model.user.UserInfoModel
@@ -11,12 +8,12 @@ import com.onmi.domain.usecase.school.SearchSchoolByNameUseCase
 import com.onmi.domain.usecase.user.UpdateUserInfoUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import khs.onmi.core.common.android.EventLogger
-import khs.onmi.enterinformation.model.CurrentState
 import khs.onmi.enterinformation.model.School
 import khs.onmi.enterinformation.viewmodel.container.EnterInformationSideEffect
 import khs.onmi.enterinformation.viewmodel.container.EnterInformationState
 import khs.onmi.navigation.ONMINavRoutes
 import org.orbitmvi.orbit.ContainerHost
+import org.orbitmvi.orbit.blockingIntent
 import org.orbitmvi.orbit.viewmodel.container
 import javax.inject.Inject
 
@@ -28,15 +25,6 @@ class EnterInformationViewModel @Inject constructor(
 ) : ContainerHost<EnterInformationState, EnterInformationSideEffect>, ViewModel() {
     override val container =
         container<EnterInformationState, EnterInformationSideEffect>(EnterInformationState())
-
-    var school by mutableStateOf("")
-        private set
-    var grade by mutableStateOf("")
-        private set
-    var `class` by mutableStateOf("")
-        private set
-    var department by mutableStateOf("")
-        private set
 
     init {
         searchSchoolByName()
@@ -78,41 +66,27 @@ class EnterInformationViewModel @Inject constructor(
         }
     }
 
-    fun saveEnteredUserInfo(
-        schoolCode: String,
-        educationCode: String,
-        schoolName: String,
-        schoolType: String,
-        grade: Int,
-        `class`: Int,
-        department: String,
-    ) = intent {
+    fun saveEnteredUserInfo() = intent {
+        val selectedSchool = state.selectedSchool
+        val userInfo = UserInfoModel(
+            schoolCode = selectedSchool?.schoolCode.orEmpty(),
+            educationCode = selectedSchool?.educationCode.orEmpty(),
+            schoolName = state.school,
+            schoolType = selectedSchool?.schoolType.orEmpty(),
+            grade = state.grade.toInt(),
+            classroom = state.`class`.toInt(),
+            department = state.department,
+        )
         runCatching {
-            updateUserInfoUseCase(
-                UserInfoModel(
-                    schoolCode = schoolCode,
-                    educationCode = educationCode,
-                    schoolName = schoolName,
-                    schoolType = schoolType,
-                    grade = grade,
-                    classroom = `class`,
-                    department = department,
-                )
-            )
+            updateUserInfoUseCase(userInfo)
         }.onSuccess {
             EventLogger.setUserProperties(
-                "school_type" to schoolType,
+                "school_type" to userInfo.schoolType,
                 "is_skip_weekend" to "false",
                 "is_custom_time_table" to "false",
                 "is_skip_after_dinner" to "false",
             )
             postSideEffect(EnterInformationSideEffect.Navigate(ONMINavRoutes.MAIN))
-        }
-    }
-
-    fun setCurrentState(currentState: CurrentState) = intent {
-        reduce {
-            state.copy(currentState = currentState)
         }
     }
 
@@ -128,32 +102,35 @@ class EnterInformationViewModel @Inject constructor(
         }
     }
 
-    fun onSchoolValueChange(school: String) {
-        this.school = school
+    fun onSchoolValueChange(school: String) = blockingIntent {
+        reduce {
+            state.copy(school = school)
+        }
     }
 
     fun onGradeValueChange(grade: String) {
         if (grade.isDigitsOnly()) {
-            this.grade = grade
+            blockingIntent {
+                reduce {
+                    state.copy(grade = grade)
+                }
+            }
         }
     }
 
     fun onClassValueChange(`class`: String) {
         if (`class`.isDigitsOnly()) {
-            this.`class` = `class`
+            blockingIntent {
+                reduce {
+                    state.copy(`class` = `class`)
+                }
+            }
         }
     }
 
-    fun onDepartmentValueChange(department: String) {
-        this.department = department
-    }
-
-    fun onGreetingValueChange(greetings: Pair<String, String>) = intent {
+    fun onDepartmentValueChange(department: String) = blockingIntent {
         reduce {
-            state.copy(
-                greetingTitle = greetings.first,
-                greetingBody = greetings.second,
-            )
+            state.copy(department = department)
         }
     }
 }
