@@ -1,10 +1,16 @@
 package khs.onmi.enterinformation.component.inputs
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardActionScope
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
@@ -35,11 +41,17 @@ fun SchoolInput(
         imeAction = ImeAction.Next,
         keyboardActions = KeyboardActions(onNext = onNext)
     )
-    AnimatedVisibility(visible = selectorVisible) {
-        ColumnSpacer(dp = 8.dp)
-        SchoolSelector(
-            schools = schools,
-            onItemClick = onSchoolSelected
-        )
+    AnimatedVisibility(
+        visible = selectorVisible,
+        enter = expandVertically(expandFrom = Alignment.Top) + fadeIn(),
+        exit = shrinkVertically(shrinkTowards = Alignment.Top) + fadeOut()
+    ) {
+        Column {
+            ColumnSpacer(dp = 24.dp)
+            SchoolSelector(
+                schools = schools,
+                onItemClick = onSchoolSelected
+            )
+        }
     }
 }
